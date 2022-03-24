@@ -1,49 +1,46 @@
-﻿using AutoPartsStore.DAL.Interfaces;
+﻿using AutoPartsStore.DAL.EF;
+using AutoPartsStore.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace AutoPartsStore.DAL.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        readonly DbContext _context;
-        readonly DbSet<TEntity> _dbSet;
+        private readonly ApplicationContext _db;
+        private readonly DbSet<TEntity> _dbSet;
 
-        public Repository(DbContext context)
+        public Repository(ApplicationContext db)
         {
-            _context = context;
-            _dbSet = context.Set<TEntity>();
-        }
-
-        public IEnumerable<TEntity> Get()
-        {
-            return _dbSet.AsNoTracking().ToList();
-        }
-
-        public IEnumerable<TEntity> Get(Func<TEntity, bool> predicate)
-        {
-            return _dbSet.AsNoTracking().Where(predicate).ToList();
-        }
-        public TEntity FindById(int id)
-        {
-#pragma warning disable CS8603 // Possible null reference return.
-            return _dbSet.Find(id);
-#pragma warning restore CS8603 // Possible null reference return.
+            _db = db;
+            _dbSet = db.Set<TEntity>();
         }
 
         public void Create(TEntity item)
         {
             _dbSet.Add(item);
-            _context.SaveChanges();
+            _db.SaveChanges();
         }
-        public void Update(TEntity item)
+
+        public IEnumerable<TEntity> GetAll()
         {
-            _context.Entry(item).State = EntityState.Modified;
-            _context.SaveChanges();
+            return _dbSet.AsNoTracking().ToList();
         }
+
+        public TEntity GetById(Func<TEntity, bool> predicate)
+        {
+            return _dbSet.FirstOrDefault(predicate);
+        }
+
         public void Remove(TEntity item)
         {
             _dbSet.Remove(item);
-            _context.SaveChanges();
+            _db.SaveChanges();
+        }
+
+        public void Update(TEntity item)
+        {
+            _db.Entry(item).State = EntityState.Modified;
+            _db.SaveChanges();
         }
     }
 }

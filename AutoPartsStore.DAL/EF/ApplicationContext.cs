@@ -5,6 +5,8 @@ namespace AutoPartsStore.DAL.EF
 {
     public class ApplicationContext : DbContext
     {
+        private string connectionString;
+
         public DbSet<Brand>? Brands { get; set; }
         public DbSet<Detail>? Details { get; set; }
         public DbSet<Feature>? Features { get; set; }
