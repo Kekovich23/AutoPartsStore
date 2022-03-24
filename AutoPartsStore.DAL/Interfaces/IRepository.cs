@@ -1,12 +1,12 @@
 ﻿namespace AutoPartsStore.DAL.Interfaces
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<TEntity> where TEntity : class
     {
-        IEnumerable<T> GetAll();
-        T Get(Guid id);
-        IEnumerable<T> Find(Func<T, Boolean> predicate);
-        void Create(T item);
-        void Update(T item);
-        void Delete(Guid id);
+        void Create(TEntity item);
+        TEntity FindById(int id);
+        IEnumerable<TEntity> Get();
+        IEnumerable<TEntity> Get(Func<TEntity, bool> predicate);
+        void Remove(TEntity item);
+        void Update(TEntity item);
     }
 }
