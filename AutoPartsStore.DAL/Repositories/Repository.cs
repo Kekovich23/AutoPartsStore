@@ -28,7 +28,9 @@ namespace AutoPartsStore.DAL.Repositories
 
         public TEntity GetById(Func<TEntity, bool> predicate)
         {
+#pragma warning disable CS8603 // Possible null reference return.
             return _dbSet.FirstOrDefault(predicate);
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         public void Remove(TEntity item)

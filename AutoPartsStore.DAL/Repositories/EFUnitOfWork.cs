@@ -9,7 +9,9 @@ namespace AutoPartsStore.DAL.Repositories
         private readonly ApplicationContext db;
         private Dictionary<string, object> repositories { get; set; }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public EFUnitOfWork(DbContextOptions<ApplicationContext> options)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             db = new ApplicationContext(options);
         }
@@ -27,7 +29,9 @@ namespace AutoPartsStore.DAL.Repositories
             {
                 var repositoryType = typeof(Repository<>);
                 var repositoryInstance = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(T)), db);
+#pragma warning disable CS8604 // Possible null reference argument.
                 repositories.Add(type, repositoryInstance);
+#pragma warning restore CS8604 // Possible null reference argument.
             }
             return (Repository<T>)repositories[type];
         }
