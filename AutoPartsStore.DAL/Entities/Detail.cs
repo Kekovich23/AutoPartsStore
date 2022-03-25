@@ -2,9 +2,10 @@
 {
     public class Detail
     {
-        public Guid Id { get; set; }
-        public Manufacturer? Manufacturer { get; set; }
-        public ICollection<Feature>? Features { get; set; }
-        public ICollection<Modification>? Modifications { get; set; }
+        public Guid Id { get; set; }        
+        public virtual Manufacturer? Manufacturer { get; set; }
+        public virtual Guid ManufacturerId { get; set; }
+        public virtual ICollection<Feature>? Features { get; set; }
+        public virtual ICollection<Modification>? Modifications { get; set; }
     }
 }

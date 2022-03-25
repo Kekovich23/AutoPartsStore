@@ -7,8 +7,8 @@
         public string? Surname { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }
-        public ICollection<Modification>? Modifications { get; set; }
-        public ICollection<PriceList>? PriceDetails { get; set; }
+        public virtual ICollection<Modification>? Modifications { get; set; }
+        public virtual ICollection<PriceList>? PriceDetails { get; set; }
         
     }
 }
