@@ -65,7 +65,7 @@ namespace AutoPartsStore.BLL.Services
                 foreach (Modification modification in Database.GetRepository<Modification>().GetAll().Where(f => idModifications.Contains(f.Id)))
                 {
                     if (modification == null)
-                        throw new ValidationException("Характеристики отсутсвуют", "");
+                        throw new ValidationException("Модификации отсутсвуют", "");
                     detail.Modifications.Add(modification);
                 }
             }
