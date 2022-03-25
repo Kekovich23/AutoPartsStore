@@ -1,4 +1,4 @@
-﻿namespace AutoPartsStore.AN.Entities
+﻿namespace AutoPartsStore.AN.DTO
 {
     public class FeatureDTO
     {

@@ -1,4 +1,4 @@
-﻿namespace AutoPartsStore.AN.Entities
+﻿namespace AutoPartsStore.AN.Infrastructure
 {
     public class ValidationException : Exception
     {
