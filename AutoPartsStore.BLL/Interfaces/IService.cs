@@ -1,6 +1,6 @@
 ﻿namespace AutoPartsStore.BLL.Interfaces
 {
-    public interface IService<TEntityDTO> where TEntityDTO : class
+    public interface IService<TEntityDTO, TEntity> where TEntityDTO : class where TEntity : class
     {
         void Create(TEntityDTO entityDTO);
         TEntityDTO Get(Guid? id);
