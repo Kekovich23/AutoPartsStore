@@ -2,62 +2,20 @@
 using AutoPartsStore.AN.DTO;
 using AutoPartsStore.AN.Entities;
 using AutoPartsStore.AN.Infrastructure;
-using AutoPartsStore.BLL.Interfaces;
 using AutoPartsStore.DAL.Interfaces;
 
 namespace AutoPartsStore.BLL.Services
 {
-    public class DetailService : IService<DetailDTO>
+    public class DetailService : BaseService<DetailDTO, Detail>
     {
-        IUnitOfWork Database { get; set; }
-
-        public DetailService(IUnitOfWork uow)
+        public DetailService(IUnitOfWork uow) : base(uow)
         {
-            Database = uow;
-        }
-
-        public void Create(DetailDTO entityDTO)
-        {
-            Detail detail = new() { Id = entityDTO.Id, ManufacturerId = entityDTO.ManufacturerId };
-            Database.GetRepository<Detail>().Create(detail);
-        }
-
-        public DetailDTO Get(Guid? id)
-        {
-            if (id == null)
-                throw new ValidationException("Не установлено id детали", "");
-            var detail = Database.GetRepository<Detail>().Get(id.Value);
-            if (detail == null)
-                throw new ValidationException("Деталь не найдена", "");
-
-            return new DetailDTO { Id = detail.Id, ManufacturerId = detail.ManufacturerId };
-        }
-
-        public IEnumerable<DetailDTO> GetAll()
-        {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Detail, DetailDTO>()).CreateMapper();
-            return mapper.Map<IEnumerable<Detail>, List<DetailDTO>>(Database.GetRepository<Detail>().GetAll());
-        }
-
-        public void Remove(DetailDTO entityDTO)
-        {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<DetailDTO, Detail>()).CreateMapper();
-            Detail detail = mapper.Map<DetailDTO, Detail>(entityDTO);
-
-            Database.GetRepository<Detail>().Remove(detail);
-        }
-
-        public void Update(DetailDTO entityDTO)
-        {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<DetailDTO, Detail>()).CreateMapper();
-            Detail detail = mapper.Map<DetailDTO, Detail>(entityDTO);
-
-            Database.GetRepository<Detail>().Update(detail);
         }
 
         public IEnumerable<FeatureDTO> GetFeatures(Guid id)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Feature, Feature>()).CreateMapper();
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Feature, FeatureDTO>()).CreateMapper();
+            
             var detail = Database.GetRepository<Detail>().Get(id);
 
 #pragma warning disable CS8604 // Possible null reference argument.
@@ -65,7 +23,7 @@ namespace AutoPartsStore.BLL.Services
 #pragma warning restore CS8604 // Possible null reference argument.
         }
 
-        public void SetFeature(Guid idDetail, Guid[] idFeatures)
+        public void SetFeatures(Guid idDetail, Guid[] idFeatures)
         {
             Detail detail = Database.GetRepository<Detail>().Get(idDetail);
 
@@ -83,10 +41,34 @@ namespace AutoPartsStore.BLL.Services
                 }
             }
         }
-
-        public void Dispose()
+        public IEnumerable<ModificationDTO> GetModifications(Guid id)
         {
-            Database.Dispose();
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Modification, ModificationDTO>()).CreateMapper();
+
+            var detail = Database.GetRepository<Detail>().Get(id);
+
+#pragma warning disable CS8604 // Possible null reference argument.
+            return mapper.Map<IEnumerable<Modification>, List<ModificationDTO>>(detail.Modifications);
+#pragma warning restore CS8604 // Possible null reference argument.
+        }
+
+        public void SetModifications(Guid idDetail, Guid[] idModifications)
+        {
+            Detail detail = Database.GetRepository<Detail>().Get(idDetail);
+
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            detail.Modifications.Clear();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+
+            if (idModifications != null)
+            {
+                foreach (Modification modification in Database.GetRepository<Modification>().GetAll().Where(f => idModifications.Contains(f.Id)))
+                {
+                    if (modification == null)
+                        throw new ValidationException("Характеристики отсутсвуют", "");
+                    detail.Modifications.Add(modification);
+                }
+            }
         }
     }
 }
