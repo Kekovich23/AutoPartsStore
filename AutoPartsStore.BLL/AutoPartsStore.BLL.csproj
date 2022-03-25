@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AutoPartsStore.AN\AutoPartsStore.AN.csproj" />
     <ProjectReference Include="..\AutoPartsStore.DAL\AutoPartsStore.DAL.csproj" />
   </ItemGroup>
 
