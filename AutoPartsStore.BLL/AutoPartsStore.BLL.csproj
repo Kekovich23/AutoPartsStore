@@ -10,8 +10,4 @@
     <ProjectReference Include="..\AutoPartsStore.DAL\AutoPartsStore.DAL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTO\" />
-  </ItemGroup>
-
 </Project>
