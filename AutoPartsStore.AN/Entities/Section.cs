@@ -1,6 +1,6 @@
-﻿namespace AutoPartsStore.DAL.Entities
+﻿namespace AutoPartsStore.AN.Entities
 {
-    public class Brand
+    public class Section
     {
         public Guid Id { get; set; }
         public string? Name { get; set; }

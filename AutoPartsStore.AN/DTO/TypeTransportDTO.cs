@@ -1,6 +1,6 @@
-﻿namespace AutoPartsStore.DAL.Entities
+﻿namespace AutoPartsStore.AN.Entities
 {
-    public class TypeTransport
+    public class TypeTransportDTO
     {
         public Guid Id { get; set; }
         public string? Name { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace AutoPartsStore.DAL.Entities
+﻿namespace AutoPartsStore.AN.Entities
 {
     public class Model
     {

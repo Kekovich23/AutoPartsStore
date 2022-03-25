@@ -1,4 +1,4 @@
-﻿using AutoPartsStore.DAL.Entities;
+﻿using AutoPartsStore.AN.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace AutoPartsStore.DAL.EF

@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AutoPartsStore.DAL.Repositories
 {
-    public class EFUnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationContext db;
         private Dictionary<string, object> repositories { get; set; }
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public EFUnitOfWork(DbContextOptions<ApplicationContext> options)
+        public UnitOfWork(DbContextOptions<ApplicationContext> options)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             db = new ApplicationContext(options);
