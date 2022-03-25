@@ -18,7 +18,7 @@ namespace AutoPartsStore.DAL.Repositories
         public void Create(TEntity item)
         {
             _dbSet.Add(item);
-            _db.SaveChanges();
+            _db.SaveChanges();            
         }
 
         public IEnumerable<TEntity> GetAll()
@@ -26,10 +26,10 @@ namespace AutoPartsStore.DAL.Repositories
             return _dbSet.AsNoTracking().ToList();
         }
 
-        public TEntity GetById(Func<TEntity, bool> predicate)
+        public TEntity Get(Guid id)
         {
 #pragma warning disable CS8603 // Possible null reference return.
-            return _dbSet.FirstOrDefault(predicate);
+            return _dbSet.Find(id);
 #pragma warning restore CS8603 // Possible null reference return.
         }
 

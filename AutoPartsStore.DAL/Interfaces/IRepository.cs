@@ -3,7 +3,7 @@
     public interface IRepository<TEntity> where TEntity : class
     {
         IEnumerable<TEntity> GetAll();
-        TEntity GetById(Func<TEntity, bool> predicate);
+        TEntity Get(Guid id);
         void Create(TEntity item);
         void Update(TEntity item);
         void Remove(TEntity item);
