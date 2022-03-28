@@ -10,7 +10,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<AutoPartsStore.DAL.Interfaces.IUnitOfWork, AutoPartsStore.DAL.Repositories.UnitOfWork>();
-builder.Services.AddScoped<AutoPartsStore.BLL.Interfaces.IService<BrandDTO, Brand>, AutoPartsStore.BLL.Services.BrandService>();
+builder.Services.AddScoped(typeof(AutoPartsStore.BLL.Interfaces.IService<BrandDTO, Brand>), typeof(AutoPartsStore.BLL.Services.BrandService));
 
 var app = builder.Build();
 
