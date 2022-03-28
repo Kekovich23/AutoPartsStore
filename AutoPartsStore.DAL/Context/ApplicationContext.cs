@@ -1,7 +1,7 @@
 ﻿using AutoPartsStore.AN.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace AutoPartsStore.DAL.EF
+namespace AutoPartsStore.DAL.Context
 {
     public class ApplicationContext : DbContext
     {
