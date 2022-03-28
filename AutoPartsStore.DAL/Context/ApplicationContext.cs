@@ -1,12 +1,11 @@
 ﻿using AutoPartsStore.AN.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace AutoPartsStore.DAL.Context
 {
-    public class ApplicationContext : DbContext
+    public class ApplicationContext : IdentityDbContext<User>
     {
-        private string connectionString;
-
         public DbSet<Brand>? Brands { get; set; }
         public DbSet<Detail>? Details { get; set; }
         public DbSet<Feature>? Features { get; set; }
@@ -25,7 +24,7 @@ namespace AutoPartsStore.DAL.Context
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
-
+            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
