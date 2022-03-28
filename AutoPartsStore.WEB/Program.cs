@@ -1,7 +1,16 @@
+using AutoPartsStore.AN.DTO;
+using AutoPartsStore.AN.Entities;
+using AutoPartsStore.DAL.Context;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<AutoPartsStore.DAL.Interfaces.IUnitOfWork, AutoPartsStore.DAL.Repositories.UnitOfWork>();
+builder.Services.AddScoped<AutoPartsStore.BLL.Interfaces.IService<BrandDTO, Brand>, AutoPartsStore.BLL.Services.BrandService>();
 
 var app = builder.Build();
 
