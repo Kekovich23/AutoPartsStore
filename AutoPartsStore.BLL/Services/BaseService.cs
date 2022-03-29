@@ -5,7 +5,7 @@ using AutoPartsStore.DAL.Interfaces;
 
 namespace AutoPartsStore.BLL.Services
 {
-    public class BaseService<TEntityDTO, TEntity> : IService<TEntityDTO, TEntity> where TEntityDTO : class where TEntity : class
+    public abstract class BaseService<TEntityDTO, TEntity> : IService<TEntityDTO, TEntity> where TEntityDTO : class where TEntity : class
     {
         protected IUnitOfWork Database { get; set; }
 
