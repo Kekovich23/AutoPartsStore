@@ -54,10 +54,10 @@ namespace AutoPartsStore.WEB.Controllers
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BrandDTO, BrandViewModel>()).CreateMapper();
             var customerData = mapper.Map<IEnumerable<BrandDTO>, List<BrandViewModel>>(brandDTOs);
 
-            // getting all Customer data  
+            //getting all Customer data
             //var customerData = (from tempcustomer in _context.CustomerTB
             //                    select tempcustomer);
-            //Sorting  
+            //Sorting
             //if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
             //{
             //    customerData = customerData.OrderBy(sortColumn + " " + sortColumnDirection);
@@ -65,7 +65,7 @@ namespace AutoPartsStore.WEB.Controllers
             ////Search  
             //if (!string.IsNullOrEmpty(searchValue))
             //{
-            //    customerData = customerData.Where(m => m.Name == searchValue);
+            //    customerData = (List<BrandViewModel>)customerData.Where(m => m.Name == searchValue);
             //}
 
             //total number of rows counts   
