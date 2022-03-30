@@ -12,20 +12,20 @@ namespace AutoPartsStore.BLL.Services
         {
         }
 
-        public IEnumerable<FeatureDTO> GetFeatures(Guid id)
+        public IEnumerable<FeatureDTO> GetFeatures(Func<Detail, bool> predicate)
         {
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Feature, FeatureDTO>()).CreateMapper();
             
-            var detail = Database.GetRepository<Detail>().Get(id);
+            var detail = Database.GetRepository<Detail>().Get(predicate);
 
 #pragma warning disable CS8604 // Possible null reference argument.
             return mapper.Map<IEnumerable<Feature>, List<FeatureDTO>>(detail.Features);
 #pragma warning restore CS8604 // Possible null reference argument.
         }
 
-        public void SetFeatures(Guid idDetail, Guid[] idFeatures)
+        public void SetFeatures(Func<Detail, bool> predicate, Guid[] idFeatures)
         {
-            Detail detail = Database.GetRepository<Detail>().Get(idDetail);
+            Detail detail = Database.GetRepository<Detail>().Get(predicate);
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             detail.Features.Clear();
@@ -41,20 +41,20 @@ namespace AutoPartsStore.BLL.Services
                 }
             }
         }
-        public IEnumerable<ModificationDTO> GetModifications(Guid id)
+        public IEnumerable<ModificationDTO> GetModifications(Func<Detail, bool> predicate)
         {
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Modification, ModificationDTO>()).CreateMapper();
 
-            var detail = Database.GetRepository<Detail>().Get(id);
+            var detail = Database.GetRepository<Detail>().Get(predicate);
 
 #pragma warning disable CS8604 // Possible null reference argument.
             return mapper.Map<IEnumerable<Modification>, List<ModificationDTO>>(detail.Modifications);
 #pragma warning restore CS8604 // Possible null reference argument.
         }
 
-        public void SetModifications(Guid idDetail, Guid[] idModifications)
+        public void SetModifications(Func<Detail, bool> predicate, Guid[] idModifications)
         {
-            Detail detail = Database.GetRepository<Detail>().Get(idDetail);
+            Detail detail = Database.GetRepository<Detail>().Get(predicate);
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             detail.Modifications.Clear();

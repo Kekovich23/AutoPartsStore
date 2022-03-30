@@ -44,5 +44,12 @@ namespace AutoPartsStore.DAL.Repositories
             _db.Entry(item).State = EntityState.Modified;
             _db.SaveChanges();
         }
+
+        public TEntity Get(Func<TEntity, bool> predicate)
+        {
+#pragma warning disable CS8603 // Possible null reference return.
+            return _dbSet.Where(predicate).FirstOrDefault();
+#pragma warning restore CS8603 // Possible null reference return.
+        }
     }
 }

@@ -11,11 +11,11 @@ namespace AutoPartsStore.BLL.Services
         {
         }
 
-        public IEnumerable<DetailDTO> GetDetails(Guid id)
+        public IEnumerable<DetailDTO> GetDetails(Func<Feature, bool> predicate)
         {
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Detail, DetailDTO>()).CreateMapper();
 
-            var feature = Database.GetRepository<Feature>().Get(id);
+            var feature = Database.GetRepository<Feature>().Get(predicate);
 
 #pragma warning disable CS8604 // Possible null reference argument.
             return mapper.Map<IEnumerable<Detail>, List<DetailDTO>>(feature.Details);

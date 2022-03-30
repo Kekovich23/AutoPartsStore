@@ -26,13 +26,10 @@ namespace AutoPartsStore.BLL.Services
             Database.Dispose();
         }
 
-        public TEntityDTO Get(Guid? id)
+        public TEntityDTO Get(Func<TEntity, bool> predicate)
         {
-            if (id == null)
-                throw new ValidationException("Не установлено id объекта", "");
-            var entity = Database.GetRepository<TEntity>().Get(id.Value);
-            if (entity == null)
-                throw new ValidationException("Объект не найден", "");
+
+            var entity = Database.GetRepository<TEntity>().Get(predicate);
 
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<TEntity, TEntityDTO>()).CreateMapper();
             TEntityDTO entityDTO = mapper.Map<TEntity, TEntityDTO>(entity);
