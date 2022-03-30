@@ -95,5 +95,12 @@ namespace AutoPartsStore.WEB.Controllers
 
             return RedirectToAction("Index", "Brand");
         }
+
+        [HttpPost]
+        public void Delete(Guid Id)
+        {
+            var brand = _brandService.Get(Id);
+            _brandService.Delete(brand);
+        }
     }
 }
