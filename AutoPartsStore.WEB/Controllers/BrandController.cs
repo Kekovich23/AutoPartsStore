@@ -3,10 +3,11 @@ using AutoPartsStore.AN.DTO;
 using AutoPartsStore.AN.Infrastructure;
 using AutoPartsStore.BLL.Services;
 using AutoPartsStore.WEB.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoPartsStore.WEB.Controllers
-{    
+{
     public class BrandController : Controller
     {
         private readonly BrandService _brandService;
@@ -52,21 +53,20 @@ namespace AutoPartsStore.WEB.Controllers
 
             IEnumerable<BrandDTO> brandDTOs = _brandService.GetAll();
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BrandDTO, BrandViewModel>()).CreateMapper();
-            var customerData = mapper.Map<IEnumerable<BrandDTO>, List<BrandViewModel>>(brandDTOs);
-
-            //getting all Customer data
-            //var customerData = (from tempcustomer in _context.CustomerTB
-            //                    select tempcustomer);
-            //Sorting
+            var customerData = mapper.Map<IEnumerable<BrandDTO>, IEnumerable<BrandViewModel>>(brandDTOs);
+            ////Sorting
             //if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
             //{
-            //    customerData = customerData.OrderBy(sortColumn + " " + sortColumnDirection);
+            //    if (sortColumnDirection == "asc")
+            //        customerData = customerData.OrderBy(s => sortColumn));
+            //    else
+            //        customerData = customerData.OrderByDescending(s => s.Name);
             //}
             ////Search  
-            //if (!string.IsNullOrEmpty(searchValue))
-            //{
-            //    customerData = (List<BrandViewModel>)customerData.Where(m => m.Name == searchValue);
-            //}
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                customerData = customerData.Where(m => m.Name == searchValue);
+            }
 
             //total number of rows counts   
             recordsTotal = customerData.Count();

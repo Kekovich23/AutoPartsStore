@@ -21,6 +21,18 @@
 
 CreateDataTable(brandRequest);
 
+//function BrandAdd(){
+//    $.ajax({
+//        'url': 'Brand/Add',
+//        'type': 'Get',
+//        'dataType' : 'html',
+//        'success': function () {
+//            $('#ajaxPart').html();
+//            $('#ajaxPart').show();
+//        }
+//    })
+//}
+
 function DeleteData(Id) {
     if (confirm("Are you sure you want to delete ...?")) {
         Delete(Id);
@@ -30,19 +42,12 @@ function DeleteData(Id) {
 }
 
 function Delete(Id) {
-    var request = {
-        'table': { 'Id': '#brandTable' },
-        'data': { 'Id': Id },
-        'url': 'Brand/Delete',
-        'type': 'POST'
-    }
-
     $.ajax({
-        'url': request.url,
-        'type': request.type,
-        'data': request.data,
+        'url': 'Brand/Delete',
+        'type': 'POST',
+        'data': { 'Id': Id },
         'success': function () {
-            $(request.table.Id).DataTable().draw();
+            $('#brandTable').DataTable().draw();
         }
     })
 }
