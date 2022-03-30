@@ -100,7 +100,7 @@ namespace AutoPartsStore.WEB.Controllers
         public void Delete(Guid Id)
         {
             var brand = _brandService.Get(Id);
-            _brandService.Delete(brand);
+            _brandService.Remove(brand);
         }
     }
 }
