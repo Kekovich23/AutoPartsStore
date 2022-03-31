@@ -1,16 +1,18 @@
 ﻿var brandRequest = {
     'table': { 'Id': '#brandTable' },
     'columns': [
-        { 'data' : 'id', 'name' : 'Id', 'autowidth' : true},
+        { 'data': 'id', 'name': 'Id', 'autowidth': true },
         { 'data': 'name', 'name': 'Name', 'autowidth': true },
         {
             "data": null,
             "render": function (data, type, row) {
-                return "<a href='#' class='btn btn-danger' onclick=DeleteData('" + row.id + "'); >Delete</a>";
+                return "<a class='btn btn-danger' onclick=DeleteData('" + row.id + "'); >Delete</a>";
             }
         },
         {
-            "render": function (data, type, full, meta) { return '<a class="btn btn-info" href="Brand/Edit/' + full.Id + '">Edit</a>'; }
+            "render": function (data, type, row) {
+                return "<a class='btn btn-info' href='/Brand/Edit/" + row.id + "'>Edit</a>";
+            }
         }],
     'ajax': {
         'url': 'Brand/GetBrands',
@@ -21,17 +23,18 @@
 
 CreateDataTable(brandRequest);
 
-//function BrandAdd(){
-//    $.ajax({
-//        'url': 'Brand/Add',
-//        'type': 'Get',
-//        'dataType' : 'html',
-//        'success': function () {
-//            $('#ajaxPart').html();
-//            $('#ajaxPart').show();
-//        }
-//    })
-//}
+function EditData(Id) {
+    $.ajax({
+        'url': 'Brand/Edit',
+        'type': 'GET',
+        'dataType': 'html',
+        'data': { 'Id': Id },
+        'success': function () {
+            $('#ajaxPart').html(Id);
+            $('#ajaxPart').show();
+        }
+    })
+}
 
 function DeleteData(Id) {
     if (confirm("Are you sure you want to delete ...?")) {

@@ -10,7 +10,7 @@
                 <tr>
                     <th>Id</th>
                     <th>Name</th>
-                    <th>Delite</th>
+                    <th>Delete</th>
                     <th>Edit</th>
                 </tr>
             </thead>
@@ -18,8 +18,7 @@
     </div>
 </div>
 
-@*<button class="btn-primary btn-success" onclick="BrandAdd()">Add brand</button>*@
-<input type="button" value="Add brand" onclick="location.href='@Url.Action("Add", "Brand")'" />
+<a class='btn btn-primary' href='/Brand/Add/'>Add new</a>
 
 @section Scripts
 {

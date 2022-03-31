@@ -102,5 +102,24 @@ namespace AutoPartsStore.WEB.Controllers
             var brand = _brandService.GetBrand(Id);
             _brandService.Remove(brand);
         }
+
+        [HttpGet]
+        public IActionResult Edit(Guid Id)
+        {
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BrandDTO, BrandViewModel>()).CreateMapper();
+            var brand = mapper.Map<BrandDTO, BrandViewModel>(_brandService.GetBrand(Id));
+
+            return View(brand);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(BrandViewModel brandViewModel)
+        {
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BrandViewModel, BrandDTO>()).CreateMapper();
+            var brandDTO = mapper.Map<BrandViewModel, BrandDTO>(brandViewModel);
+            _brandService.Update(brandDTO);
+
+            return RedirectToAction("Index", "Brand");
+        }
     }
 }
