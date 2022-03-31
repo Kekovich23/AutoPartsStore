@@ -17,6 +17,8 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
     .AddEntityFrameworkStores<ApplicationContext>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<BrandService>();
+builder.Services.AddScoped<ModelService>();
+builder.Services.AddScoped<TypeTransportService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

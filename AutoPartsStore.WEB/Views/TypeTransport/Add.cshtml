@@ -1,6 +1,6 @@
-﻿@model AutoPartsStore.WEB.Models.BrandViewModel
+﻿@model AutoPartsStore.WEB.Models.TypeTransportViewModel
 @{
-    ViewBag.Title = "Новая марка";
+    ViewBag.Title = "Новая тип транспорта";
 }
 <form method="post">
     <div>
@@ -8,5 +8,5 @@
         <input type="text" name="Name" value=@Model.Name />
     </div>
     <input type="hidden" name="Id" value="@Model.Id" />
-    <input type="submit" value="Добавить модель" />
+    <input type="submit" value="Добавить тип транспорта" />
 </form>
