@@ -3,6 +3,7 @@ using AutoPartsStore.BLL.Services;
 using AutoPartsStore.DAL.Context;
 using AutoPartsStore.DAL.Interfaces;
 using AutoPartsStore.DAL.Repositories;
+using AutoPartsStore.WEB.AutoMapperProfiles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationContext>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddAutoMapper(typeof(ModelProfile));
 builder.Services.AddScoped<BrandService>();
 builder.Services.AddScoped<ModelService>();
 builder.Services.AddScoped<TypeTransportService>();

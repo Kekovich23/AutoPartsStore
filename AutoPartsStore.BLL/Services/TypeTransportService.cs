@@ -7,9 +7,10 @@ namespace AutoPartsStore.BLL.Services
 {
     public class TypeTransportService : BaseService<TypeTransportDTO, TypeTransport>
     {
-        public TypeTransportService(IUnitOfWork uow) : base(uow)
+        public TypeTransportService(IUnitOfWork uow, IMapper mapper) : base(uow, mapper)
         {
         }
+
         public TypeTransportDTO GetTypeTransport(Guid Id)
         {
             var entity = Database.GetRepository<TypeTransport>().GetAll().FirstOrDefault(b => b.Id == Id);

@@ -7,18 +7,18 @@ namespace AutoPartsStore.BLL.Services
 {
     public abstract class BaseService<TEntityDTO, TEntity> : IService<TEntityDTO, TEntity> where TEntityDTO : class where TEntity : class
     {
-        protected IUnitOfWork Database { get; set; }
+        protected IUnitOfWork Database;
+        protected IMapper _mapper;
 
-        public BaseService(IUnitOfWork uow)
+        public BaseService(IUnitOfWork uow, IMapper mapper)
         {
             Database = uow;
+            _mapper = mapper;
         }
 
         public void Create(TEntityDTO entityDTO)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<TEntityDTO, TEntity>()).CreateMapper();
-            TEntity entity = mapper.Map<TEntityDTO, TEntity>(entityDTO);
-            Database.GetRepository<TEntity>().Create(entity);
+            Database.GetRepository<TEntity>().Create(_mapper.Map<TEntity>(entityDTO));
         }
 
         public void Dispose()
@@ -28,35 +28,22 @@ namespace AutoPartsStore.BLL.Services
 
         public TEntityDTO Get(Func<TEntity, bool> predicate)
         {
-
-            var entity = Database.GetRepository<TEntity>().Get(predicate);
-
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<TEntity, TEntityDTO>()).CreateMapper();
-            TEntityDTO entityDTO = mapper.Map<TEntity, TEntityDTO>(entity);
-
-            return entityDTO;
+            return _mapper.Map<TEntityDTO>(Database.GetRepository<TEntity>().Get(predicate));
         }
 
         public IEnumerable<TEntityDTO> GetAll()
-        {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<TEntity, TEntityDTO>()).CreateMapper();
-            return mapper.Map<IEnumerable<TEntity>, List<TEntityDTO>>(Database.GetRepository<TEntity>().GetAll());
+        {            
+            return _mapper.Map<IEnumerable<TEntityDTO>>(Database.GetRepository<TEntity>().GetAll());
         }
 
         public void Remove(TEntityDTO entityDTO)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<TEntityDTO, TEntity>()).CreateMapper();
-            TEntity entity = mapper.Map<TEntityDTO, TEntity>(entityDTO);
-
-            Database.GetRepository<TEntity>().Remove(entity);
+            Database.GetRepository<TEntity>().Remove(_mapper.Map<TEntity>(entityDTO));
         }
 
         public void Update(TEntityDTO entityDTO)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<TEntityDTO, TEntity>()).CreateMapper();
-            TEntity entity = mapper.Map<TEntityDTO, TEntity>(entityDTO);
-
-            Database.GetRepository<TEntity>().Update(entity);
+            Database.GetRepository<TEntity>().Update(_mapper.Map<TEntity>(entityDTO));
         }
     }
 }

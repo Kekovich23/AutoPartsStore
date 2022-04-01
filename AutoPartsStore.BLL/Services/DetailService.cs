@@ -8,7 +8,7 @@ namespace AutoPartsStore.BLL.Services
 {
     public class DetailService : BaseService<DetailDTO, Detail>
     {
-        public DetailService(IUnitOfWork uow) : base(uow)
+        public DetailService(IUnitOfWork uow, IMapper mapper) : base(uow, mapper)
         {
         }
 

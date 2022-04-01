@@ -7,7 +7,7 @@ namespace AutoPartsStore.BLL.Services
 {
     public class BrandService : BaseService<BrandDTO, Brand>
     {
-        public BrandService(IUnitOfWork uow) : base(uow)
+        public BrandService(IUnitOfWork uow, IMapper mapper) : base(uow, mapper)
         {
         }
 

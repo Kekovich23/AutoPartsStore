@@ -35,11 +35,11 @@ function DeleteData(Id) {
 
 function Delete(Id) {
     $.ajax({
-        'url': 'Brand/Delete',
+        'url': 'Model/Delete',
         'type': 'POST',
         'data': { 'Id': Id },
         'success': function () {
-            $('#brandTable').DataTable().draw();
+            $('#modelTable').DataTable().draw();
         }
     })
 }

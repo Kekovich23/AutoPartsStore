@@ -7,7 +7,7 @@ namespace AutoPartsStore.BLL.Services
 {
     public class FeatureService : BaseService<FeatureDTO, Feature>
     {
-        public FeatureService(IUnitOfWork uow) : base(uow)
+        public FeatureService(IUnitOfWork uow, IMapper mapper) : base(uow, mapper)
         {
         }
 
