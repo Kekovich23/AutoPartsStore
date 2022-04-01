@@ -17,6 +17,8 @@ namespace AutoPartsStore.BLL.Services
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Model, ModelDTO>()).CreateMapper();
 #pragma warning disable CS8604 // Possible null reference argument.
             ModelDTO modelDTO = mapper.Map<Model, ModelDTO>(entity);
+            modelDTO.BrandName = Database.GetRepository<Brand>().Get(b => b.Id == modelDTO.BrandId).Name;
+            modelDTO.TypeTransportName = Database.GetRepository<TypeTransport>().Get(b => b.Id == modelDTO.TypeTransportId).Name;
 #pragma warning restore CS8604 // Possible null reference argument.
             return modelDTO;
         }

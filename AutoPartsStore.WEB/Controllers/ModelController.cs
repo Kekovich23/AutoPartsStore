@@ -51,6 +51,11 @@ namespace AutoPartsStore.WEB.Controllers
             int recordsTotal = 0;
 
             IEnumerable<ModelDTO> modelDTOs = _modelService.GetAll();
+            foreach(var model in modelDTOs)
+            {
+                model.BrandName = _brandService.GetBrand(model.BrandId).Name;
+                model.TypeTransportName = _typeTransportService.GetTypeTransport(model.TypeTransportId).Name;
+            }
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<ModelDTO, ModelViewModel>()).CreateMapper();
             var customerData = mapper.Map<IEnumerable<ModelDTO>, IEnumerable<ModelViewModel>>(modelDTOs);
             ////Sorting

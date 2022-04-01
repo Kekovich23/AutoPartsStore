@@ -3,8 +3,8 @@
     'columns': [
         { 'data': 'id', 'name': 'Id', 'autowidth': true },
         { 'data': 'name', 'name': 'Name', 'autowidth': true },
-        { 'data': 'typeTransport', 'name': 'TypeTransport.Name', 'autowidth': true },
-        { 'data': 'brand', 'name': 'Brand.Name', 'autowidth': true },
+        { 'data': 'brandName', 'name': 'Brand', 'autowidth': true },
+        { 'data': 'typeTransportName', 'name': 'Type transport', 'autowidth': true },
         {
             "data": null,
             "render": function (data, type, row) {
@@ -24,19 +24,6 @@
 }
 
 CreateDataTable(brandRequest);
-
-function EditData(Id) {
-    $.ajax({
-        'url': 'Brand/Edit',
-        'type': 'GET',
-        'dataType': 'html',
-        'data': { 'Id': Id },
-        'success': function () {
-            $('#ajaxPart').html(Id);
-            $('#ajaxPart').show();
-        }
-    })
-}
 
 function DeleteData(Id) {
     if (confirm("Are you sure you want to delete ...?")) {
