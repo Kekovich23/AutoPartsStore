@@ -15,7 +15,7 @@
             }
         }],
     'ajax': {
-        'url': 'Brand/GetBrands',
+        'url': 'Brand/Get',
         'type': 'POST',
         'datatype': 'json'
     }
@@ -29,8 +29,8 @@ function EditData(Id) {
         'type': 'GET',
         'dataType': 'html',
         'data': { 'Id': Id },
-        'success': function () {
-            $('#ajaxPart').html(Id);
+        'success': function (data) {
+            $('#ajaxPart').html(data);
             $('#ajaxPart').show();
         }
     })

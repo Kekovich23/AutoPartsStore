@@ -1,11 +1,11 @@
-﻿function CreateDataTable(request) {
+﻿function CreateDataTable(options) {
     $(document).ready(function () {
-        $(request.table.Id).DataTable({
+        $(options.table.Id).DataTable({
             'processing': true,
             'serverSide': true,
             'filter': true,
-            'ajax': request.ajax,
-            'columns': request.columns
+            'ajax': options.ajax,
+            'columns': options.columns
         });
     });
 }

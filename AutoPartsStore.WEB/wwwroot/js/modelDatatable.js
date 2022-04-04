@@ -3,8 +3,8 @@
     'columns': [
         { 'data': 'id', 'name': 'Id', 'autowidth': true },
         { 'data': 'name', 'name': 'Name', 'autowidth': true },
-        { 'data': 'brandName', 'name': 'Brand', 'autowidth': true },
-        { 'data': 'typeTransportName', 'name': 'Type transport', 'autowidth': true },
+        { 'data': 'brand.Name', 'name': 'Brand', 'autowidth': true },
+        { 'data': 'typeTransport.Name', 'name': 'Type transport', 'autowidth': true },
         {
             "data": null,
             "render": function (data, type, row) {
