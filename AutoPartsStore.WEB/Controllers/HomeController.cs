@@ -1,6 +1,4 @@
-﻿using AutoPartsStore.AN.Entities;
-using AutoPartsStore.WEB.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using AutoPartsStore.WEB.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -8,17 +6,13 @@ namespace AutoPartsStore.WEB.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        UserManager<User> _userManager;
-        public HomeController(ILogger<HomeController> logger, UserManager<User> manager)
+        public HomeController()
         {
-            _logger = logger;
-            _userManager = manager;
         }
-        
+
         public IActionResult Index()
         {
-            return View(_userManager.Users.ToList());
+            return View();
         }
 
         public IActionResult Privacy()
