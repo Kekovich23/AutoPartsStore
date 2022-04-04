@@ -9,10 +9,7 @@ namespace AutoPartsStore.WEB.AutoMapperProfiles
     {
         public ModelProfile()
         {
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-            CreateMap<Model, ModelDTO>().ForMember(m => m.BrandName, opt => opt.MapFrom(m => m.Brand.Name));
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-            CreateMap<ModelDTO, Model>();
+            CreateMap<Model, ModelDTO>().ReverseMap();
             CreateMap<ModelDTO, ModelViewModel>().ReverseMap();
         }
     }

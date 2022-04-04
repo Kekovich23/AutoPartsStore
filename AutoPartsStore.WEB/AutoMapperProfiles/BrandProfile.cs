@@ -9,8 +9,8 @@ namespace AutoPartsStore.WEB.AutoMapperProfiles
     {
         public BrandProfile()
         {
-            CreateMap<Brand, BrandDTO>().ReverseMap();
-            CreateMap<BrandDTO, BrandViewModel>().ReverseMap();
+            CreateMap<Brand, BrandDTO>().ReverseMap();  
+            CreateMap<BrandDTO, BrandViewModel>().ReverseMap();            
         }
     }
 }
