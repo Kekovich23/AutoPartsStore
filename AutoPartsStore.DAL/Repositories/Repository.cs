@@ -1,6 +1,7 @@
 ﻿using AutoPartsStore.DAL.Context;
 using AutoPartsStore.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace AutoPartsStore.DAL.Repositories
 {
@@ -18,12 +19,12 @@ namespace AutoPartsStore.DAL.Repositories
         public void Create(TEntity item)
         {
             _dbSet.Add(item);
-            _db.SaveChanges();            
+            _db.SaveChanges();
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public IQueryable<TEntity> GetAll()
         {
-            return _dbSet.AsNoTracking().ToList();
+            return _dbSet.AsNoTracking();
         }
 
         public TEntity Get(Guid id)
@@ -45,7 +46,7 @@ namespace AutoPartsStore.DAL.Repositories
             _db.SaveChanges();
         }
 
-        public TEntity Get(Func<TEntity, bool> predicate)
+        public TEntity Get(Expression<Func<TEntity, bool>> predicate)
         {
 #pragma warning disable CS8603 // Possible null reference return.
             return _dbSet.Where(predicate).FirstOrDefault();

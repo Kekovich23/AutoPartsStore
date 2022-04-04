@@ -1,14 +1,19 @@
 ﻿using AutoMapper;
-using AutoPartsStore.AN.Infrastructure;
 using AutoPartsStore.BLL.Interfaces;
 using AutoPartsStore.DAL.Interfaces;
+using System.Linq.Expressions;
 
 namespace AutoPartsStore.BLL.Services
 {
-    public abstract class BaseService<TEntityDTO, TEntity> : IService<TEntityDTO, TEntity> where TEntityDTO : class where TEntity : class
+
+
+    public abstract class BaseService<TEntityDTO, TEntity, TFilter> : IService<TEntityDTO, TEntity, TFilter>
+        where TEntityDTO : class
+        where TEntity : class
+        where TFilter : class
     {
-        protected IUnitOfWork Database;
-        protected IMapper _mapper;
+        protected readonly IUnitOfWork Database;
+        protected readonly IMapper _mapper;
 
         public BaseService(IUnitOfWork uow, IMapper mapper)
         {
@@ -16,9 +21,19 @@ namespace AutoPartsStore.BLL.Services
             _mapper = mapper;
         }
 
-        public void Create(TEntityDTO entityDTO)
+        public ServiceResult Create(TEntityDTO entityDTO)
         {
-            Database.GetRepository<TEntity>().Create(_mapper.Map<TEntity>(entityDTO));
+            ServiceResult serviceResult = new();
+            try
+            {
+                Database.GetRepository<TEntity>().Create(_mapper.Map<TEntity>(entityDTO));
+                serviceResult.IsSuccessful = true;
+            }
+            catch
+            {
+                serviceResult.Message = "Failed to create";
+            }
+            return serviceResult;
         }
 
         public void Dispose()
@@ -26,24 +41,86 @@ namespace AutoPartsStore.BLL.Services
             Database.Dispose();
         }
 
-        public TEntityDTO Get(Func<TEntity, bool> predicate)
+        public ServiceResult<TEntityDTO> Get(Expression<Func<TEntity, bool>> predicate)
         {
-            return _mapper.Map<TEntityDTO>(Database.GetRepository<TEntity>().Get(predicate));
+            ServiceResult<TEntityDTO> serviceResult = new();
+            try
+            {
+                var query = Database.GetRepository<TEntity>()
+                .GetAll()
+                .Where(predicate);
+
+                query = Include(query);
+
+                serviceResult.Data = _mapper.Map<TEntityDTO>(query.FirstOrDefault());
+                serviceResult.IsSuccessful = true;
+            }
+            catch
+            {
+                serviceResult.Message = "Failed to get";
+            }
+            return serviceResult;
         }
 
-        public IEnumerable<TEntityDTO> GetAll()
-        {            
-            return _mapper.Map<IEnumerable<TEntityDTO>>(Database.GetRepository<TEntity>().GetAll());
+        public ServiceResult<IEnumerable<TEntityDTO>> GetAll(TFilter filter)
+        {
+            ServiceResult<IEnumerable<TEntityDTO>> serviceResult = new();
+            try
+            {
+                var query = Database.GetRepository<TEntity>().GetAll();
+
+                query = Include(query);
+
+                query = FilterOut(query, filter);
+
+                serviceResult.Data = _mapper.Map<IEnumerable<TEntityDTO>>(query);
+                serviceResult.IsSuccessful = true;
+            }
+            catch
+            {
+                serviceResult.Message = "Failed to get all";
+            }
+            return serviceResult;
         }
 
-        public void Remove(TEntityDTO entityDTO)
+        public ServiceResult Remove(TEntityDTO entityDTO)
         {
-            Database.GetRepository<TEntity>().Remove(_mapper.Map<TEntity>(entityDTO));
+            ServiceResult serviceResult = new();
+            try
+            {
+                Database.GetRepository<TEntity>().Remove(_mapper.Map<TEntity>(entityDTO));
+                serviceResult.IsSuccessful = true;
+            }
+            catch
+            {
+                serviceResult.Message = "Failed to remove";
+            }
+            return serviceResult;
         }
 
-        public void Update(TEntityDTO entityDTO)
+        public ServiceResult Update(TEntityDTO entityDTO)
         {
-            Database.GetRepository<TEntity>().Update(_mapper.Map<TEntity>(entityDTO));
+            ServiceResult serviceResult = new();
+            try
+            {
+                Database.GetRepository<TEntity>().Update(_mapper.Map<TEntity>(entityDTO));
+                serviceResult.IsSuccessful = true;
+            }
+            catch
+            {
+                serviceResult.Message = "Failed to update";
+            }
+            return serviceResult;
+        }
+
+        protected virtual IQueryable<TEntity> Include(IQueryable<TEntity> query)
+        {
+            return query;
+        }
+
+        protected virtual IQueryable<TEntity> FilterOut(IQueryable<TEntity> query, TFilter filter)
+        {
+            return query;
         }
     }
 }
