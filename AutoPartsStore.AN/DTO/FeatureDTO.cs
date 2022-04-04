@@ -4,6 +4,6 @@
     {
         public Guid Id { get; set; }
         public string? Name { get; set; }
-        public Guid TypeDetailId { get; set; }
+        public TypeDetailDTO TypeDetail { get; set; }
     }
 }

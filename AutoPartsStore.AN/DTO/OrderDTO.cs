@@ -3,7 +3,7 @@
     public class OrderDTO
     {
         public Guid Id { get; set; }
-        public Guid CustomerId { get; set; }
+        public CustomerDTO Customer { get; set; }
         public DateTime CreatedDate { get; set; }
     }
 }
