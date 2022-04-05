@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace AutoPartsStore.DAL.Context
-{
-    public class ApplicationContext : IdentityDbContext<User>
-    {
+namespace AutoPartsStore.DAL.Context {
+    public class ApplicationContext : IdentityDbContext<User> {
         public DbSet<Brand>? Brands { get; set; }
         public DbSet<Detail>? Details { get; set; }
         public DbSet<Feature>? Features { get; set; }
@@ -20,15 +18,11 @@ namespace AutoPartsStore.DAL.Context
         public DbSet<TypeTransport>? TypeTransports { get; set; }
         public DbSet<Customer>? Customers { get; set; }
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        {
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) {
 
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
         }
     }
