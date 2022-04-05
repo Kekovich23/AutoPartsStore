@@ -1,9 +1,8 @@
-﻿namespace AutoPartsStore.AN.DTO
-{
-    public class FeatureDTO
-    {
-        public Guid Id { get; set; }
+﻿using AutoPartsStore.AN.DTO.Base;
+
+namespace AutoPartsStore.AN.DTO {
+    public class FeatureDTO : BaseEntityDTO<int> {
         public string? Name { get; set; }
-        public TypeDetailDTO TypeDetail { get; set; }
+        public TypeDetailDTO? TypeDetail { get; set; }
     }
 }

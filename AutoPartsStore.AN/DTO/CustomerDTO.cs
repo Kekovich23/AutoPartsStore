@@ -1,8 +1,7 @@
-﻿namespace AutoPartsStore.AN.DTO
-{
-    public class CustomerDTO
-    {
-        public Guid Id { get; set; }
+﻿using AutoPartsStore.AN.DTO.Base;
+
+namespace AutoPartsStore.AN.DTO {
+    public class CustomerDTO : BaseEntityDTO<Guid> {
         public string? Name { get; set; }
         public string? Surname { get; set; }
         public string? Email { get; set; }

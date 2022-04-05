@@ -1,8 +1,7 @@
-﻿namespace AutoPartsStore.AN.Entities
-{
-    public class TypeTransport
-    {
-        public Guid Id { get; set; }
+﻿using AutoPartsStore.AN.Entities.Base;
+
+namespace AutoPartsStore.AN.Entities {
+    public class TypeTransport : BaseEntity<int> {
         public string? Name { get; set; }
     }
 }
