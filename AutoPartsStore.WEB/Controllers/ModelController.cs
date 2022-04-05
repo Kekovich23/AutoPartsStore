@@ -5,23 +5,19 @@ using AutoPartsStore.WEB.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace AutoPartsStore.WEB.Controllers
-{
-    public class ModelController : Controller
-    {
+namespace AutoPartsStore.WEB.Controllers {
+    public class ModelController : Controller {
         private readonly ModelService _modelService;
         private readonly BrandService _brandService;
         private readonly TypeTransportService _typeTransportService;
         private readonly IMapper _mapper;
-        public ModelController(ModelService modelService, BrandService brandService, TypeTransportService typeTransportService, IMapper mapper)
-        {
+        public ModelController(ModelService modelService, BrandService brandService, TypeTransportService typeTransportService, IMapper mapper) {
             _modelService = modelService;
             _brandService = brandService;
             _typeTransportService = typeTransportService;
             _mapper = mapper;
         }
-        public IActionResult Index()
-        {
+        public IActionResult Index() {
             return View();
         }
 

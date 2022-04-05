@@ -1,21 +1,21 @@
 ﻿using AutoMapper;
+using AutoPartsStore.AN.DTO.Base;
+using AutoPartsStore.AN.Entities.Base;
 using AutoPartsStore.BLL.Interfaces;
+using AutoPartsStore.WEB.Models.Base;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AutoPartsStore.WEB.Controllers.Base
-{
-    public class CrudController<TService, TEntity, TEntityDto, TEntityViewModel, TFilter> : Controller
-        where TService : IService<TEntityDto, TEntity, TFilter>
-        where TEntity : class
-        where TEntityDto : class
-        where TEntityViewModel : class
-        where TFilter : class
-    {
+namespace AutoPartsStore.WEB.Controllers.Base {
+    public class CrudController<TEntity, TEntityDTO, TEntityViewModel, TService, TKey, TFilter> : Controller
+        where TService : IService<TEntity, TEntityDTO, TKey, TFilter>
+        where TEntity : BaseEntity<TKey>
+        where TEntityDTO : BaseEntityDTO<TKey>
+        where TEntityViewModel : BaseEntityViewModel<TKey>
+        where TFilter : class {
         protected readonly TService _service;
         private readonly IMapper _mapper;
 
-        public CrudController(TService service, IMapper mapper)
-        {
+        public CrudController(TService service, IMapper mapper) {
             _service = service;
             _mapper = mapper;
         }
@@ -23,9 +23,12 @@ namespace AutoPartsStore.WEB.Controllers.Base
         // GET - TFilters
 
         [HttpPost]
-        public virtual IActionResult Get(TFilter filter)
-        {
+        public virtual IActionResult GetAll(TFilter filter) {
             var serviceResult = _service.GetAll(filter);
+            if (!serviceResult.IsSuccessful) {
+                return BadRequest(serviceResult.Message);
+            }
+
             //TODO CHECK
             var customerData = _mapper.Map<IEnumerable<TEntityViewModel>>(serviceResult.Data);
 
@@ -60,17 +63,15 @@ namespace AutoPartsStore.WEB.Controllers.Base
         }
 
         // GET/id
-        //[HttpGet]
-        //public IActionResult Get(Guid id)
-        //{
-        //    var result = _service.Get(id);
-        //    if (result)
-        //    {
-        //        return View(result);
-        //    }
+        [HttpGet]
+        public IActionResult Get(TKey id) {
+            var result = _service.Get(id);
+            if (!result.IsSuccessful) {
+                return View(result);
+            }
 
-        //    return View("Details", result.Data);
-        //}
+            return View("Details", result.Data);
+        }
 
         // POST
 

@@ -4,15 +4,12 @@ using AutoPartsStore.BLL.Services;
 using AutoPartsStore.WEB.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AutoPartsStore.WEB.Controllers
-{
-    public class TypeTransportController : Controller
-    {
+namespace AutoPartsStore.WEB.Controllers {
+    public class TypeTransportController : Controller {
         private readonly TypeTransportService _typeTransportService;
         private readonly IMapper _mapper;
 
-        public TypeTransportController(TypeTransportService typeTransportService, IMapper mapper)
-        {
+        public TypeTransportController(TypeTransportService typeTransportService, IMapper mapper) {
             _typeTransportService = typeTransportService;
             _mapper = mapper;
         }
