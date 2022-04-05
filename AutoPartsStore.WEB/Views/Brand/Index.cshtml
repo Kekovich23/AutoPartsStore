@@ -2,6 +2,10 @@
     ViewData["Title"] = "Brand page";
 }
 <link href="~/lib/datatables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<link href="~/js/Notify/Notify.css" rel="stylesheet" />
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<div id="notifications"></div>
 <div class="container">
     <br />
     <div style="width:90%; margin:0 auto;">
@@ -18,12 +22,14 @@
     </div>
 </div>
 
-<a class='btn btn-primary' href='/Brand/Add/'>Add new</a>
+<a class='btn btn-primary' onclick="CreateData()">Add new</a>
 
 @section Scripts
 {
 <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
 <script src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
+<script src="~/js/Notify/Notify.js"></script>
+<script src="~/js/Requests.js"></script>
 <script src="~/js/CreateDataTable.js"></script>
-<script src="~/js/brandDatatable.js"></script>
+<script src="~/js/DataTables/BrandDatatable.js"></script>
 }

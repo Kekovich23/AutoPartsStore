@@ -11,7 +11,7 @@ namespace AutoPartsStore.WEB.Controllers.Base {
         where TEntity : BaseEntity<TKey>
         where TEntityDTO : BaseEntityDTO<TKey>
         where TEntityViewModel : BaseEntityViewModel<TKey>
-        where TFilter : class {
+        where TFilter : class{
         protected readonly TService _service;
         private readonly IMapper _mapper;
 
@@ -26,7 +26,7 @@ namespace AutoPartsStore.WEB.Controllers.Base {
         public virtual IActionResult GetAll(TFilter filter) {
             var serviceResult = _service.GetAll(filter);
             if (!serviceResult.IsSuccessful) {
-                return BadRequest(serviceResult.Message);
+                return BadRequest(error: serviceResult.Message);
             }
 
             //TODO CHECK
@@ -64,13 +64,18 @@ namespace AutoPartsStore.WEB.Controllers.Base {
 
         // GET/id
         [HttpGet]
-        public IActionResult Get(TKey id) {
+        public virtual IActionResult Get(TKey id) {
             var result = _service.Get(id);
             if (!result.IsSuccessful) {
-                return View(result);
+                return BadRequest(result.Message);
             }
 
             return View("Details", result.Data);
+        }
+
+        [HttpDelete]
+        public virtual IActionResult Delete(TKey id) {
+            return Json("ddd");
         }
 
         // POST

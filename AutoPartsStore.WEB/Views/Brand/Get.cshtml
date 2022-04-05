@@ -1,0 +1,10 @@
+﻿@model AutoPartsStore.WEB.Models.BrandViewModel
+@{
+    ViewBag.Title = Model.Name;
+}
+<form method="post">
+    <div>
+        <label>Название</label><br>
+        <input type="text" name="Name" value=@Model.Name />
+    </div>
+</form>

@@ -1,6 +1,6 @@
 ﻿@model AutoPartsStore.WEB.Models.BrandViewModel
 @{
-    ViewBag.Title = "Редактирование модели";
+    ViewBag.Title = Model.IsNew ? "Редактирование модели" : "Добавление";
 }
 <form method="post">
     <div>
