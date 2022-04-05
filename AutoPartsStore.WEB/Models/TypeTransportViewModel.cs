@@ -1,8 +1,7 @@
-﻿namespace AutoPartsStore.WEB.Models
-{
-    public class TypeTransportViewModel
-    {
-        public Guid Id { get; set; }
+﻿using AutoPartsStore.WEB.Models.Base;
+
+namespace AutoPartsStore.WEB.Models {
+    public class TypeTransportViewModel : BaseEntityViewModel<Guid> {
         public string? Name { get; set; }
     }
 }

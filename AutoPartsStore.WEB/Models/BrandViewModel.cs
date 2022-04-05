@@ -1,8 +1,9 @@
-﻿namespace AutoPartsStore.WEB.Models
+﻿using AutoPartsStore.WEB.Models.Base;
+
+namespace AutoPartsStore.WEB.Models
 {
-    public class BrandViewModel
+    public class BrandViewModel : BaseEntityViewModel<Guid>
     {
-        public Guid Id { get; set; }
-        public string? Name { get; set; }
+        public string? Name { get; set; }        
     }
 }
