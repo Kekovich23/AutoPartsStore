@@ -1,4 +1,5 @@
 ﻿using AutoPartsStore.AN.Entities;
+using AutoPartsStore.DAL.Configure;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +25,8 @@ namespace AutoPartsStore.DAL.Context {
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new BrandConfiguration());
         }
     }
 }
