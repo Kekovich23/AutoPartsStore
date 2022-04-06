@@ -2,6 +2,6 @@
 
 namespace AutoPartsStore.AN.Entities {
     public class Section : BaseEntity<int> {
-        public string? Name { get; set; }
+        public string Name { get; set; }
     }
 }

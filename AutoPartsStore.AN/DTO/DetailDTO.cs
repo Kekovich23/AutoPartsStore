@@ -2,6 +2,6 @@
 
 namespace AutoPartsStore.AN.DTO {
     public class DetailDTO : BaseEntityDTO<Guid> {
-        public ManufacturerDTO? Manufacturer { get; set; }
+        public ManufacturerDTO Manufacturer { get; set; }
     }
 }

@@ -2,6 +2,6 @@
 
 namespace AutoPartsStore.AN.DTO {
     public class TypeTransportDTO : BaseEntityDTO<int> {
-        public string? Name { get; set; }
+        public string Name { get; set; }
     }
 }

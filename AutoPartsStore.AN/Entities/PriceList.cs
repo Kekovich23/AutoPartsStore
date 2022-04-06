@@ -5,6 +5,6 @@ namespace AutoPartsStore.AN.Entities {
         public Guid DetailId { get; set; }
         public uint Price { get; set; }
         public uint Count { get; set; }
-        public virtual Detail? Detail { get; set; }
+        public virtual Detail Detail { get; set; }
     }
 }

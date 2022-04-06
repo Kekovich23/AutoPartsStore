@@ -2,6 +2,6 @@
 
 namespace AutoPartsStore.AN.Entities {
     public class Manufacturer : BaseEntity<Guid> {
-        public string? Name { get; set; }
+        public string Name { get; set; }
     }
 }

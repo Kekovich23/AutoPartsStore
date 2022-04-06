@@ -2,7 +2,7 @@
 
 namespace AutoPartsStore.AN.DTO {
     public class FeatureDTO : BaseEntityDTO<int> {
-        public string? Name { get; set; }
-        public TypeDetailDTO? TypeDetail { get; set; }
+        public string Name { get; set; }
+        public TypeDetailDTO TypeDetail { get; set; }
     }
 }
