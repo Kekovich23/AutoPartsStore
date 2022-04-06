@@ -23,7 +23,7 @@ namespace AutoPartsStore.BLL.Services {
             }
             catch {
                 // TODO: log
-                return ServiceResult<TEntityDTO>.Failed("Failed to create");
+                return ServiceResult<TEntityDTO>.Failed("Failed to create", entityDTO);
             }
         }
 
@@ -46,7 +46,7 @@ namespace AutoPartsStore.BLL.Services {
             }
             catch {
                 // TODO: log
-                return ServiceResult<TEntityDTO>.Failed("Failed to get");
+                return ServiceResult<TEntityDTO>.Failed("Failed to get", null);
             }
         }
 
@@ -61,14 +61,14 @@ namespace AutoPartsStore.BLL.Services {
             }
             catch {
                 // TODO: log
-                return ServiceResult<IEnumerable<TEntityDTO>>.Failed("Failed to get all");
+                return ServiceResult<IEnumerable<TEntityDTO>>.Failed("Failed to get all", null);
             }
         }
 
         public ServiceResult Remove(TKey id) {
             try {
                 var query = GetQuery(id);
-                Database.GetRepository<TEntity>().Remove(_mapper.Map<TEntity>(query));
+                Database.GetRepository<TEntity>().Remove(_mapper.Map<TEntity>(query.FirstOrDefault()));
                 return ServiceResult.Success();
             }
             catch {
@@ -84,7 +84,7 @@ namespace AutoPartsStore.BLL.Services {
             }
             catch {
                 // TODO: log
-                return ServiceResult<TEntityDTO>.Failed("Failed to update");
+                return ServiceResult<TEntityDTO>.Failed("Failed to update", entityDTO);
             }
         }
 

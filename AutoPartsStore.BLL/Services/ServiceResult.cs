@@ -17,8 +17,8 @@
         public static ServiceResult<T> Success(T data) {
             return new ServiceResult<T> { IsSuccessful = true, Data = data };
         }
-        public static new ServiceResult<T> Failed(string message) {
-            return new ServiceResult<T> { Message = message };
+        public static new ServiceResult<T> Failed(string message, T data) {
+            return new ServiceResult<T> { Message = message, Data = data };
         }
     }
 }
