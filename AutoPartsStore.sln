@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoPartsStore.DAL", "AutoP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoPartsStore.BLL", "AutoPartsStore.BLL\AutoPartsStore.BLL.csproj", "{0BF98ED6-14A1-4073-9870-76363E36EDEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoPartsStore.AN", "AutoPartsStore.AN\AutoPartsStore.AN.csproj", "{34D80FA7-B0B9-4947-9422-AA32CB2A9252}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoPartsStore.AN", "AutoPartsStore.AN\AutoPartsStore.AN.csproj", "{34D80FA7-B0B9-4947-9422-AA32CB2A9252}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E4548A4F-C4A2-472F-B81E-B96E20FD58F5}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
