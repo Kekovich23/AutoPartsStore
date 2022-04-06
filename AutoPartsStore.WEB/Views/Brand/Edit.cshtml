@@ -1,6 +1,6 @@
 ﻿@model AutoPartsStore.WEB.Models.BrandViewModel
 @{
-    ViewBag.Title = Model.IsNew ? "Редактирование модели" : "Добавление";
+    ViewBag.Title = Model.IsNew ? "Добавление новой марки" : "Редактирование марки";
 }
 <form method="post">
     <div>
@@ -8,5 +8,5 @@
         <input type="text" name="Name" value=@Model.Name />
     </div>
     <input type="hidden" name="Id" value="@Model.Id" />
-    <input type="submit" value="Изменить модель" />
+    <input type="submit" value=@(Model.IsNew ? "Добавить" : "Изменить") />
 </form>

@@ -5,7 +5,7 @@
         {
             'data': 'name', 'name': 'Name', 'autowidth': true,
             'render': function (data, type, row) {
-                return "<a onclick=GetData('" + row.id + "'); >" + data + "</a>";
+                return "<a class='btn' href='Brand/Get/" + row.id + "'>" + data + "</a>";
             }
         },
         {
@@ -15,7 +15,7 @@
         },
         {
             "render": function (data, type, row) {
-                return "<a class='btn btn-info' href='/Brand/Edit/" + row.id + "'>Edit</a>";
+                return "<a class='btn btn-info' href='Brand/Edit/" + row.id + "'>Edit</a>";
             }
         }],
     'ajax': {
@@ -23,7 +23,7 @@
         'type': 'POST',
         'datatype': 'json',
         'error': function (err) {
-            Notify(err.responseText, null, null, 'danger');
+            Notify(err.responseText, 'danger');
         }
     }
 }
@@ -37,27 +37,4 @@ function DeleteData(Id) {
         'tableId': '#brandTable'
     }
     Delete(option);
-}
-
-function EditData(Id) {
-    var option = {
-        'url': 'Brand/Edit',
-        'data': { 'id': Id }
-    }
-    Edit(option);
-}
-
-function GetData(Id) {
-    var option = {
-        'url': 'Brand/Get',
-        'data': { 'id': Id }
-    }
-    Get(option);
-}
-
-function CreateData() {
-    var option = {
-        'url': 'Brand/Create'
-    }
-    Create(option);
 }

@@ -10,8 +10,8 @@ namespace AutoPartsStore.WEB.Controllers.Base {
         where TService : IService<TEntity, TEntityDTO, TKey, TFilter>
         where TEntity : BaseEntity<TKey>
         where TEntityDTO : BaseEntityDTO<TKey>
-        where TEntityViewModel : BaseEntityViewModel<TKey>
-        where TFilter : class{
+        where TEntityViewModel : new ()
+        where TFilter : class {
         protected readonly TService _service;
         private readonly IMapper _mapper;
 
@@ -62,26 +62,57 @@ namespace AutoPartsStore.WEB.Controllers.Base {
             return Json(new { draw, recordsFiltered = recordsTotal, recordsTotal, data });
         }
 
-        // GET/id
         [HttpGet]
         public virtual IActionResult Get(TKey id) {
             var result = _service.Get(id);
             if (!result.IsSuccessful) {
-                return BadRequest(result.Message);
+                return View("ErrorGet", result.Message);
             }
-
-            return View("Details", result.Data);
+            return View(_mapper.Map<TEntityViewModel>(result.Data));
         }
 
         [HttpDelete]
         public virtual IActionResult Delete(TKey id) {
-            return Json("ddd");
+            var result = _service.Remove(id);
+
+            if (!result.IsSuccessful) {
+                return BadRequest(result.Message);
+            }
+            return Ok();
         }
 
-        // POST
+        [HttpGet]
+        public virtual IActionResult Add() {
+            return View("Edit", new TEntityViewModel { });
+        }
 
-        // PUT - TEntityViewModel
+        [HttpPost]
+        public virtual IActionResult Add(TEntityViewModel entityViewModel) {
+            var result = _service.Create(_mapper.Map<TEntityDTO>(entityViewModel));
+            if (!result.IsSuccessful) {
+                ViewBag.isFailed = true;
+                return View(entityViewModel);
+            }
+            return RedirectToAction("Index");
+        }
 
-        // DELETE - id
+        [HttpGet]
+        public virtual IActionResult Edit(TKey id) {
+            var result = _service.Get(id);
+            if (!result.IsSuccessful) {
+                return View("ErrorGet", result.Message);
+            }
+            return View(_mapper.Map<TEntityViewModel>(result.Data));
+        }
+
+        [HttpPost]
+        public virtual IActionResult Edit(TEntityViewModel entityViewModel) {
+            var result = _service.Update(_mapper.Map<TEntityDTO>(entityViewModel));
+            if (!result.IsSuccessful) {
+                ViewBag.isFailed = true;
+                return View(entityViewModel);
+            }
+            return RedirectToAction("Index");
+        }
     }
 }

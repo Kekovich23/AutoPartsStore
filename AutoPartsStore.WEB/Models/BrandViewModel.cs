@@ -1,4 +1,5 @@
 ﻿using AutoPartsStore.WEB.Models.Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace AutoPartsStore.WEB.Models
 {
