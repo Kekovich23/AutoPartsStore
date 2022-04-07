@@ -3,11 +3,12 @@ using AutoPartsStore.AN.DTO;
 using AutoPartsStore.AN.Entities;
 using AutoPartsStore.BLL.Filters;
 using AutoPartsStore.DAL.Interfaces;
+using Microsoft.Extensions.Logging;
 using System.Data.Entity;
 
 namespace AutoPartsStore.BLL.Services {
     public class ModelService : BaseService<Model, ModelDTO, Guid, ModelFilter> {
-        public ModelService(IUnitOfWork uow, IMapper mapper) : base(uow, mapper) {
+        public ModelService(IUnitOfWork uow, IMapper mapper, ILogger<BaseService<Model, ModelDTO, Guid, ModelFilter>> logger) : base(uow, mapper, logger) {
         }
 
         protected override IQueryable<Model> Include(IQueryable<Model> query) {

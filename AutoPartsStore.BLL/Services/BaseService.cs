@@ -3,6 +3,7 @@ using AutoPartsStore.AN.DTO.Base;
 using AutoPartsStore.AN.Entities.Base;
 using AutoPartsStore.BLL.Interfaces;
 using AutoPartsStore.DAL.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace AutoPartsStore.BLL.Services {
     public abstract class BaseService<TEntity, TEntityDTO, TKey, TFilter> : IService<TEntity, TEntityDTO, TKey, TFilter>
@@ -10,10 +11,12 @@ namespace AutoPartsStore.BLL.Services {
         where TEntity : BaseEntity<TKey> {
         protected readonly IUnitOfWork Database;
         protected readonly IMapper _mapper;
+        private readonly ILogger<BaseService<TEntity, TEntityDTO, TKey, TFilter>> _logger;
 
-        public BaseService(IUnitOfWork uow, IMapper mapper) {
+        public BaseService(IUnitOfWork uow, IMapper mapper, ILogger<BaseService<TEntity, TEntityDTO, TKey, TFilter>> logger) {
             Database = uow;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public ServiceResult<TEntityDTO> Create(TEntityDTO entityDTO) {
@@ -21,8 +24,8 @@ namespace AutoPartsStore.BLL.Services {
                 Database.GetRepository<TEntity>().Create(_mapper.Map<TEntity>(entityDTO));
                 return ServiceResult<TEntityDTO>.Success(entityDTO);
             }
-            catch {
-                // TODO: log
+            catch (Exception ex) {
+                _logger.LogError(ex, "Failed to create");
                 return ServiceResult<TEntityDTO>.Failed("Failed to create", entityDTO);
             }
         }
@@ -44,8 +47,8 @@ namespace AutoPartsStore.BLL.Services {
                 var query = GetQuery(id);
                 return ServiceResult<TEntityDTO>.Success(_mapper.Map<TEntityDTO>(query.FirstOrDefault()));
             }
-            catch {
-                // TODO: log
+            catch (Exception ex){
+                _logger.LogError(ex, "Failed to get");
                 return ServiceResult<TEntityDTO>.Failed("Failed to get", null);
             }
         }
@@ -59,8 +62,8 @@ namespace AutoPartsStore.BLL.Services {
                 query = FilterOut(query, filter);
                 return ServiceResult<IEnumerable<TEntityDTO>>.Success(_mapper.Map<IEnumerable<TEntityDTO>>(query));
             }
-            catch {
-                // TODO: log
+            catch (Exception ex){
+                _logger.LogError(ex, "Failed to get all");
                 return ServiceResult<IEnumerable<TEntityDTO>>.Failed("Failed to get all", null);
             }
         }
@@ -71,8 +74,8 @@ namespace AutoPartsStore.BLL.Services {
                 Database.GetRepository<TEntity>().Remove(_mapper.Map<TEntity>(query.FirstOrDefault()));
                 return ServiceResult.Success();
             }
-            catch {
-                // TODO: log
+            catch (Exception ex){
+                _logger.LogError(ex, "Failed to remove");
                 return ServiceResult.Failed("Failed to remove");
             }
         }
@@ -82,8 +85,8 @@ namespace AutoPartsStore.BLL.Services {
                 Database.GetRepository<TEntity>().Update(_mapper.Map<TEntity>(entityDTO));
                 return ServiceResult<TEntityDTO>.Success(entityDTO);
             }
-            catch {
-                // TODO: log
+            catch (Exception ex){
+                _logger.LogError(ex, "Failed to update");
                 return ServiceResult<TEntityDTO>.Failed("Failed to update", entityDTO);
             }
         }

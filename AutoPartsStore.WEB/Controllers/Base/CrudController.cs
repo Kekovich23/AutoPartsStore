@@ -14,16 +14,20 @@ namespace AutoPartsStore.WEB.Controllers.Base {
         where TFilter : class {
         protected readonly TService _service;
         private readonly IMapper _mapper;
+        private readonly ILogger<CrudController<TEntity, TEntityDTO, TEntityViewModel, TService, TKey, TFilter>> _logger;
 
-        public CrudController(TService service, IMapper mapper) {
+        public CrudController(TService service, IMapper mapper, ILogger<CrudController<TEntity, TEntityDTO, TEntityViewModel, TService, TKey, TFilter>> logger) {
             _service = service;
             _mapper = mapper;
+            _logger = logger;
+            _logger.LogDebug(1, "NLog injected into HomeController");
         }
 
         // GET - TFilters
 
         [HttpPost]
         public virtual IActionResult GetAll(TFilter filter) {
+            _logger.LogInformation("Hello, this is the index!");
             var serviceResult = _service.GetAll(filter);
             if (!serviceResult.IsSuccessful) {
                 return BadRequest(error: serviceResult.Message);
@@ -83,6 +87,7 @@ namespace AutoPartsStore.WEB.Controllers.Base {
 
         [HttpGet]
         public virtual IActionResult Add() {
+            _logger.LogInformation("Pressed 'Add' button.");
             ViewBag.isFailed = false;
             return View("Edit", new TEntityViewModel { });
         }

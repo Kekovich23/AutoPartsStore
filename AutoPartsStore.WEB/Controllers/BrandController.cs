@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AutoPartsStore.WEB.Controllers {
     public class BrandController : CrudController<Brand, BrandDTO, BrandViewModel, BrandService, Guid, BrandFilter> {
-        public BrandController(BrandService service, IMapper mapper) : base(service, mapper) {
+        public BrandController(BrandService service, IMapper mapper, ILogger<CrudController<Brand, BrandDTO, BrandViewModel, BrandService, Guid, BrandFilter>> logger) : base(service, mapper, logger) {
         }
 
         public IActionResult Index() {
