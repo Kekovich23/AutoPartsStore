@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AutoPartsStore.DAL.Context {
     public class ApplicationContext : IdentityDbContext<User> {
-        public DbSet<Brand>? Brands { get; set; }
+        public DbSet<Brand> Brands { get; set; }
         public DbSet<Detail>? Details { get; set; }
         public DbSet<Feature>? Features { get; set; }
         public DbSet<Manufacturer>? Manufacturers { get; set; }
@@ -27,6 +27,7 @@ namespace AutoPartsStore.DAL.Context {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new BrandConfiguration());
+            modelBuilder.ApplyConfiguration(new TypeTransportConfiguration());
         }
     }
 }

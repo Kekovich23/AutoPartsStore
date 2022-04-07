@@ -1,32 +1,25 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace AutoPartsStore.DAL.Migrations
-{
-    public partial class InitialMigration : Migration
-    {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
+namespace AutoPartsStore.DAL.Migrations {
+    public partial class test : Migration {
+        protected override void Up(MigrationBuilder migrationBuilder) {
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "AspNetUsers",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -43,98 +36,86 @@ namespace AutoPartsStore.DAL.Migrations
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
                     AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Brands",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Brands", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Customers",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Customers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Manufacturers",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Manufacturers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Sections",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                columns: table => new {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Sections", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Statuses",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                columns: table => new {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Statuses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "TypeTransports",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                columns: table => new {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_TypeTransports", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
                     table.ForeignKey(
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
@@ -146,16 +127,14 @@ namespace AutoPartsStore.DAL.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
                     table.ForeignKey(
                         name: "FK_AspNetUserClaims_AspNetUsers_UserId",
@@ -167,15 +146,13 @@ namespace AutoPartsStore.DAL.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserLogins",
-                columns: table => new
-                {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                columns: table => new {
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
                         name: "FK_AspNetUserLogins_AspNetUsers_UserId",
@@ -187,13 +164,11 @@ namespace AutoPartsStore.DAL.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
-                columns: table => new
-                {
+                columns: table => new {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
@@ -211,15 +186,13 @@ namespace AutoPartsStore.DAL.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
-                columns: table => new
-                {
+                columns: table => new {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                     table.ForeignKey(
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
@@ -231,14 +204,12 @@ namespace AutoPartsStore.DAL.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Orders",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Orders_Customers_CustomerId",
@@ -250,13 +221,11 @@ namespace AutoPartsStore.DAL.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Details",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ManufacturerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Details", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Details_Manufacturers_ManufacturerId",
@@ -268,18 +237,18 @@ namespace AutoPartsStore.DAL.Migrations
 
             migrationBuilder.CreateTable(
                 name: "TypeDetails",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SectionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                columns: table => new {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SectionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SectionId1 = table.Column<int>(type: "int", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_TypeDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TypeDetails_Sections_SectionId",
-                        column: x => x.SectionId,
+                        name: "FK_TypeDetails_Sections_SectionId1",
+                        column: x => x.SectionId1,
                         principalTable: "Sections",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -287,15 +256,14 @@ namespace AutoPartsStore.DAL.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Models",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BrandId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TypeTransportId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    TypeTransportId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TypeTransportId1 = table.Column<int>(type: "int", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Models", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Models_Brands_BrandId",
@@ -304,8 +272,8 @@ namespace AutoPartsStore.DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Models_TypeTransports_TypeTransportId",
-                        column: x => x.TypeTransportId,
+                        name: "FK_Models_TypeTransports_TypeTransportId1",
+                        column: x => x.TypeTransportId1,
                         principalTable: "TypeTransports",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -313,13 +281,11 @@ namespace AutoPartsStore.DAL.Migrations
 
             migrationBuilder.CreateTable(
                 name: "OrderStatus",
-                columns: table => new
-                {
+                columns: table => new {
                     OrdersId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StatusId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    StatusId = table.Column<int>(type: "int", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_OrderStatus", x => new { x.OrdersId, x.StatusId });
                     table.ForeignKey(
                         name: "FK_OrderStatus_Orders_OrdersId",
@@ -337,8 +303,7 @@ namespace AutoPartsStore.DAL.Migrations
 
             migrationBuilder.CreateTable(
                 name: "PriceLists",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Price = table.Column<long>(type: "bigint", nullable: false),
@@ -346,8 +311,7 @@ namespace AutoPartsStore.DAL.Migrations
                     CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_PriceLists", x => x.Id);
                     table.ForeignKey(
                         name: "FK_PriceLists_Customers_CustomerId",
@@ -369,18 +333,18 @@ namespace AutoPartsStore.DAL.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Features",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TypeDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                columns: table => new {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TypeDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TypeDetailId1 = table.Column<int>(type: "int", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Features", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Features_TypeDetails_TypeDetailId",
-                        column: x => x.TypeDetailId,
+                        name: "FK_Features_TypeDetails_TypeDetailId1",
+                        column: x => x.TypeDetailId1,
                         principalTable: "TypeDetails",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -388,14 +352,12 @@ namespace AutoPartsStore.DAL.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Modifications",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ModelId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Modifications", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Modifications_Models_ModelId",
@@ -407,13 +369,11 @@ namespace AutoPartsStore.DAL.Migrations
 
             migrationBuilder.CreateTable(
                 name: "DetailFeature",
-                columns: table => new
-                {
+                columns: table => new {
                     DetailsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FeaturesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    FeaturesId = table.Column<int>(type: "int", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_DetailFeature", x => new { x.DetailsId, x.FeaturesId });
                     table.ForeignKey(
                         name: "FK_DetailFeature_Details_DetailsId",
@@ -431,13 +391,11 @@ namespace AutoPartsStore.DAL.Migrations
 
             migrationBuilder.CreateTable(
                 name: "CustomerModification",
-                columns: table => new
-                {
+                columns: table => new {
                     CustomersId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ModificationsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_CustomerModification", x => new { x.CustomersId, x.ModificationsId });
                     table.ForeignKey(
                         name: "FK_CustomerModification_Customers_CustomersId",
@@ -455,13 +413,11 @@ namespace AutoPartsStore.DAL.Migrations
 
             migrationBuilder.CreateTable(
                 name: "DetailModification",
-                columns: table => new
-                {
+                columns: table => new {
                     DetailsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ModificationsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_DetailModification", x => new { x.DetailsId, x.ModificationsId });
                     table.ForeignKey(
                         name: "FK_DetailModification_Details_DetailsId",
@@ -537,9 +493,9 @@ namespace AutoPartsStore.DAL.Migrations
                 column: "ManufacturerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Features_TypeDetailId",
+                name: "IX_Features_TypeDetailId1",
                 table: "Features",
-                column: "TypeDetailId");
+                column: "TypeDetailId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Models_BrandId",
@@ -547,9 +503,9 @@ namespace AutoPartsStore.DAL.Migrations
                 column: "BrandId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Models_TypeTransportId",
+                name: "IX_Models_TypeTransportId1",
                 table: "Models",
-                column: "TypeTransportId");
+                column: "TypeTransportId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Modifications_ModelId",
@@ -582,13 +538,12 @@ namespace AutoPartsStore.DAL.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TypeDetails_SectionId",
+                name: "IX_TypeDetails_SectionId1",
                 table: "TypeDetails",
-                column: "SectionId");
+                column: "SectionId1");
         }
 
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
+        protected override void Down(MigrationBuilder migrationBuilder) {
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 

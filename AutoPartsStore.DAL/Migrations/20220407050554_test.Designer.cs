@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoPartsStore.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220328094824_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20220407050554_test")]
+    partial class test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,7 +31,9 @@ namespace AutoPartsStore.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -45,15 +47,19 @@ namespace AutoPartsStore.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -79,19 +85,25 @@ namespace AutoPartsStore.DAL.Migrations
 
             modelBuilder.Entity("AutoPartsStore.AN.Entities.Feature", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("TypeDetailId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("TypeDetailId1")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("TypeDetailId");
+                    b.HasIndex("TypeDetailId1");
 
                     b.ToTable("Features");
                 });
@@ -103,6 +115,7 @@ namespace AutoPartsStore.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -120,16 +133,20 @@ namespace AutoPartsStore.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("TypeTransportId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("TypeTransportId1")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
 
-                    b.HasIndex("TypeTransportId");
+                    b.HasIndex("TypeTransportId1");
 
                     b.ToTable("Models");
                 });
@@ -144,6 +161,7 @@ namespace AutoPartsStore.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -206,11 +224,14 @@ namespace AutoPartsStore.DAL.Migrations
 
             modelBuilder.Entity("AutoPartsStore.AN.Entities.Section", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -220,11 +241,14 @@ namespace AutoPartsStore.DAL.Migrations
 
             modelBuilder.Entity("AutoPartsStore.AN.Entities.Status", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -234,30 +258,39 @@ namespace AutoPartsStore.DAL.Migrations
 
             modelBuilder.Entity("AutoPartsStore.AN.Entities.TypeDetail", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("SectionId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("SectionId1")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("SectionId");
+                    b.HasIndex("SectionId1");
 
                     b.ToTable("TypeDetails");
                 });
 
             modelBuilder.Entity("AutoPartsStore.AN.Entities.TypeTransport", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -350,8 +383,8 @@ namespace AutoPartsStore.DAL.Migrations
                     b.Property<Guid>("DetailsId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("FeaturesId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("FeaturesId")
+                        .HasColumnType("int");
 
                     b.HasKey("DetailsId", "FeaturesId");
 
@@ -455,10 +488,12 @@ namespace AutoPartsStore.DAL.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -495,10 +530,12 @@ namespace AutoPartsStore.DAL.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -513,8 +550,8 @@ namespace AutoPartsStore.DAL.Migrations
                     b.Property<Guid>("OrdersId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("StatusId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
 
                     b.HasKey("OrdersId", "StatusId");
 
@@ -538,7 +575,7 @@ namespace AutoPartsStore.DAL.Migrations
                 {
                     b.HasOne("AutoPartsStore.AN.Entities.TypeDetail", "TypeDetail")
                         .WithMany()
-                        .HasForeignKey("TypeDetailId")
+                        .HasForeignKey("TypeDetailId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -555,7 +592,7 @@ namespace AutoPartsStore.DAL.Migrations
 
                     b.HasOne("AutoPartsStore.AN.Entities.TypeTransport", "TypeTransport")
                         .WithMany()
-                        .HasForeignKey("TypeTransportId")
+                        .HasForeignKey("TypeTransportId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -609,7 +646,7 @@ namespace AutoPartsStore.DAL.Migrations
                 {
                     b.HasOne("AutoPartsStore.AN.Entities.Section", "Section")
                         .WithMany()
-                        .HasForeignKey("SectionId")
+                        .HasForeignKey("SectionId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
