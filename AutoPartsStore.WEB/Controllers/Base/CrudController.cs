@@ -83,21 +83,25 @@ namespace AutoPartsStore.WEB.Controllers.Base {
 
         [HttpGet]
         public virtual IActionResult Add() {
+            ViewBag.isFailed = false;
             return View("Edit", new TEntityViewModel { });
         }
 
         [HttpPost]
         public virtual IActionResult Add(TEntityViewModel entityViewModel) {
+            ViewBag.isFailed = false;
             var result = _service.Create(_mapper.Map<TEntityDTO>(entityViewModel));
             if (!result.IsSuccessful) {
                 ViewBag.isFailed = true;
-                return View(entityViewModel);
+                ViewBag.ErrorMessage = result.Message;                
+                return View("Edit", entityViewModel);
             }
             return RedirectToAction("Index");
         }
 
         [HttpGet]
         public virtual IActionResult Edit(TKey id) {
+            ViewBag.isFailed = false;
             var result = _service.Get(id);
             if (!result.IsSuccessful) {
                 return View("ErrorGet", result.Message);
@@ -107,10 +111,12 @@ namespace AutoPartsStore.WEB.Controllers.Base {
 
         [HttpPost]
         public virtual IActionResult Edit(TEntityViewModel entityViewModel) {
+            ViewBag.isFailed = false;
             var result = _service.Update(_mapper.Map<TEntityDTO>(entityViewModel));
             if (!result.IsSuccessful) {
                 ViewBag.isFailed = true;
-                return View(entityViewModel);
+                ViewBag.ErrorMessage = result.Message;
+                return View(_mapper.Map<TEntityViewModel>(result.Data));
             }
             return RedirectToAction("Index");
         }
