@@ -4,6 +4,7 @@ using AutoPartsStore.DAL.Context;
 using AutoPartsStore.DAL.Interfaces;
 using AutoPartsStore.DAL.Repositories;
 using AutoPartsStore.WEB.AutoMapperProfiles;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NLog;
 using NLog.Web;
@@ -18,13 +19,22 @@ try {
         options.UseSqlServer(connectionString));
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-    builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-        .AddEntityFrameworkStores<ApplicationContext>();
+    //builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+    //    .AddEntityFrameworkStores<ApplicationContext>();
+
+    //builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+    //    .AddEntityFrameworkStores<ApplicationContext>();
+
+    builder.Services.AddDefaultIdentity<User>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationContext>();
+
     builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
     builder.Services.AddAutoMapper(typeof(BrandProfile));
     builder.Services.AddScoped<BrandService>();
     builder.Services.AddScoped<ModelService>();
     builder.Services.AddScoped<TypeTransportService>();
+    builder.Services.AddRazorPages();
 
     // Add services to the container.
     builder.Services.AddControllersWithViews();
@@ -45,7 +55,6 @@ try {
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
     }
-
     app.UseHttpsRedirection();
     app.UseStaticFiles();
 
@@ -57,6 +66,7 @@ try {
     app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
+
     app.MapRazorPages();
 
     app.Run();
