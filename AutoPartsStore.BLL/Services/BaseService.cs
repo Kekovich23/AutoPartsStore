@@ -7,11 +7,11 @@ using Microsoft.Extensions.Logging;
 
 namespace AutoPartsStore.BLL.Services {
     public abstract class BaseService<TEntity, TEntityDTO, TKey, TFilter> : IService<TEntity, TEntityDTO, TKey, TFilter>
-        where TEntityDTO : BaseEntityDTO<TKey>
-        where TEntity : BaseEntity<TKey> {
+        where TEntityDTO : class, IBaseEntityDTO<TKey>
+        where TEntity : class, IBaseEntity<TKey> {
         protected readonly IUnitOfWork Database;
         protected readonly IMapper _mapper;
-        private readonly ILogger<BaseService<TEntity, TEntityDTO, TKey, TFilter>> _logger;
+        protected readonly ILogger<BaseService<TEntity, TEntityDTO, TKey, TFilter>> _logger;
 
         public BaseService(IUnitOfWork uow, IMapper mapper, ILogger<BaseService<TEntity, TEntityDTO, TKey, TFilter>> logger) {
             Database = uow;
@@ -42,18 +42,18 @@ namespace AutoPartsStore.BLL.Services {
             return Include(query);
         }
 
-        public ServiceResult<TEntityDTO> Get(TKey id) {
+        public virtual async Task<ServiceResult<TEntityDTO>> Get(TKey id) {
             try {
                 var query = GetQuery(id);
                 return ServiceResult<TEntityDTO>.Success(_mapper.Map<TEntityDTO>(query.FirstOrDefault()));
             }
             catch (Exception ex){
                 _logger.LogError(ex, "Failed to get");
-                return ServiceResult<TEntityDTO>.Failed("Failed to get", null);
+                return ServiceResult<TEntityDTO>.Failed("Failed to get");
             }
         }
 
-        public ServiceResult<IEnumerable<TEntityDTO>> GetAll(TFilter filter) {
+        public virtual async Task<ServiceResult<IEnumerable<TEntityDTO>>> GetAll(TFilter filter) {
             try {
                 var query = Database.GetRepository<TEntity>().GetAll();
 
@@ -64,7 +64,7 @@ namespace AutoPartsStore.BLL.Services {
             }
             catch (Exception ex){
                 _logger.LogError(ex, "Failed to get all");
-                return ServiceResult<IEnumerable<TEntityDTO>>.Failed("Failed to get all", null);
+                return ServiceResult<IEnumerable<TEntityDTO>>.Failed("Failed to get all");
             }
         }
 

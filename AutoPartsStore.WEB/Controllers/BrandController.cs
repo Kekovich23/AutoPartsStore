@@ -8,8 +8,10 @@ using AutoPartsStore.WEB.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoPartsStore.WEB.Controllers {
-    public class BrandController : CrudController<Brand, BrandDTO, BrandViewModel, BrandService, Guid, BrandFilter> {
-        public BrandController(BrandService service, IMapper mapper, ILogger<CrudController<Brand, BrandDTO, BrandViewModel, BrandService, Guid, BrandFilter>> logger) : base(service, mapper, logger) {
+    public class BrandController : CrudController<Brand, BrandDTO, BrandViewModel, Guid, BrandFilter> {
+        //private readonly BrandService _brandService;
+        public BrandController(BrandService brandService, IMapper mapper, ILogger<CrudController<Brand, BrandDTO, BrandViewModel, Guid, BrandFilter>> logger) : base(brandService, mapper, logger) {
+           // _brandService = brandService;
         }
 
         public IActionResult Index() {

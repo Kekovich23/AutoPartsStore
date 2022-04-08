@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Users page";
+}
+<link href="~/lib/datatables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<link href="~/js/Notify/Notify.css" rel="stylesheet" />
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+<div id="notifications"></div>
+<div class="container">
+    <br />
+    <div style="width:90%; margin:0 auto;">
+        <table id="userTable" class="table table-striped" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>E-mail</th>
+                    <th>Role</th>
+                    <th>Delete</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts
+{
+<script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+<script src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
+<script src="~/js/Notify/Notify.js"></script>
+<script src="~/js/Requests.js"></script>
+<script src="~/js/CreateDataTable.js"></script>
+<script src="~/js/DataTables/UserDataTable.js"></script>
+}

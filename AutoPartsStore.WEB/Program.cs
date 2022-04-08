@@ -33,6 +33,7 @@ try {
     builder.Services.AddAutoMapper(typeof(BrandProfile));
     builder.Services.AddScoped<BrandService>();
     builder.Services.AddScoped<ModelService>();
+    builder.Services.AddScoped<UserService>();
     builder.Services.AddScoped<TypeTransportService>();
     builder.Services.AddRazorPages();
 

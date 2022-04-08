@@ -1,22 +1,20 @@
 ﻿using AutoMapper;
 using AutoPartsStore.AN.DTO.Base;
 using AutoPartsStore.AN.Entities.Base;
-using AutoPartsStore.BLL.Interfaces;
-using AutoPartsStore.WEB.Models.Base;
+using AutoPartsStore.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoPartsStore.WEB.Controllers.Base {
-    public class CrudController<TEntity, TEntityDTO, TEntityViewModel, TService, TKey, TFilter> : Controller
-        where TService : IService<TEntity, TEntityDTO, TKey, TFilter>
-        where TEntity : BaseEntity<TKey>
-        where TEntityDTO : BaseEntityDTO<TKey>
-        where TEntityViewModel : new ()
+    public class CrudController<TEntity, TEntityDTO, TEntityViewModel, TKey, TFilter> : Controller
+        where TEntity : class, IBaseEntity<TKey>
+        where TEntityDTO : class, IBaseEntityDTO<TKey>
+        where TEntityViewModel : new()
         where TFilter : class {
-        protected readonly TService _service;
-        private readonly IMapper _mapper;
-        private readonly ILogger<CrudController<TEntity, TEntityDTO, TEntityViewModel, TService, TKey, TFilter>> _logger;
+        protected readonly BaseService<TEntity, TEntityDTO, TKey, TFilter> _service;
+        protected readonly IMapper _mapper;
+        private readonly ILogger<CrudController<TEntity, TEntityDTO, TEntityViewModel, TKey, TFilter>> _logger;
 
-        public CrudController(TService service, IMapper mapper, ILogger<CrudController<TEntity, TEntityDTO, TEntityViewModel, TService, TKey, TFilter>> logger) {
+        public CrudController(BaseService<TEntity, TEntityDTO, TKey, TFilter> service, IMapper mapper, ILogger<CrudController<TEntity, TEntityDTO, TEntityViewModel, TKey, TFilter>> logger) {
             _service = service;
             _mapper = mapper;
             _logger = logger;
@@ -26,14 +24,13 @@ namespace AutoPartsStore.WEB.Controllers.Base {
         // GET - TFilters
 
         [HttpPost]
-        public virtual IActionResult GetAll(TFilter filter) {
+        public virtual async Task<IActionResult> GetAll(TFilter filter) {
             _logger.LogInformation("Hello, this is the index!");
-            var serviceResult = _service.GetAll(filter);
+            var serviceResult = await _service.GetAll(filter);
             if (!serviceResult.IsSuccessful) {
                 return BadRequest(error: serviceResult.Message);
             }
 
-            //TODO CHECK
             var customerData = _mapper.Map<IEnumerable<TEntityViewModel>>(serviceResult.Data);
 
             var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
@@ -67,8 +64,8 @@ namespace AutoPartsStore.WEB.Controllers.Base {
         }
 
         [HttpGet]
-        public virtual IActionResult Get(TKey id) {
-            var result = _service.Get(id);
+        public virtual async Task<IActionResult> Get(TKey id) {
+            var result = await _service.Get(id);
             if (!result.IsSuccessful) {
                 return View("ErrorGet", result.Message);
             }
@@ -98,16 +95,16 @@ namespace AutoPartsStore.WEB.Controllers.Base {
             var result = _service.Create(_mapper.Map<TEntityDTO>(entityViewModel));
             if (!result.IsSuccessful) {
                 ViewBag.isFailed = true;
-                ViewBag.ErrorMessage = result.Message;                
+                ViewBag.ErrorMessage = result.Message;
                 return View("Edit", entityViewModel);
             }
             return RedirectToAction("Index");
         }
 
         [HttpGet]
-        public virtual IActionResult Edit(TKey id) {
+        public virtual async Task<IActionResult> Edit(TKey id) {
             ViewBag.isFailed = false;
-            var result = _service.Get(id);
+            var result = await _service.Get(id);
             if (!result.IsSuccessful) {
                 return View("ErrorGet", result.Message);
             }
