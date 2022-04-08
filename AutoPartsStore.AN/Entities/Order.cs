@@ -1,7 +1,8 @@
 ﻿using AutoPartsStore.AN.Entities.Base;
 
 namespace AutoPartsStore.AN.Entities {
-    public class Order : BaseEntity<Guid> {
+    public class Order : IBaseEntity<Guid> {
+        public Guid Id { get; set; }
         public Guid CustomerId { get; set; }
         public DateTime CreatedDate { get; set; }
         public virtual ICollection<Status> Status { get; set; }

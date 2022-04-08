@@ -1,5 +1,5 @@
 ﻿namespace AutoPartsStore.AN.Entities.Base {
-    public class BaseEntity<TKey> {
+    public interface IBaseEntity<TKey> {
         public TKey Id { get; set; }
     }
 }

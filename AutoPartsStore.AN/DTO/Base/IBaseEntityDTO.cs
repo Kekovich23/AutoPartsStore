@@ -1,5 +1,5 @@
 ﻿namespace AutoPartsStore.AN.DTO.Base {
-    public class BaseEntityDTO<Tkey> {
+    public interface IBaseEntityDTO<Tkey> {
         public Tkey Id { get; set; }
     }
 }
