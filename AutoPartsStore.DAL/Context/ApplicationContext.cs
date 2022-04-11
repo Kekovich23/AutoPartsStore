@@ -1,10 +1,11 @@
 ﻿using AutoPartsStore.AN.Entities;
 using AutoPartsStore.DAL.Configure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace AutoPartsStore.DAL.Context {
-    public class ApplicationContext : IdentityDbContext<User> {
+    public class ApplicationContext : IdentityDbContext<User, Role, Guid> {
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Detail>? Details { get; set; }
         public DbSet<Feature>? Features { get; set; }

@@ -1,5 +1,6 @@
 using AutoPartsStore.AN.Entities;
 using AutoPartsStore.BLL.Services;
+using AutoPartsStore.DAL.Configure;
 using AutoPartsStore.DAL.Context;
 using AutoPartsStore.DAL.Interfaces;
 using AutoPartsStore.DAL.Repositories;
@@ -22,20 +23,38 @@ try {
     //builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
     //    .AddEntityFrameworkStores<ApplicationContext>();
 
-    //builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+    //builder.Services.AddIdentity<User, Role>(opts => {
+    //    opts.Password.RequiredLength = 5;   // ����������� �����
+    //    opts.Password.RequireNonAlphanumeric = false;   // ��������� �� �� ���������-�������� �������
+    //    opts.Password.RequireLowercase = false; // ��������� �� ������� � ������ ��������
+    //    opts.Password.RequireUppercase = false; // ��������� �� ������� � ������� ��������
+    //    opts.Password.RequireDigit = false; // ��������� �� �����
+    //})
     //    .AddEntityFrameworkStores<ApplicationContext>();
 
+
+    builder.Services.ConfigureApplicationCookie(options => {
+        // Cookie settings
+        options.Cookie.HttpOnly = true;
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+        options.LoginPath = "/Identity/Account/Login";
+        options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+        options.SlidingExpiration = true;
+    });
     builder.Services.AddDefaultIdentity<User>()
-                .AddRoles<IdentityRole>()
+                .AddRoles<Role>()
                 .AddEntityFrameworkStores<ApplicationContext>();
 
     builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-    builder.Services.AddAutoMapper(typeof(BrandProfile));
+    builder.Services.AddAutoMapper(typeof(BrandProfile), typeof(UserProfile));
     builder.Services.AddScoped<BrandService>();
     builder.Services.AddScoped<ModelService>();
     builder.Services.AddScoped<UserService>();
     builder.Services.AddScoped<TypeTransportService>();
     builder.Services.AddRazorPages();
+
+
 
     // Add services to the container.
     builder.Services.AddControllersWithViews();
@@ -47,8 +66,16 @@ try {
 
     var app = builder.Build();
 
+    using (var scope = app.Services.CreateScope()) {
+        var services = scope.ServiceProvider;
+        var userManager = services.GetRequiredService<UserManager<User>>();
+        var rolesManager = services.GetRequiredService<RoleManager<Role>>();
+        await RoleInitializer.InitializeAsync(userManager, rolesManager);
+    }
+        
+
     // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment()) {
+        if (app.Environment.IsDevelopment()) {
         app.UseMigrationsEndPoint();
     }
     else {
