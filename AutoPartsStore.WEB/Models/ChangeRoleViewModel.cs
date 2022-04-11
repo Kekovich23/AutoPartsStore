@@ -2,7 +2,7 @@
 
 namespace AutoPartsStore.WEB.Models {
     public class ChangeRoleViewModel {
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public string UserEmail { get; set; }
         public List<IdentityRole> AllRoles { get; set; }
         public IList<string> UserRoles { get; set; }

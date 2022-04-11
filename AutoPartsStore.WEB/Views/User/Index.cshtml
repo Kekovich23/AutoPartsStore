@@ -1,4 +1,30 @@
-﻿@{
+﻿@model IEnumerable<AutoPartsStore.WEB.Models.UserViewModel>
+@{
+    ViewBag.Title = "Список пользователей";
+}
+ 
+
+ 
+<table class="table">
+    <tr><th>Email</th><th></th></tr>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@user.Email</td>
+            <td>
+                <form asp-action="Delete" asp-route-id="@user.Id" method="post">
+                    <a class="btn btn-sm btn-primary" asp-action="EditUser" asp-route-id="@user.Id">Изменить</a>
+                     <a class="btn btn-sm btn-primary" asp-action="ChangePassword" asp-route-id="@user.Id">Сменить пароль</a>
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Удалить
+                    </button>
+                </form>
+            </td>
+        </tr>
+    }
+</table>
+
+@{
     ViewData["Title"] = "Users page";
 }
 <link href="~/lib/datatables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
@@ -22,6 +48,8 @@
         </table>
     </div>
 </div>
+
+<a class='btn btn-info' href='User/Create'>Add new user</a>;
 
 @section Scripts
 {

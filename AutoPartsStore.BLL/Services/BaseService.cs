@@ -80,7 +80,7 @@ namespace AutoPartsStore.BLL.Services {
             }
         }
 
-        public ServiceResult<TEntityDTO> Update(TEntityDTO entityDTO) {
+        public virtual ServiceResult<TEntityDTO> Update(TEntityDTO entityDTO) {
             try {
                 Database.GetRepository<TEntity>().Update(_mapper.Map<TEntity>(entityDTO));
                 return ServiceResult<TEntityDTO>.Success(entityDTO);
