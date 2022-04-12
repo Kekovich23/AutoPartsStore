@@ -33,8 +33,6 @@ namespace AutoPartsStore.WEB.Controllers {
             return View();
         }
 
-        public IActionResult Create() => View();
-
         [HttpPost]
         public async Task<IActionResult> Create(CreateUserViewModel model) {
             if (ModelState.IsValid) {

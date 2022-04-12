@@ -42,17 +42,19 @@ namespace AutoPartsStore.BLL.Services {
             }
         }
 
-        //public override ServiceResult<UserDTO> Create(UserDTO entityDTO) {
-        //    try {
+        public override ServiceResult<UserDTO> Create(UserDTO entityDTO) {
+            try {
+                var user = _mapper.Map<User>(entityDTO);
 
+                _userManager.CreateAsync(user, entityDTO.Password).Wait();
 
-        //        return ServiceResult<UserDTO>.Success(_mapper.Map<UserDTO>());
-        //    }
-        //    catch (Exception ex) {
-        //        _logger.LogError(ex, "Failed to create");
-        //        return ServiceResult<UserDTO>.Failed("Failed to create");
-        //    }
-        //}
+                return ServiceResult<UserDTO>.Success(_mapper.Map<UserDTO>(user));
+            }
+            catch (Exception ex) {
+                _logger.LogError(ex, "Failed to create");
+                return ServiceResult<UserDTO>.Failed("Failed to create");
+            }
+        }
 
         //public override async Task<ServiceResult<UserDTO>> Get(string id) {
         //    try {

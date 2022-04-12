@@ -11,6 +11,7 @@ namespace AutoPartsStore.WEB.AutoMapperProfiles {
             _userManager = userManager;
 
             CreateMap<User, UserDTO>().ForMember(s => s.Role, opt => opt.MapFrom(src => _userManager.GetRolesAsync(src).Result.FirstOrDefault()));
+            CreateMap<UserDTO, User>();
             // CreateMap<UserDTO, User>();
             //CreateMap<User, UserViewModel>().ReverseMap();
             CreateMap<UserDTO, UserViewModel>().ReverseMap();
