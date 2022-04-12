@@ -19,7 +19,7 @@ namespace AutoPartsStore.BLL.Services {
             _logger = logger;
         }
 
-        public ServiceResult<TEntityDTO> Create(TEntityDTO entityDTO) {
+        public virtual ServiceResult<TEntityDTO> Create(TEntityDTO entityDTO) {
             try {
                 Database.GetRepository<TEntity>().Create(_mapper.Map<TEntity>(entityDTO));
                 return ServiceResult<TEntityDTO>.Success(entityDTO);

@@ -16,7 +16,7 @@ namespace AutoPartsStore.WEB.Controllers {
         private readonly RoleManager<Role> _roleManager;
         private readonly UserManager<User> _userManager;
         
-        // private readonly UserService _userService;
+        private readonly UserService _userService;
 
         public UserController(
             RoleManager<Role> roleManager,
@@ -30,9 +30,7 @@ namespace AutoPartsStore.WEB.Controllers {
         }
 
         public IActionResult Index() {
-            UserViewModel userViewModel = new(_roleManager, _mapper);
-            var users = _userManager.Users;
-            return View(_mapper.Map<UserViewModel>());
+            return View();
         }
 
         public IActionResult Create() => View();

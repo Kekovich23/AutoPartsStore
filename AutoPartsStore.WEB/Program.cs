@@ -1,3 +1,4 @@
+using AutoMapper;
 using AutoPartsStore.AN.Entities;
 using AutoPartsStore.BLL.Services;
 using AutoPartsStore.DAL.Configure;
@@ -33,15 +34,15 @@ try {
     //    .AddEntityFrameworkStores<ApplicationContext>();
 
 
-    builder.Services.ConfigureApplicationCookie(options => {
-        // Cookie settings
-        options.Cookie.HttpOnly = true;
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+    //builder.Services.ConfigureApplicationCookie(options => {
+    //    // Cookie settings
+    //    options.Cookie.HttpOnly = true;
+    //    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
-        options.LoginPath = "/Identity/Account/Login";
-        options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-        options.SlidingExpiration = true;
-    });
+    //    options.LoginPath = "/Identity/Account/Login";
+    //    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+    //    options.SlidingExpiration = true;
+    //});
     builder.Services.AddDefaultIdentity<User>()
                 .AddRoles<Role>()
                 .AddEntityFrameworkStores<ApplicationContext>();
@@ -52,7 +53,9 @@ try {
     builder.Services.AddScoped<ModelService>();
     builder.Services.AddScoped<UserService>();
     builder.Services.AddScoped<TypeTransportService>();
-    builder.Services.AddRazorPages();
+    builder.Services.AddScoped(provider => new MapperConfiguration(cfg => {
+        cfg.AddProfile(new UserProfile(provider.GetService<UserManager<User>>()));
+    }).CreateMapper());
 
 
 
@@ -72,10 +75,10 @@ try {
         var rolesManager = services.GetRequiredService<RoleManager<Role>>();
         await RoleInitializer.InitializeAsync(userManager, rolesManager);
     }
-        
+
 
     // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment()) {
+    if (app.Environment.IsDevelopment()) {
         app.UseMigrationsEndPoint();
     }
     else {

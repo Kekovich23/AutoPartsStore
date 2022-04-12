@@ -18,31 +18,39 @@ namespace AutoPartsStore.BLL.Services {
             _userManager = userManager;
         }
 
-        //public override async Task<ServiceResult<IEnumerable<UserDTO>>> GetAll(UserFilter filter) {
+        public override async Task<ServiceResult<IEnumerable<UserDTO>>> GetAll(UserFilter filter) {
+            try {
+                var query = _userManager.Users;
+
+                List<UserDTO> result = new();
+
+                query = Include(query);
+
+                query = FilterOut(query, filter);
+
+                foreach (User user in query.ToList()) {
+                    //UserDTO userDTO = await new(_userManager.GetRolesAsync(user));
+                    UserDTO userDTO = _mapper.Map<UserDTO>(user);
+                    result.Add(userDTO);
+                }
+
+                return ServiceResult<IEnumerable<UserDTO>>.Success(_mapper.Map<IEnumerable<UserDTO>>(result));
+            }
+            catch (Exception ex) {
+                _logger.LogError(ex, "Failed to get all");
+                return ServiceResult<IEnumerable<UserDTO>>.Failed("Failed to get all");
+            }
+        }
+
+        //public override ServiceResult<UserDTO> Create(UserDTO entityDTO) {
         //    try {
-        //        var query = _userManager.Users;                
 
-        //        List<UserDTO> result = new();
 
-        //        query = Include(query);
-
-        //        query = FilterOut(query, filter);
-
-        //        foreach (var user in query.ToList()) {
-        //            var userDTO = new UserDTO {
-        //                Id = user.Id,
-        //                Name = user.UserName,
-        //                Email = user.Email,
-        //                Role = await _userManager.GetRolesAsync(user)
-        //            };
-        //            result.Add(userDTO);
-        //        }
-                
-        //        return ServiceResult<IEnumerable<UserDTO>>.Success(_mapper.Map<IEnumerable<UserDTO>>(result));
+        //        return ServiceResult<UserDTO>.Success(_mapper.Map<UserDTO>());
         //    }
         //    catch (Exception ex) {
-        //        _logger.LogError(ex, "Failed to get all");
-        //        return ServiceResult<IEnumerable<UserDTO>>.Failed("Failed to get all");
+        //        _logger.LogError(ex, "Failed to create");
+        //        return ServiceResult<UserDTO>.Failed("Failed to create");
         //    }
         //}
 
@@ -67,7 +75,7 @@ namespace AutoPartsStore.BLL.Services {
 
         //public override ServiceResult<UserDTO> Update(UserDTO userDTO) {
         //    try {
-                
+
         //    }
         //    catch (Exception ex) {
         //        _logger.LogError(ex, "Failed to update");

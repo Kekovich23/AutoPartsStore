@@ -3,7 +3,7 @@
     'columns': [
         { 'data': 'id', 'name': 'Id', 'autowidth': true },
         {
-            'data': 'name', 'name': 'Name', 'autowidth': true,
+            'data': 'userName', 'name': 'Name', 'autowidth': true,
             'render': function (data, type, row) {
                 return "<a class='btn' href='User/Get/" + row.id + "'>" + data + "</a>";
             }
