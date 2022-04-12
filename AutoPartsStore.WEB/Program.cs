@@ -24,14 +24,16 @@ try {
     //builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
     //    .AddEntityFrameworkStores<ApplicationContext>();
 
-    //builder.Services.AddIdentity<User, Role>(opts => {
-    //    opts.Password.RequiredLength = 5;   // ����������� �����
-    //    opts.Password.RequireNonAlphanumeric = false;   // ��������� �� �� ���������-�������� �������
-    //    opts.Password.RequireLowercase = false; // ��������� �� ������� � ������ ��������
-    //    opts.Password.RequireUppercase = false; // ��������� �� ������� � ������� ��������
-    //    opts.Password.RequireDigit = false; // ��������� �� �����
-    //})
-    //    .AddEntityFrameworkStores<ApplicationContext>();
+    builder.Services.AddIdentity<User, Role>(opts => {
+        opts.Password.RequiredLength = 5;   // ����������� �����
+        opts.Password.RequireNonAlphanumeric = false;   // ��������� �� �� ���������-�������� �������
+        opts.Password.RequireLowercase = false; // ��������� �� ������� � ������ ��������
+        opts.Password.RequireUppercase = false; // ��������� �� ������� � ������� ��������
+        opts.Password.RequireDigit = false; // ��������� �� �����
+    })
+        .AddEntityFrameworkStores<ApplicationContext>();
+
+    builder.Services.AddRazorPages();
 
 
     //builder.Services.ConfigureApplicationCookie(options => {
@@ -43,9 +45,9 @@ try {
     //    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
     //    options.SlidingExpiration = true;
     //});
-    builder.Services.AddDefaultIdentity<User>()
-                .AddRoles<Role>()
-                .AddEntityFrameworkStores<ApplicationContext>();
+    //builder.Services.AddDefaultIdentity<User>()
+    //            .AddRoles<Role>()
+    //            .AddEntityFrameworkStores<ApplicationContext>();
 
     builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
     builder.Services.AddAutoMapper(typeof(BrandProfile), typeof(UserProfile));

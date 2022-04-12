@@ -19,7 +19,7 @@ namespace AutoPartsStore.BLL.Services {
             _logger = logger;
         }
 
-        public virtual ServiceResult<TEntityDTO> Create(TEntityDTO entityDTO) {
+        public virtual async Task<ServiceResult<TEntityDTO>> Create(TEntityDTO entityDTO) {
             try {
                 Database.GetRepository<TEntity>().Create(_mapper.Map<TEntity>(entityDTO));
                 return ServiceResult<TEntityDTO>.Success(entityDTO);
@@ -68,7 +68,7 @@ namespace AutoPartsStore.BLL.Services {
             }
         }
 
-        public ServiceResult Remove(TKey id) {
+        public virtual async Task<ServiceResult> Remove(TKey id) {
             try {
                 var query = GetQuery(id);
                 Database.GetRepository<TEntity>().Remove(_mapper.Map<TEntity>(query.FirstOrDefault()));
@@ -80,7 +80,7 @@ namespace AutoPartsStore.BLL.Services {
             }
         }
 
-        public virtual ServiceResult<TEntityDTO> Update(TEntityDTO entityDTO) {
+        public virtual async Task<ServiceResult<TEntityDTO>> Update(TEntityDTO entityDTO) {
             try {
                 Database.GetRepository<TEntity>().Update(_mapper.Map<TEntity>(entityDTO));
                 return ServiceResult<TEntityDTO>.Success(entityDTO);

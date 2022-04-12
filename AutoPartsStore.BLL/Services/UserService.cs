@@ -42,11 +42,19 @@ namespace AutoPartsStore.BLL.Services {
             }
         }
 
-        public override ServiceResult<UserDTO> Create(UserDTO entityDTO) {
+        public override async Task<ServiceResult<UserDTO>> Create(UserDTO userDTO) {
             try {
-                var user = _mapper.Map<User>(entityDTO);
+                var user = _mapper.Map<User>(userDTO);
 
-                _userManager.CreateAsync(user, entityDTO.Password).Wait();
+                var result = await _userManager.CreateAsync(user, userDTO.NewPassword);
+
+                if (!result.Succeeded) {
+                    string err = "";
+                    foreach (var error in result.Errors) {
+                        err += error.Description + " ";
+                    }
+                    throw new Exception(err);
+                }
 
                 return ServiceResult<UserDTO>.Success(_mapper.Map<UserDTO>(user));
             }
@@ -75,14 +83,63 @@ namespace AutoPartsStore.BLL.Services {
         //    }
         //}
 
-        //public override ServiceResult<UserDTO> Update(UserDTO userDTO) {
-        //    try {
+        public override async Task<ServiceResult> Remove(Guid id) {
+            try {
+                User user = await _userManager.FindByIdAsync(id.ToString());
 
-        //    }
-        //    catch (Exception ex) {
-        //        _logger.LogError(ex, "Failed to update");
-        //        return ServiceResult<UserDTO>.Failed("Failed to update", userDTO);
-        //    }
-        //}
+                var result = await _userManager.DeleteAsync(user);
+
+                if (!result.Succeeded) {
+                    string err = "";
+                    foreach (var error in result.Errors) {
+                        err += error.Description + " ";
+                    }
+                    throw new Exception(err);
+                }
+
+                return ServiceResult.Success();
+            }
+            catch (Exception ex) {
+                _logger.LogError(ex, "Failed to remove");
+                return ServiceResult.Failed("Failed to remove");
+            }
+        }
+
+        public override async Task<ServiceResult<UserDTO>> Update(UserDTO userDTO) {
+            try {
+                User user = await _userManager.FindByIdAsync(userDTO.Id.ToString());
+
+                if (user != null) {
+                    user.Email = userDTO.Email;
+                    user.UserName = userDTO.UserName;
+
+                   var result = await _userManager.UpdateAsync(user);
+                    if (!result.Succeeded) {
+                        string err = "";
+                        foreach (var error in result.Errors) {
+                            err += error.Description + " ";
+                        }
+                        throw new Exception(err);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(userDTO.NewPassword)) {
+                    var result = await _userManager.ChangePasswordAsync(user, userDTO.OldPassword, userDTO.NewPassword);
+                    if (!result.Succeeded) {
+                        string err = "";
+                        foreach (var error in result.Errors) {
+                            err += error.Description + " ";
+                        }
+                        throw new Exception(err);
+                    }
+                }
+
+                return ServiceResult<UserDTO>.Success(_mapper.Map<UserDTO>(user));
+            }
+            catch (Exception ex) {
+                _logger.LogError(ex, "Failed to update");
+                return ServiceResult<UserDTO>.Failed("Failed to update", userDTO);
+            }
+        }
     }
 }

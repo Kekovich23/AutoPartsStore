@@ -73,8 +73,8 @@ namespace AutoPartsStore.WEB.Controllers.Base {
         }
 
         [HttpDelete]
-        public virtual IActionResult Delete(TKey id) {
-            var result = _service.Remove(id);
+        public virtual async Task<IActionResult> Delete(TKey id) {
+            var result = await _service.Remove(id);
 
             if (!result.IsSuccessful) {
                 return BadRequest(result.Message);
@@ -90,9 +90,9 @@ namespace AutoPartsStore.WEB.Controllers.Base {
         }
 
         [HttpPost]
-        public virtual IActionResult Add(TEntityViewModel entityViewModel) {
+        public virtual async Task<IActionResult> Add(TEntityViewModel entityViewModel) {
             ViewBag.isFailed = false;
-            var result = _service.Create(_mapper.Map<TEntityDTO>(entityViewModel));
+            var result = await _service.Create(_mapper.Map<TEntityDTO>(entityViewModel));
             if (!result.IsSuccessful) {
                 ViewBag.isFailed = true;
                 ViewBag.ErrorMessage = result.Message;
@@ -112,9 +112,9 @@ namespace AutoPartsStore.WEB.Controllers.Base {
         }
 
         [HttpPost]
-        public virtual IActionResult Edit(TEntityViewModel entityViewModel) {
+        public virtual async Task<IActionResult> Edit(TEntityViewModel entityViewModel) {
             ViewBag.isFailed = false;
-            var result = _service.Update(_mapper.Map<TEntityDTO>(entityViewModel));
+            var result = await _service.Update(_mapper.Map<TEntityDTO>(entityViewModel));
             if (!result.IsSuccessful) {
                 ViewBag.isFailed = true;
                 ViewBag.ErrorMessage = result.Message;
