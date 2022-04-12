@@ -1,12 +1,12 @@
 ﻿@model AutoPartsStore.WEB.Models.TypeTransportViewModel
 @{
-    ViewBag.Title = "Новая тип транспорта";
+    ViewBag.Title = "New type of transport";
 }
 <form method="post">
     <div>
-        <label>Название</label><br><br>
+        <label>Name</label><br><br>
         <input type="text" name="Name" value=@Model.Name />
     </div>
     <input type="hidden" name="Id" value="@Model.Id" />
-    <input type="submit" value="Добавить тип транспорта" />
+    <input type="submit" value="Add type of transport" />
 </form>

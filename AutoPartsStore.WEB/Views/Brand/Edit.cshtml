@@ -1,17 +1,17 @@
 ﻿@model AutoPartsStore.WEB.Models.BrandViewModel
 @{
-    ViewBag.Title = Model.IsNew ? "Добавление новой марки" : "Редактирование марки";
+    ViewBag.Title = Model.IsNew ? "New brand" : "Edit brand";
 }
 <link href="~/js/Notify/Notify.css" rel="stylesheet" />
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
 <div id="notifications"></div>
 <form method="post">
     <div>
-        <label>Название</label>
+        <label>Name</label>
         <input type="text" name="Name" value=@Model.Name />
     </div>
     <input type="hidden" name="Id" value="@Model.Id" />
-    <input type="submit" value=@(Model.IsNew ? "Добавить" : "Изменить") />
+    <input type="submit" value=@(Model.IsNew ? "Add" : "Edit") />
 </form>
 
 @if (ViewBag.IsFailed) {
