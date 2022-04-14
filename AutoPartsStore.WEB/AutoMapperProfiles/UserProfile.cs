@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AutoPartsStore.AN.DTO;
 using AutoPartsStore.AN.Entities;
-using AutoPartsStore.WEB.Models;
+using AutoPartsStore.WEB.Models.User;
 using Microsoft.AspNetCore.Identity;
 
 namespace AutoPartsStore.WEB.AutoMapperProfiles {
@@ -12,9 +12,9 @@ namespace AutoPartsStore.WEB.AutoMapperProfiles {
 
             CreateMap<User, UserDTO>().ForMember(s => s.Role, opt => opt.MapFrom(src => _userManager.GetRolesAsync(src).Result.FirstOrDefault()));
             CreateMap<UserDTO, User>();
-            // CreateMap<UserDTO, User>();
-            //CreateMap<User, UserViewModel>().ReverseMap();
-            CreateMap<UserDTO, UserViewModel>().ReverseMap();
+            CreateMap<UserDTO, UserViewModel>();
+            CreateMap<CreateUserViewModel, UserDTO>().ForMember(s => s.NewPassword, opt => opt.MapFrom(src => src.Password));
+            CreateMap<UserViewModel, UserDTO>();
         }
     }
 }

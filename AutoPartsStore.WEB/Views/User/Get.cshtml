@@ -1,0 +1,14 @@
+﻿@model UserViewModel
+@{
+    ViewBag.Title = "Page of " + Model.UserName;
+}
+<div>
+    <label>User's name</label><br />
+    <output>@Model.UserName</output>
+</div>
+<div>
+    <label>E-mail</label><br />
+    <output>@Model.Email</output>
+</div>
+
+<a href="User/Edit/@Model.Id">Edit</a>

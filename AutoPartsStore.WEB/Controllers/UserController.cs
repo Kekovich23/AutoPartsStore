@@ -5,149 +5,62 @@ using AutoPartsStore.BLL.Filters;
 using AutoPartsStore.BLL.Services;
 using AutoPartsStore.WEB.Controllers.Base;
 using AutoPartsStore.WEB.Models;
+using AutoPartsStore.WEB.Models.User;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace AutoPartsStore.WEB.Controllers {   
+namespace AutoPartsStore.WEB.Controllers {
 
-    //[Authorize(Roles = "admin")]
+    // [Authorize(Roles = RoleInitializer.AdminRoleName)]
     public class UserController : CrudController<User, UserDTO, UserViewModel, Guid, UserFilter> {
-        private readonly RoleManager<Role> _roleManager;
-        private readonly UserManager<User> _userManager;
-        
         private readonly UserService _userService;
-
+        private readonly RoleManager<Role> _roleManager;
         public UserController(
             RoleManager<Role> roleManager,
-            UserManager<User> userManager,
-            UserService userService,
+            UserService service,
             IMapper mapper,
-            ILogger<CrudController<User, UserDTO, UserViewModel, Guid, UserFilter>> logger) : base(userService, mapper, logger) {
+            ILogger<CrudController<User, UserDTO, UserViewModel, Guid, UserFilter>> logger) : base(service, mapper, logger) {
+            _userService = service;
             _roleManager = roleManager;
-            _userManager = userManager;
-            //_userService = userService;
         }
 
-        public IActionResult Index() {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateUserViewModel model) {
-            if (ModelState.IsValid) {
-                User user = new User { Email = model.Email, UserName = model.Email};
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded) {
-                    return RedirectToAction("Index");
-                }
-                else {
-                    foreach (var error in result.Errors) {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
-            }
-            return View(model);
-        }
-
-        public async Task<IActionResult> EditUser(Guid id) {
-            User user = await _userManager.FindByIdAsync(id.ToString());
-            if (user == null) {
-                return NotFound();
-            }
-            EditUserViewModel model = new EditUserViewModel { Id = user.Id, Email = user.Email};
-            return View(model);
+        [HttpGet]
+        public IActionResult AddUser() {
+            _logger.LogInformation("Pressed 'Add' button.");
+            ViewBag.AllRoles = new SelectList(_roleManager.Roles.ToList());
+            return View("Create", new CreateUserViewModel { });
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditUser(EditUserViewModel model) {
-            if (ModelState.IsValid) {
-                User user = await _userManager.FindByIdAsync(model.Id.ToString());
-                if (user != null) {
-                    user.Email = model.Email;
-                    user.UserName = model.Email;
-
-                    var result = await _userManager.UpdateAsync(user);
-                    if (result.Succeeded) {
-                        return RedirectToAction("Index");
-                    }
-                    else {
-                        foreach (var error in result.Errors) {
-                            ModelState.AddModelError(string.Empty, error.Description);
-                        }
-                    }
-                }
-            }
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> Delete(string id) {
-            User user = await _userManager.FindByIdAsync(id);
-            if (user != null) {
-                IdentityResult result = await _userManager.DeleteAsync(user);
+        public async Task<IActionResult> AddUser(CreateUserViewModel createUserViewModel) {
+            var result = await _service.Create(_mapper.Map<UserDTO>(createUserViewModel));
+            if (!result.IsSuccessful) {
+                ErrorOccured(result.Message);
+                return View("Create" ,createUserViewModel);
             }
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> ChangePassword(string id) {
-            User user = await _userManager.FindByIdAsync(id);
-            if (user == null) {
-                return NotFound();
-            }
-            ChangePasswordViewModel model = new ChangePasswordViewModel { Id = user.Id, Email = user.Email };
-            return View(model);
+        [HttpGet]
+        public IActionResult ChangePassword(Guid id) {
+            return View(new ChangePasswordUserViewModel { UserId = id});
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model) {
-            if (ModelState.IsValid) {
-                User user = await _userManager.FindByIdAsync(model.Id.ToString());
-                if (user != null) {
-                    IdentityResult result =
-                        await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-                    if (result.Succeeded) {
-                        return RedirectToAction("Index");
-                    }
-                    else {
-                        foreach (var error in result.Errors) {
-                            ModelState.AddModelError(string.Empty, error.Description);
-                        }
-                    }
-                }
-                else {
-                    ModelState.AddModelError(string.Empty, "Пользователь не найден");
-                }
+        public async Task<IActionResult> ChangePasswordAsync(ChangePasswordUserViewModel changePassword) {
+            var result = await _userService.ChangePasswordAsync(_mapper.Map<ChangePasswordUserDTO>(changePassword));
+            if (!result.IsSuccessful) {
+                ErrorOccured(result.Message);
+                return View(changePassword.UserId);
             }
-            return View(model);
+            return View("Index");
         }
 
-        //[HttpGet]
-        //public override async Task<IActionResult> Edit(string id) {
-        //    ViewBag.AllRoles = _roleManager.Roles.ToList();
-        //    ViewBag.isFailed = false;
-        //    var result = await _service.Get(id);
-        //    if (!result.IsSuccessful) {
-        //        return View("ErrorGet", result.Message);
-        //    }
-        //    return View(_mapper.Map<UserViewModel>(result.Data));
-        //}
-
-        //[HttpPost]
-        //public override IActionResult Edit(UserViewModel userViewModel) {
-        //    ViewBag.isFailed = false;
-        //    ViewBag.AllRoles = _roleManager.Roles.ToList();
-        //    var result = _service.Update(_mapper.Map<UserDTO>(userViewModel));
-        //    if (!result.IsSuccessful) {
-        //        ErrorOccured(result.Message);
-        //        return View(_mapper.Map<UserViewModel>(result.Data));                
-        //    }
-        //    return RedirectToAction("Index");
-        //}
-
-        private void ErrorOccured(string errorMessage) {
-            ViewBag.isFailed = true;
-            ViewBag.ErrorMessage = errorMessage;
+        [HttpGet]
+        public override Task<IActionResult> Edit(Guid id) {          
+            ViewBag.AllRoles = new SelectList(_roleManager.Roles.ToList());
+            return base.Edit(id);
         }
     }
 }

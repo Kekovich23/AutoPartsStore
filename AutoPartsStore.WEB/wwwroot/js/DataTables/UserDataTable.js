@@ -24,14 +24,7 @@
                 return "<a class='btn btn-info' href='User/Edit/" + row.id + "'>Edit</a>";
             }
         }],
-    'ajax': {
-        'url': 'User/GetAll',
-        'type': 'POST',
-        'datatype': 'json',
-        'error': function (err) {
-            Notify(err.responseText, 'danger');
-        }
-    }
+    'url': 'User/GetAll'
 }
 
 CreateDataTable(userRequest);

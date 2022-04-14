@@ -1,0 +1,11 @@
+{
+  "name": "bootstrap4-min-css",
+  "version": "1.0.1",
+  "description": "bootstrap 4 min css package",
+  "main": "style.css",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mohamad AL Ghorani",
+  "license": "ISC"
+}

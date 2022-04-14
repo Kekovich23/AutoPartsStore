@@ -2,6 +2,7 @@
 using AutoPartsStore.AN.DTO;
 using AutoPartsStore.AN.Entities;
 using AutoPartsStore.BLL.Filters;
+using AutoPartsStore.BLL.Services.Base;
 using AutoPartsStore.DAL.Interfaces;
 using Microsoft.Extensions.Logging;
 using System.Data.Entity;

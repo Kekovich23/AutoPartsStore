@@ -5,6 +5,11 @@
     {
       "library": "datatables@1.10.21",
       "destination": "wwwroot/lib/datatables/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "bootstrap4-min-css@1.0.1",
+      "destination": "wwwroot/lib/bootstrap/dist/css/bootstrap4-min-css/"
     }
   ]
 }

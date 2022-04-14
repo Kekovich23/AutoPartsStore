@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using AutoPartsStore.AN.DTO.Base;
 using AutoPartsStore.AN.Entities.Base;
-using AutoPartsStore.BLL.Services;
+using AutoPartsStore.BLL.Filters.Base;
+using AutoPartsStore.BLL.Services.Base;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoPartsStore.WEB.Controllers.Base {
@@ -9,24 +10,28 @@ namespace AutoPartsStore.WEB.Controllers.Base {
         where TEntity : class, IBaseEntity<TKey>
         where TEntityDTO : class, IBaseEntityDTO<TKey>
         where TEntityViewModel : new()
-        where TFilter : class {
+        where TFilter : BaseFilter {
         protected readonly BaseService<TEntity, TEntityDTO, TKey, TFilter> _service;
         protected readonly IMapper _mapper;
-        private readonly ILogger<CrudController<TEntity, TEntityDTO, TEntityViewModel, TKey, TFilter>> _logger;
+        protected readonly ILogger<CrudController<TEntity, TEntityDTO, TEntityViewModel, TKey, TFilter>> _logger;
 
-        public CrudController(BaseService<TEntity, TEntityDTO, TKey, TFilter> service, IMapper mapper, ILogger<CrudController<TEntity, TEntityDTO, TEntityViewModel, TKey, TFilter>> logger) {
+        public CrudController(BaseService<TEntity, TEntityDTO, TKey, TFilter> service,
+                              IMapper mapper,
+                              ILogger<CrudController<TEntity, TEntityDTO, TEntityViewModel, TKey, TFilter>> logger) {
             _service = service;
             _mapper = mapper;
             _logger = logger;
             _logger.LogDebug(1, "NLog injected into HomeController");
         }
 
-        // GET - TFilters
+        public virtual IActionResult Index() {
+            return View();
+        }
 
         [HttpPost]
-        public virtual async Task<IActionResult> GetAll(TFilter filter) {
+        public virtual IActionResult GetAll(TFilter filter) {
             _logger.LogInformation("Hello, this is the index!");
-            var serviceResult = await _service.GetAll(filter);
+            var serviceResult = _service.GetAll(filter);
             if (!serviceResult.IsSuccessful) {
                 return BadRequest(error: serviceResult.Message);
             }
@@ -75,27 +80,28 @@ namespace AutoPartsStore.WEB.Controllers.Base {
         [HttpDelete]
         public virtual async Task<IActionResult> Delete(TKey id) {
             var result = await _service.Remove(id);
-
             if (!result.IsSuccessful) {
                 return BadRequest(result.Message);
             }
             return Ok();
         }
 
+        protected void ErrorOccured(string errorMessage) {
+            ViewBag.IsFailed = true;
+            ViewBag.ErrorMessage = errorMessage;
+        }
+
         [HttpGet]
         public virtual IActionResult Add() {
             _logger.LogInformation("Pressed 'Add' button.");
-            ViewBag.isFailed = false;
             return View("Edit", new TEntityViewModel { });
         }
 
         [HttpPost]
         public virtual async Task<IActionResult> Add(TEntityViewModel entityViewModel) {
-            ViewBag.isFailed = false;
             var result = await _service.Create(_mapper.Map<TEntityDTO>(entityViewModel));
             if (!result.IsSuccessful) {
-                ViewBag.isFailed = true;
-                ViewBag.ErrorMessage = result.Message;
+                ErrorOccured(result.Message);
                 return View("Edit", entityViewModel);
             }
             return RedirectToAction("Index");
@@ -103,7 +109,6 @@ namespace AutoPartsStore.WEB.Controllers.Base {
 
         [HttpGet]
         public virtual async Task<IActionResult> Edit(TKey id) {
-            ViewBag.isFailed = false;
             var result = await _service.Get(id);
             if (!result.IsSuccessful) {
                 return View("ErrorGet", result.Message);
@@ -113,11 +118,9 @@ namespace AutoPartsStore.WEB.Controllers.Base {
 
         [HttpPost]
         public virtual async Task<IActionResult> Edit(TEntityViewModel entityViewModel) {
-            ViewBag.isFailed = false;
             var result = await _service.Update(_mapper.Map<TEntityDTO>(entityViewModel));
             if (!result.IsSuccessful) {
-                ViewBag.isFailed = true;
-                ViewBag.ErrorMessage = result.Message;
+                ErrorOccured(result.Message);
                 return View(_mapper.Map<TEntityViewModel>(result.Data));
             }
             return RedirectToAction("Index");

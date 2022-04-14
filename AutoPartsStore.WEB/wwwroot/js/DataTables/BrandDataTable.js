@@ -18,14 +18,7 @@
                 return "<a class='btn btn-info' href='Brand/Edit/" + row.id + "'>Edit</a>";
             }
         }],
-    'ajax': {
-        'url': 'Brand/GetAll',
-        'type': 'POST',
-        'datatype': 'json',
-        'error': function (err) {
-            Notify(err.responseText, 'danger');
-        }
-    }
+    'url': 'Brand/GetAll'
 }
 
 CreateDataTable(brandRequest);

@@ -2,6 +2,7 @@
 using AutoPartsStore.AN.DTO;
 using AutoPartsStore.AN.Entities;
 using AutoPartsStore.BLL.Filters;
+using AutoPartsStore.BLL.Services.Base;
 using AutoPartsStore.DAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -12,49 +13,48 @@ namespace AutoPartsStore.BLL.Services {
 
         public UserService(
             UserManager<User> userManager,
-            IUnitOfWork uow, IMapper mapper,
-            ILogger<BaseService<User, UserDTO,
-            Guid, UserFilter>> logger) : base(uow, mapper, logger) {
+            IUnitOfWork uow,
+            IMapper mapper,
+            ILogger<BaseService<User, UserDTO, Guid, UserFilter>> logger) : base(uow, mapper, logger) {
             _userManager = userManager;
         }
 
-        public override async Task<ServiceResult<IEnumerable<UserDTO>>> GetAll(UserFilter filter) {
-            try {
-                var query = _userManager.Users;
-
-                List<UserDTO> result = new();
-
-                query = Include(query);
-
-                query = FilterOut(query, filter);
-
-                foreach (User user in query.ToList()) {
-                    //UserDTO userDTO = await new(_userManager.GetRolesAsync(user));
-                    UserDTO userDTO = _mapper.Map<UserDTO>(user);
-                    result.Add(userDTO);
-                }
-
-                return ServiceResult<IEnumerable<UserDTO>>.Success(_mapper.Map<IEnumerable<UserDTO>>(result));
+        private static void CatchException(IdentityResult result) {
+            if (!result.Succeeded) {
+                throw new Exception(CollectErrors(result.Errors));
             }
-            catch (Exception ex) {
-                _logger.LogError(ex, "Failed to get all");
-                return ServiceResult<IEnumerable<UserDTO>>.Failed("Failed to get all");
+        }
+
+        private static string CollectErrors(IEnumerable<IdentityError> errors) {
+            if (errors == null) {
+                return String.Empty;
             }
+            return String.Join(" ", errors);
+        }
+
+        // TODO: override Include and FilterOut
+
+        protected override IQueryable<User> FilterOut(IQueryable<User> query, UserFilter filter) {
+            return base.FilterOut(query, filter);
+        }
+
+        private async Task<IdentityResult> SetRoleForUser(Guid id, string role) {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            CatchException(await _userManager.RemoveFromRolesAsync(user, (IEnumerable<string>)roles));
+
+            return await _userManager.AddToRoleAsync(user, role);
         }
 
         public override async Task<ServiceResult<UserDTO>> Create(UserDTO userDTO) {
             try {
                 var user = _mapper.Map<User>(userDTO);
 
-                var result = await _userManager.CreateAsync(user, userDTO.NewPassword);
+                CatchException(await _userManager.CreateAsync(user, userDTO.NewPassword));
 
-                if (!result.Succeeded) {
-                    string err = "";
-                    foreach (var error in result.Errors) {
-                        err += error.Description + " ";
-                    }
-                    throw new Exception(err);
-                }
+                CatchException(await SetRoleForUser(userDTO.Id, userDTO.Role));
 
                 return ServiceResult<UserDTO>.Success(_mapper.Map<UserDTO>(user));
             }
@@ -64,38 +64,9 @@ namespace AutoPartsStore.BLL.Services {
             }
         }
 
-        //public override async Task<ServiceResult<UserDTO>> Get(string id) {
-        //    try {
-        //        var user = await _userManager.FindByIdAsync(id);
-
-        //        var userDTO = new UserDTO {
-        //            Id = user.Id,
-        //            Name = user.UserName,
-        //            Email = user.Email,
-        //            Role = await _userManager.GetRolesAsync(user)
-        //        };
-
-        //        return ServiceResult<UserDTO>.Success(userDTO);
-        //    }
-        //    catch (Exception ex) {
-        //        _logger.LogError(ex, "Failed to get");
-        //        return ServiceResult<UserDTO>.Failed("Failed to get");
-        //    }
-        //}
-
         public override async Task<ServiceResult> Remove(Guid id) {
             try {
-                User user = await _userManager.FindByIdAsync(id.ToString());
-
-                var result = await _userManager.DeleteAsync(user);
-
-                if (!result.Succeeded) {
-                    string err = "";
-                    foreach (var error in result.Errors) {
-                        err += error.Description + " ";
-                    }
-                    throw new Exception(err);
-                }
+                CatchException(await _userManager.DeleteAsync(await _userManager.FindByIdAsync(id.ToString())));
 
                 return ServiceResult.Success();
             }
@@ -109,36 +80,43 @@ namespace AutoPartsStore.BLL.Services {
             try {
                 User user = await _userManager.FindByIdAsync(userDTO.Id.ToString());
 
-                if (user != null) {
-                    user.Email = userDTO.Email;
-                    user.UserName = userDTO.UserName;
+                user.Email = userDTO.Email;
+                user.UserName = userDTO.UserName;
 
-                   var result = await _userManager.UpdateAsync(user);
-                    if (!result.Succeeded) {
-                        string err = "";
-                        foreach (var error in result.Errors) {
-                            err += error.Description + " ";
-                        }
-                        throw new Exception(err);
-                    }
-                }
+                CatchException(await _userManager.UpdateAsync(user));
 
-                if (!string.IsNullOrEmpty(userDTO.NewPassword)) {
-                    var result = await _userManager.ChangePasswordAsync(user, userDTO.OldPassword, userDTO.NewPassword);
-                    if (!result.Succeeded) {
-                        string err = "";
-                        foreach (var error in result.Errors) {
-                            err += error.Description + " ";
-                        }
-                        throw new Exception(err);
-                    }
-                }
+                CatchException(await SetRoleForUser(userDTO.Id, userDTO.Role));
 
                 return ServiceResult<UserDTO>.Success(_mapper.Map<UserDTO>(user));
             }
             catch (Exception ex) {
                 _logger.LogError(ex, "Failed to update");
-                return ServiceResult<UserDTO>.Failed("Failed to update", userDTO);
+                return ServiceResult<UserDTO>.Failed(ex.Message, userDTO);
+            }
+        }
+
+        public async Task<ServiceResult> ChangePasswordAsync(ChangePasswordUserDTO changePassword) {
+            try {
+                CatchException(await _userManager.ChangePasswordAsync(
+                    await _userManager.FindByIdAsync(changePassword.UserId.ToString()),
+                    changePassword.OldPassword,
+                    changePassword.NewPassword));
+                return ServiceResult.Success();
+            }
+            catch (Exception ex) {
+                _logger.LogError(ex, "Failed to change password");
+                return ServiceResult.Failed(ex.Message);
+            }
+        }
+
+        public async Task<ServiceResult> SetRole(Guid id, string role) {
+            try {
+                CatchException(await SetRoleForUser(id, role));
+                return ServiceResult.Success();
+            }
+            catch (Exception ex) {
+                _logger.LogError(ex, "Failed to set role");
+                return ServiceResult.Failed(ex.Message);
             }
         }
     }

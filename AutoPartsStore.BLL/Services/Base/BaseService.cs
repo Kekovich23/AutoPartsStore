@@ -1,14 +1,16 @@
 ﻿using AutoMapper;
 using AutoPartsStore.AN.DTO.Base;
 using AutoPartsStore.AN.Entities.Base;
+using AutoPartsStore.BLL.Filters.Base;
 using AutoPartsStore.BLL.Interfaces;
 using AutoPartsStore.DAL.Interfaces;
 using Microsoft.Extensions.Logging;
 
-namespace AutoPartsStore.BLL.Services {
+namespace AutoPartsStore.BLL.Services.Base {
     public abstract class BaseService<TEntity, TEntityDTO, TKey, TFilter> : IService<TEntity, TEntityDTO, TKey, TFilter>
         where TEntityDTO : class, IBaseEntityDTO<TKey>
-        where TEntity : class, IBaseEntity<TKey> {
+        where TEntity : class, IBaseEntity<TKey>
+        where TFilter : BaseFilter {
         protected readonly IUnitOfWork Database;
         protected readonly IMapper _mapper;
         protected readonly ILogger<BaseService<TEntity, TEntityDTO, TKey, TFilter>> _logger;
@@ -53,13 +55,17 @@ namespace AutoPartsStore.BLL.Services {
             }
         }
 
-        public virtual async Task<ServiceResult<IEnumerable<TEntityDTO>>> GetAll(TFilter filter) {
+        public virtual ServiceResult<IEnumerable<TEntityDTO>> GetAll(TFilter filter) {
             try {
                 var query = Database.GetRepository<TEntity>().GetAll();
 
                 query = Include(query);
 
                 query = FilterOut(query, filter);
+
+                // TODO: ordering
+                // TODO: paging
+
                 return ServiceResult<IEnumerable<TEntityDTO>>.Success(_mapper.Map<IEnumerable<TEntityDTO>>(query));
             }
             catch (Exception ex){
