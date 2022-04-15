@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using NLog;
 using NLog.Web;
 
-var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("init main");
 try {
     var builder = WebApplication.CreateBuilder(args);
@@ -27,17 +27,17 @@ try {
         .AddEntityFrameworkStores<ApplicationContext>();
     builder.Services.AddControllersWithViews();
 
-    
-
     builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-    builder.Services.AddAutoMapper(typeof(BrandProfile), typeof(UserProfile));
     builder.Services.AddScoped<BrandService>();
     builder.Services.AddScoped<ModelService>();
     builder.Services.AddScoped<UserService>();
     builder.Services.AddScoped<TypeTransportService>();
     builder.Services.AddScoped(provider => new MapperConfiguration(cfg => {
         cfg.AddProfile(new UserProfile(provider.GetService<UserManager<User>>()));
-    }).CreateMapper());
+        cfg.AddProfile(new BrandProfile());
+        cfg.AddProfile(new TypeTransportProfile());
+        cfg.AddProfile(new ModelProfile());
+    }).CreateMapper());    
 
     // NLog: Setup NLog for Dependency injection
     builder.Logging.ClearProviders();
