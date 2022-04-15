@@ -4,8 +4,10 @@ using AutoPartsStore.AN.Entities;
 using AutoPartsStore.BLL.Filters;
 using AutoPartsStore.BLL.Services.Base;
 using AutoPartsStore.DAL.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using System.Linq.Dynamic.Core;
 
 namespace AutoPartsStore.BLL.Services {
     public class UserService : BaseService<User, UserDTO, Guid, UserFilter> {
@@ -27,15 +29,38 @@ namespace AutoPartsStore.BLL.Services {
 
         private static string CollectErrors(IEnumerable<IdentityError> errors) {
             if (errors == null) {
-                return String.Empty;
+                return string.Empty;
             }
-            return String.Join(" ", errors);
+            return string.Join(" ", errors);
         }
 
-        // TODO: override Include and FilterOut
-
         protected override IQueryable<User> FilterOut(IQueryable<User> query, UserFilter filter) {
-            return base.FilterOut(query, filter);
+
+            //Search
+            if (!string.IsNullOrWhiteSpace(filter.UserName)) {
+                query = query.Where(m => m.UserName.ToLower() == filter.UserName.ToLower());
+            }
+            if (!string.IsNullOrWhiteSpace(filter.Email)) {
+                query = query.Where(m => m.Email.ToLower() == filter.Email.ToLower());
+            }
+
+            //Sorting
+            if (!(string.IsNullOrEmpty(filter.SortColumn) && string.IsNullOrEmpty(filter.SortColumnDir))) {
+                if (filter.SortColumn != "Role" && filter.SortColumnDir != "Role") {
+                    query = query.OrderBy(filter.SortColumn + " " + filter.SortColumnDir);
+                }
+                else {
+                    var usersDTO = _mapper.Map<IEnumerable<UserDTO>>(query);
+                    usersDTO = usersDTO.AsQueryable().OrderBy(filter.SortColumn + " " + filter.SortColumnDir);
+                    var result = _mapper.Map<IEnumerable<User>>(usersDTO);
+                    query = result.AsQueryable();
+                }
+            }
+
+            //Paging     
+            query = query.Skip(filter.Skip).Take(filter.PageSize);
+
+            return query;
         }
 
         private async Task<IdentityResult> SetRoleForUser(Guid id, string role) {
@@ -48,7 +73,7 @@ namespace AutoPartsStore.BLL.Services {
             return await _userManager.AddToRoleAsync(user, role);
         }
 
-        public override async Task<ServiceResult<UserDTO>> Create(UserDTO userDTO) {
+        public override async Task<ServiceResult<UserDTO>> CreateAsync(UserDTO userDTO) {
             try {
                 var user = _mapper.Map<User>(userDTO);
 
@@ -64,7 +89,7 @@ namespace AutoPartsStore.BLL.Services {
             }
         }
 
-        public override async Task<ServiceResult> Remove(Guid id) {
+        public override async Task<ServiceResult> RemoveAsync(Guid id) {
             try {
                 CatchException(await _userManager.DeleteAsync(await _userManager.FindByIdAsync(id.ToString())));
 
@@ -76,7 +101,7 @@ namespace AutoPartsStore.BLL.Services {
             }
         }
 
-        public override async Task<ServiceResult<UserDTO>> Update(UserDTO userDTO) {
+        public override async Task<ServiceResult<UserDTO>> UpdateAsync(UserDTO userDTO) {
             try {
                 User user = await _userManager.FindByIdAsync(userDTO.Id.ToString());
 
@@ -118,6 +143,12 @@ namespace AutoPartsStore.BLL.Services {
                 _logger.LogError(ex, "Failed to set role");
                 return ServiceResult.Failed(ex.Message);
             }
+        }
+
+        public override UserFilter GetFilter(IFormCollection form, UserFilter filter) {
+            filter.UserName = form["UserName"].FirstOrDefault();
+            filter.Email = form["Email"].FirstOrDefault();
+            return filter;
         }
     }
 }

@@ -5,23 +5,33 @@
         {
             'data': 'name', 'name': 'Name', 'autowidth': true,
             'render': function (data, type, row) {
-                return "<a onclick=GetData('" + row.id + "'); >" + data + "</a>";
+                return "<a class='btn' href='TypeTransport/Get/" + row.id + "'>" + data + "</a>";
             }
         },
         {
+            'orderable': false,
+            'searchable': false,
             "render": function (data, type, row) {
                 return "<a class='btn btn-danger' onclick=DeleteData('" + row.id + "'); >Delete</a>";
             }
         },
         {
+            'orderable': false,
+            'searchable': false,
             "render": function (data, type, row) {
                 return "<a class='btn btn-info' href='/TypeTransport/Edit/" + row.id + "'>Edit</a>";
             }
         }],
-    'ajax': {
-        'url': 'TypeTransport/GetTypeTransports',
+    'data': {
+        'url': 'TypeTransport/GetAll',
         'type': 'POST',
-        'datatype': 'json'
+        'datatype': 'json',
+        'error': function (err) {
+            Notify(err.responseText, 'danger');
+        },
+        data(d) {
+            d.Name = $('#Name').val();
+        }
     }
 }
 
@@ -34,20 +44,4 @@ function DeleteData(Id) {
         'tableId': '#typeTransportTable'
     }
     Delete(option);
-}
-
-function EditData(Id) {
-    var option = {
-        'url': 'TypeTransport/Edit',
-        'data': { 'id': Id }
-    }
-    Edit(option);
-}
-
-function GetData(Id) {
-    var option = {
-        'url': 'TypeTransport/Get',
-        'data': { 'id': Id }
-    }
-    Get(option);
 }

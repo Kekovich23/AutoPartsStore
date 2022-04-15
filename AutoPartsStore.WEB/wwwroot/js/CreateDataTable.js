@@ -4,14 +4,7 @@
             'processing': true,
             'serverSide': true,
             'filter': false,
-            'ajax': {
-                'url': options.url,
-                'type': 'POST',
-                'datatype': 'json',
-                'error': function (err) {
-                    Notify(err.responseText, 'danger');
-                }
-            },
+            'ajax': options.data,
             'columns': options.columns
         });
     });

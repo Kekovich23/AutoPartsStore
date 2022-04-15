@@ -16,3 +16,6 @@
     }
 }
 
+function FilterOut(table) {
+    $(table).DataTable().draw();
+}

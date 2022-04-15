@@ -34,7 +34,7 @@ namespace AutoPartsStore.WEB.Controllers {
 
         [HttpPost]
         public async Task<IActionResult> AddUser(CreateUserViewModel createUserViewModel) {
-            var result = await _service.Create(_mapper.Map<UserDTO>(createUserViewModel));
+            var result = await _service.CreateAsync(_mapper.Map<UserDTO>(createUserViewModel));
             if (!result.IsSuccessful) {
                 ErrorOccured(result.Message);
                 return View("Create" ,createUserViewModel);

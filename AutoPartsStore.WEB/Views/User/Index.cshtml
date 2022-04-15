@@ -1,8 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Users page";
 }
-<link href="~/lib/datatables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
 <div class="container">
+    <label>User's name</label>
+    <input type="text" id="UserName" />
+    <label>Email</label>
+    <input type="text" id="Email" />
+    <button onclick="FilterOut('#userTable')">Filter</button>
     <br />
     <div style="width:90%; margin:0 auto;">
         <table id="userTable" class="table table-striped" width="100%" cellspacing="0">
@@ -22,11 +26,4 @@
 
 <a class='btn btn-info' href='User/AddUser'>Add new user</a>
 
-@section Scripts
-{
-<script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
-<script src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
-<script src="~/js/Requests.js"></script>
-<script src="~/js/CreateDataTable.js"></script>
-<script src="~/js/DataTables/UserDataTable.js"></script>
-}
+@await Html.PartialAsync("DataTable", "UserDataTable")

@@ -1,8 +1,24 @@
 ﻿@{
     ViewData["Title"] = "Model page";
 }
-<link href="~/lib/datatables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
 <div class="container">
+    <label>Name</label>
+    <input type="text" id="Name" />
+    <select id="BrandId">
+        <option value="@null">--------</option>
+        @foreach (var brand in ViewBag.Brands)
+        {
+            <option value="@brand.Id">@brand.Name</option>
+        }
+    </select>
+    <select id="TypeTransportId">
+        <option value="@null">--------</option>
+        @foreach (var typeTransport in ViewBag.TypesTransport)
+        {
+            <option value="@typeTransport.Id">@typeTransport.Name</option>
+        }
+    </select>
+    <button onclick="FilterOut('#modelTable')">Filter</button>
     <br />
     <div style="width:90%; margin:0 auto;">
         <table id="modelTable" class="table table-striped" width="100%" cellspacing="0">
@@ -20,12 +36,6 @@
     </div>
 </div>
 
-<a class='btn btn-primary' href='/Model/Add/'>Add new</a>
+<a class='btn btn-primary' href='Model/Add/'>Add new</a>
 
-@section Scripts
-{
-<script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
-<script src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
-<script src="~/js/CreateDataTable.js"></script>
-<script src="~/js/modelDatatable.js"></script>
-}
+@await Html.PartialAsync("DataTable", "ModelDatatable")

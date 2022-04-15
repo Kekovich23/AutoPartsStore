@@ -24,53 +24,46 @@ namespace AutoPartsStore.WEB.Controllers.Base {
             _logger.LogDebug(1, "NLog injected into HomeController");
         }
 
-        public virtual IActionResult Index() {
+        public virtual async Task<IActionResult> Index() {
             return View();
         }
 
         [HttpPost]
-        public virtual IActionResult GetAll(TFilter filter) {
-            _logger.LogInformation("Hello, this is the index!");
-            var serviceResult = _service.GetAll(filter);
-            if (!serviceResult.IsSuccessful) {
-                return BadRequest(error: serviceResult.Message);
-            }
+        public virtual async Task<IActionResult> GetAll(TFilter filter) {
 
-            var customerData = _mapper.Map<IEnumerable<TEntityViewModel>>(serviceResult.Data);
+            filter = _service.GetFilter(Request.Form, filter);
 
-            var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
-
-            // Skip number of Rows count  
+            var draw = Request.Form["draw"].FirstOrDefault();
             var start = Request.Form["start"].FirstOrDefault();
-
-            // Paging Length 10,20  
             var length = Request.Form["length"].FirstOrDefault();
+            var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+            var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
 
-            // Sort Column Name  
-            //var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-
-            //// Sort Column Direction (asc, desc)  
-            //var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
-
-            // Search Value from (Search box)  
-            //var searchValue = Request.Form["search[value]"].FirstOrDefault();
-
-            //Paging Size (10, 20, 50,100)  
+            //Paging Size (10,20,50,100)    
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
-
             int skip = start != null ? Convert.ToInt32(start) : 0;
 
-            //total number of rows counts   
-            int recordsTotal = customerData.Count();
-            //Paging   
-            var data = customerData.Skip(skip).Take(pageSize).ToList();
-            //Returning Json Data  
-            return Json(new { draw, recordsFiltered = recordsTotal, recordsTotal, data });
+            //filter.SearchValue = searchValue;
+            filter.SortColumn = sortColumn;
+            filter.SortColumnDir = sortColumnDir;
+            filter.Skip = skip;
+            filter.PageSize = pageSize;
+
+            // Getting all Customer data    
+            var result = await _service.GetAllAsync(filter);
+            if (!result.IsSuccessful) {
+                return BadRequest();
+            }
+
+            //total number of rows count     
+            var recordsTotal = result.Data.Count();
+            //Returning Json Data    
+            return Json(new { draw, recordsFiltered = recordsTotal, recordsTotal, data = result.Data });
         }
 
         [HttpGet]
         public virtual async Task<IActionResult> Get(TKey id) {
-            var result = await _service.Get(id);
+            var result = await _service.GetAsync(id);
             if (!result.IsSuccessful) {
                 return View("ErrorGet", result.Message);
             }
@@ -79,7 +72,7 @@ namespace AutoPartsStore.WEB.Controllers.Base {
 
         [HttpDelete]
         public virtual async Task<IActionResult> Delete(TKey id) {
-            var result = await _service.Remove(id);
+            var result = await _service.RemoveAsync(id);
             if (!result.IsSuccessful) {
                 return BadRequest(result.Message);
             }
@@ -92,14 +85,14 @@ namespace AutoPartsStore.WEB.Controllers.Base {
         }
 
         [HttpGet]
-        public virtual IActionResult Add() {
+        public virtual async Task<IActionResult> Add() {
             _logger.LogInformation("Pressed 'Add' button.");
             return View("Edit", new TEntityViewModel { });
         }
 
         [HttpPost]
         public virtual async Task<IActionResult> Add(TEntityViewModel entityViewModel) {
-            var result = await _service.Create(_mapper.Map<TEntityDTO>(entityViewModel));
+            var result = await _service.CreateAsync(_mapper.Map<TEntityDTO>(entityViewModel));
             if (!result.IsSuccessful) {
                 ErrorOccured(result.Message);
                 return View("Edit", entityViewModel);
@@ -109,7 +102,7 @@ namespace AutoPartsStore.WEB.Controllers.Base {
 
         [HttpGet]
         public virtual async Task<IActionResult> Edit(TKey id) {
-            var result = await _service.Get(id);
+            var result = await _service.GetAsync(id);
             if (!result.IsSuccessful) {
                 return View("ErrorGet", result.Message);
             }
@@ -118,7 +111,7 @@ namespace AutoPartsStore.WEB.Controllers.Base {
 
         [HttpPost]
         public virtual async Task<IActionResult> Edit(TEntityViewModel entityViewModel) {
-            var result = await _service.Update(_mapper.Map<TEntityDTO>(entityViewModel));
+            var result = await _service.UpdateAsync(_mapper.Map<TEntityDTO>(entityViewModel));
             if (!result.IsSuccessful) {
                 ErrorOccured(result.Message);
                 return View(_mapper.Map<TEntityViewModel>(result.Data));

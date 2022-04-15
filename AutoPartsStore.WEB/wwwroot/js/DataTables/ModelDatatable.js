@@ -5,25 +5,37 @@
         {
             'data': 'name', 'name': 'Name', 'autowidth': true,
             'render': function (data, type, row) {
-                return "<a onclick=GetData('" + row.id + "'); >" + data + "</a>";
+                return "<a class='btn' href='Model/Get/" + row.id + "'>" + data + "</a>";
             }
         },
         { 'data': 'brand.Name', 'name': 'Brand', 'autowidth': true },
-        { 'data': 'typeTransport.Name', 'name': 'Type transport', 'autowidth': true },
+        { 'data': 'typeTransport.Name', 'name': 'TypeTransport', 'autowidth': true },
         {
+            'orderable': false,
+            'searchable': false,
             "render": function (data, type, row) {
                 return "<a class='btn btn-danger' onclick=DeleteData('" + row.id + "'); >Delete</a>";
             }
         },
         {
+            'orderable': false,
+            'searchable': false,
             "render": function (data, type, row) {
                 return "<a class='btn btn-info' href='/Brand/Edit/" + row.id + "'>Edit</a>";
             }
-        }],
-    'ajax': {
-        'url': 'Model/GetModels',
+        }],    
+     'data': {
+         'url': 'Model/GetAll',
         'type': 'POST',
-        'datatype': 'json'
+        'datatype': 'json',
+        'error': function (err) {
+            Notify(err.responseText, 'danger');
+        },
+        data(d) {
+            d.Name = $('#Name').val();
+            d.BrandId = $('#BrandId').val();
+            d.TypeTransportId = $('#TypeTransportId').val();
+        }
     }
 }
 
@@ -36,20 +48,4 @@ function DeleteData(Id) {
         'tableId': '#modelTable'
     }
     Delete(option);
-}
-
-function EditData(Id) {
-    var option = {
-        'url': 'Model/Edit',
-        'data': { 'id': Id }
-    }
-    Edit(option);
-}
-
-function GetData(Id) {
-    var option = {
-        'url': 'Model/Get',
-        'data': { 'id': Id }
-    }
-    Get(option);
 }

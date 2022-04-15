@@ -4,6 +4,7 @@ using AutoPartsStore.AN.Entities.Base;
 using AutoPartsStore.BLL.Filters.Base;
 using AutoPartsStore.BLL.Interfaces;
 using AutoPartsStore.DAL.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace AutoPartsStore.BLL.Services.Base {
@@ -21,7 +22,7 @@ namespace AutoPartsStore.BLL.Services.Base {
             _logger = logger;
         }
 
-        public virtual async Task<ServiceResult<TEntityDTO>> Create(TEntityDTO entityDTO) {
+        public virtual async Task<ServiceResult<TEntityDTO>> CreateAsync(TEntityDTO entityDTO) {
             try {
                 Database.GetRepository<TEntity>().Create(_mapper.Map<TEntity>(entityDTO));
                 return ServiceResult<TEntityDTO>.Success(entityDTO);
@@ -44,7 +45,7 @@ namespace AutoPartsStore.BLL.Services.Base {
             return Include(query);
         }
 
-        public virtual async Task<ServiceResult<TEntityDTO>> Get(TKey id) {
+        public virtual async Task<ServiceResult<TEntityDTO>> GetAsync(TKey id) {
             try {
                 var query = GetQuery(id);
                 return ServiceResult<TEntityDTO>.Success(_mapper.Map<TEntityDTO>(query.FirstOrDefault()));
@@ -55,16 +56,13 @@ namespace AutoPartsStore.BLL.Services.Base {
             }
         }
 
-        public virtual ServiceResult<IEnumerable<TEntityDTO>> GetAll(TFilter filter) {
+        public virtual async Task<ServiceResult<IEnumerable<TEntityDTO>>> GetAllAsync(TFilter filter) {
             try {
                 var query = Database.GetRepository<TEntity>().GetAll();
 
                 query = Include(query);
 
                 query = FilterOut(query, filter);
-
-                // TODO: ordering
-                // TODO: paging
 
                 return ServiceResult<IEnumerable<TEntityDTO>>.Success(_mapper.Map<IEnumerable<TEntityDTO>>(query));
             }
@@ -74,7 +72,7 @@ namespace AutoPartsStore.BLL.Services.Base {
             }
         }
 
-        public virtual async Task<ServiceResult> Remove(TKey id) {
+        public virtual async Task<ServiceResult> RemoveAsync(TKey id) {
             try {
                 var query = GetQuery(id);
                 Database.GetRepository<TEntity>().Remove(_mapper.Map<TEntity>(query.FirstOrDefault()));
@@ -86,7 +84,7 @@ namespace AutoPartsStore.BLL.Services.Base {
             }
         }
 
-        public virtual async Task<ServiceResult<TEntityDTO>> Update(TEntityDTO entityDTO) {
+        public virtual async Task<ServiceResult<TEntityDTO>> UpdateAsync(TEntityDTO entityDTO) {
             try {
                 Database.GetRepository<TEntity>().Update(_mapper.Map<TEntity>(entityDTO));
                 return ServiceResult<TEntityDTO>.Success(entityDTO);
@@ -103,6 +101,10 @@ namespace AutoPartsStore.BLL.Services.Base {
 
         protected virtual IQueryable<TEntity> FilterOut(IQueryable<TEntity> query, TFilter filter) {
             return query;
+        }
+
+        public virtual TFilter GetFilter(IFormCollection form, TFilter filter) {
+            return filter;
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Type transport page";
 }
-<link href="~/lib/datatables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
 <div class="container">
+    <label>Name</label>
+    <input type="text" id="Name" />
+    <button onclick="FilterOut('#typeTransportTable')">Filter</button>
     <br />
     <div style="width:90%; margin:0 auto;">
         <table id="typeTransportTable" class="table table-striped" width="100%" cellspacing="0">
@@ -18,12 +20,6 @@
     </div>
 </div>
 
-<a class='btn btn-primary' href='/TypeTransport/Add/'>Add new</a>
+<a class='btn btn-primary' href='TypeTransport/Add/'>Add new</a>
 
-@section Scripts
-{
-<script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
-<script src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
-<script src="~/js/CreateDataTable.js"></script>
-<script src="~/js/typeTransportDatatable.js"></script>
-}
+@await Html.PartialAsync("DataTable", "typeTransportDatatable")

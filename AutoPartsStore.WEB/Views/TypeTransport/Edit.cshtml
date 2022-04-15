@@ -1,12 +1,12 @@
 ﻿@model TypeTransportViewModel
 @{
-    ViewBag.Title = "New type of transport";
+    ViewBag.Title = Model.IsNew ? "New type" : "Edit type";
 }
 <form method="post">
     <div>
-        <label>Name</label><br><br>
+        <label>Name</label>
         <input type="text" name="Name" value=@Model.Name />
     </div>
     <input type="hidden" name="Id" value="@Model.Id" />
-    <input type="submit" value="Add type of transport" />
+    <input type="submit" value=@(Model.IsNew ? "Add" : "Edit") />
 </form>

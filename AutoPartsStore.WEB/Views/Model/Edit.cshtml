@@ -1,5 +1,30 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ModelViewModel
 @{
+    ViewBag.Title = Model.IsNew ? "New model" : "Edit model";
 }
+<form method="post">
+    <div>
+        <label>Марка</label>
+        <select name="BrandId">
+            <option value="@null">--------</option>
+            @foreach (var brand in ViewBag.Brands) {
+                <option value="@brand.Id">@brand.Name</option>
+            }
+        </select>       
+    </div>
+    <div>
+        <label>Тип</label>
+         <select name="TypeTransportId">
+            <option value="@null">--------</option>
+            @foreach (var typeTransport in ViewBag.TypesTransport) {
+                <option value="@typeTransport.Id">@typeTransport.Name</option>
+            }
+        </select>
+    </div>
+    <div>
+        <label>Name</label>
+        <input type="text" name="Name" value=@Model.Name />
+    </div>
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="submit" value=@(Model.IsNew ? "Add" : "Edit") />
+</form>

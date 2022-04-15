@@ -9,16 +9,30 @@
             }
         },
         {
+            'orderable': false,
+            'searchable': false,
             "render": function (data, type, row) {
                 return "<a class='btn btn-danger' onclick=DeleteData('" + row.id + "'); >Delete</a>";
             }
         },
         {
+            'orderable': false,
+            'searchable': false,
             "render": function (data, type, row) {
                 return "<a class='btn btn-info' href='Brand/Edit/" + row.id + "'>Edit</a>";
             }
         }],
-    'url': 'Brand/GetAll'
+    'data': {
+        'url': 'Brand/GetAll',
+        'type': 'POST',
+        'datatype': 'json',
+        'error': function (err) {
+            Notify(err.responseText, 'danger');
+        },
+        data(d) {
+            d.Name = $('#Name').val();
+        }
+    }    
 }
 
 CreateDataTable(brandRequest);

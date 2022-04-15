@@ -4,6 +4,6 @@ namespace AutoPartsStore.BLL.Filters {
     public class ModelFilter : BaseFilter {
         public string Name { get; set; }
         public Guid? BrandId { get; set; }
-        public Guid? TypeTransportId { get; set; }
+        public int? TypeTransportId { get; set; }
     }
 }

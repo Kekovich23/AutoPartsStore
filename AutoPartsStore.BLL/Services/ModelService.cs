@@ -4,8 +4,10 @@ using AutoPartsStore.AN.Entities;
 using AutoPartsStore.BLL.Filters;
 using AutoPartsStore.BLL.Services.Base;
 using AutoPartsStore.DAL.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Data.Entity;
+using System.Linq.Dynamic.Core;
 
 namespace AutoPartsStore.BLL.Services {
     public class ModelService : BaseService<Model, ModelDTO, Guid, ModelFilter> {
@@ -31,7 +33,33 @@ namespace AutoPartsStore.BLL.Services {
                 query = query.Where((m) => m.TypeTransportId == filter.TypeTransportId.Value);
             }
 
+            ////Search    
+            //if (!string.IsNullOrEmpty(filter.SearchValue)) {
+            //    query = query.Where(m => m.Name.ToLower() == filter.SearchValue.ToLower()
+            //    || m.Brand.Name.ToLower() == filter.SearchValue.ToLower()
+            //    || m.TypeTransport.Name.ToLower() == filter.SearchValue.ToLower());
+            //}
+            //Sorting
+            if (!(string.IsNullOrEmpty(filter.SortColumn) && string.IsNullOrEmpty(filter.SortColumnDir))) {
+                query = query.OrderBy(filter.SortColumn + " " + filter.SortColumnDir);
+            }
+
+            //Paging     
+            query = query.Skip(filter.Skip).Take(filter.PageSize);
+
             return query;
+        }
+
+        public override ModelFilter GetFilter(IFormCollection form, ModelFilter filter) {
+            filter.Name = form["Name"].FirstOrDefault();
+            if (!string.IsNullOrWhiteSpace(form["BrandId"])) {
+                filter.BrandId = Guid.Parse(form["BrandId"].FirstOrDefault());
+            }
+            if (!string.IsNullOrWhiteSpace(form["TypeTransportId"])) {
+                filter.TypeTransportId = Convert.ToInt32(form["TypeTransportId"].FirstOrDefault());
+            }
+            
+            return filter;
         }
     }
 }
