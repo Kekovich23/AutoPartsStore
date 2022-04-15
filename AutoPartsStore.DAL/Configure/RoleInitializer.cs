@@ -4,27 +4,23 @@ using Microsoft.AspNetCore.Identity;
 namespace AutoPartsStore.DAL.Configure {
     public class RoleInitializer {
         public const string AdminRoleName = "admin";
-        // TODO: other roles
+        public const string EmployeeRoleName = "employee";
+        public const string UserRoleName = "user";
 
         public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<Role> roleManager) {
-            string adminEmail = "admin@gmail.com";
-            string password = "!Qa2ws";
-
             await CreateRole(roleManager, AdminRoleName);
-            // TODO: other roles
-            if (await roleManager.FindByNameAsync("employee") == null) {
-                await roleManager.CreateAsync(new Role { Name = "employee"});
-            }
-            if (await roleManager.FindByNameAsync("user") == null) {
-                await roleManager.CreateAsync(new Role { Name = "user" });
-            }
+            await CreateRole(roleManager, EmployeeRoleName);
+            await CreateRole(roleManager, UserRoleName);
 
-            // TODO: the same for users
-            if (await userManager.FindByNameAsync(adminEmail) == null) {
-                User admin = new User { Email = adminEmail, UserName = adminEmail };
-                IdentityResult result = await userManager.CreateAsync(admin, password);
+            await CreateUser(userManager, "admin@gmail.com", "!Qa2ws", AdminRoleName);
+        }
+
+        private static async Task CreateUser(UserManager<User> userManager, string email, string password, string roleName) {
+            if (await userManager.FindByNameAsync(email) == null) {
+                User user = new() { Email = email, UserName = email };
+                IdentityResult result = await userManager.CreateAsync(user, password);
                 if (result.Succeeded) {
-                    await userManager.AddToRoleAsync(admin, AdminRoleName);
+                    await userManager.AddToRoleAsync(user, roleName);
                 }
             }
         }
