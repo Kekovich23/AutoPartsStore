@@ -50,7 +50,7 @@ namespace AutoPartsStore.BLL.Services.Base {
                 var query = GetQuery(id);
                 return ServiceResult<TEntityDTO>.Success(_mapper.Map<TEntityDTO>(query.FirstOrDefault()));
             }
-            catch (Exception ex){
+            catch (Exception ex) {
                 _logger.LogError(ex, "Failed to get");
                 return ServiceResult<TEntityDTO>.Failed("Failed to get");
             }
@@ -60,13 +60,17 @@ namespace AutoPartsStore.BLL.Services.Base {
             try {
                 var query = Database.GetRepository<TEntity>().GetAll();
 
+                query = FilterOut(query, filter);
+
+                query = OrderBy(query, filter);
+
                 query = Include(query);
 
-                query = FilterOut(query, filter);
+                query = query.Skip(filter.Skip).Take(filter.PageSize);
 
                 return ServiceResult<IEnumerable<TEntityDTO>>.Success(_mapper.Map<IEnumerable<TEntityDTO>>(query));
             }
-            catch (Exception ex){
+            catch (Exception ex) {
                 _logger.LogError(ex, "Failed to get all");
                 return ServiceResult<IEnumerable<TEntityDTO>>.Failed("Failed to get all");
             }
@@ -78,7 +82,7 @@ namespace AutoPartsStore.BLL.Services.Base {
                 Database.GetRepository<TEntity>().Remove(_mapper.Map<TEntity>(query.FirstOrDefault()));
                 return ServiceResult.Success();
             }
-            catch (Exception ex){
+            catch (Exception ex) {
                 _logger.LogError(ex, "Failed to remove");
                 return ServiceResult.Failed("Failed to remove");
             }
@@ -89,7 +93,7 @@ namespace AutoPartsStore.BLL.Services.Base {
                 Database.GetRepository<TEntity>().Update(_mapper.Map<TEntity>(entityDTO));
                 return ServiceResult<TEntityDTO>.Success(entityDTO);
             }
-            catch (Exception ex){
+            catch (Exception ex) {
                 _logger.LogError(ex, "Failed to update");
                 return ServiceResult<TEntityDTO>.Failed("Failed to update", entityDTO);
             }
@@ -103,8 +107,30 @@ namespace AutoPartsStore.BLL.Services.Base {
             return query;
         }
 
-        public virtual TFilter GetFilter(IFormCollection form, TFilter filter) {
+        protected virtual IQueryable<TEntity> OrderBy(IQueryable<TEntity> query, TFilter filter) {
+            return query;
+        }
+
+        protected virtual TFilter InitFilter(IFormCollection form, TFilter filter) {
+            var draw = form["draw"].FirstOrDefault();
+            var start = form["start"].FirstOrDefault();
+            var length = form["length"].FirstOrDefault();
+            var sortColumn = form["columns[" + form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+            var sortColumnDir = form["order[0][dir]"].FirstOrDefault();
+
+            int pageSize = length != null ? Convert.ToInt32(length) : 0;
+            int skip = start != null ? Convert.ToInt32(start) : 0;
+
+            filter.SortColumn = sortColumn;
+            filter.SortColumnDir = sortColumnDir;
+            filter.Skip = skip;
+            filter.PageSize = pageSize;
+            filter.Draw = draw;
             return filter;
+        }
+
+        public virtual TFilter GetFilter(IFormCollection form) {
+            return null;
         }
     }
 }

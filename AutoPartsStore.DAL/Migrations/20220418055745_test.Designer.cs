@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoPartsStore.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220411063523_test")]
+    [Migration("20220418055745_test")]
     partial class test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,15 +94,12 @@ namespace AutoPartsStore.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("TypeDetailId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("TypeDetailId1")
+                    b.Property<int>("TypeDetailId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TypeDetailId1");
+                    b.HasIndex("TypeDetailId");
 
                     b.ToTable("Features");
                 });
@@ -135,17 +132,14 @@ namespace AutoPartsStore.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("TypeTransportId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("TypeTransportId1")
+                    b.Property<int>("TypeTransportId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
 
-                    b.HasIndex("TypeTransportId1");
+                    b.HasIndex("TypeTransportId");
 
                     b.ToTable("Models");
                 });
@@ -295,15 +289,12 @@ namespace AutoPartsStore.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("SectionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("SectionId1")
+                    b.Property<int>("SectionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SectionId1");
+                    b.HasIndex("SectionId");
 
                     b.ToTable("TypeDetails");
                 });
@@ -573,7 +564,7 @@ namespace AutoPartsStore.DAL.Migrations
                 {
                     b.HasOne("AutoPartsStore.AN.Entities.TypeDetail", "TypeDetail")
                         .WithMany()
-                        .HasForeignKey("TypeDetailId1")
+                        .HasForeignKey("TypeDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -590,7 +581,7 @@ namespace AutoPartsStore.DAL.Migrations
 
                     b.HasOne("AutoPartsStore.AN.Entities.TypeTransport", "TypeTransport")
                         .WithMany()
-                        .HasForeignKey("TypeTransportId1")
+                        .HasForeignKey("TypeTransportId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -644,7 +635,7 @@ namespace AutoPartsStore.DAL.Migrations
                 {
                     b.HasOne("AutoPartsStore.AN.Entities.Section", "Section")
                         .WithMany()
-                        .HasForeignKey("SectionId1")
+                        .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -35,8 +35,6 @@ namespace AutoPartsStore.BLL.Services {
         }
 
         protected override IQueryable<User> FilterOut(IQueryable<User> query, UserFilter filter) {
-
-            //Search
             if (!string.IsNullOrWhiteSpace(filter.UserName)) {
                 query = query.Where(m => m.UserName.ToLower() == filter.UserName.ToLower());
             }
@@ -44,7 +42,10 @@ namespace AutoPartsStore.BLL.Services {
                 query = query.Where(m => m.Email.ToLower() == filter.Email.ToLower());
             }
 
-            //Sorting
+            return query;
+        }
+
+        protected override IQueryable<User> OrderBy(IQueryable<User> query, UserFilter filter) {
             if (!(string.IsNullOrEmpty(filter.SortColumn) && string.IsNullOrEmpty(filter.SortColumnDir))) {
                 if (filter.SortColumn != "Role" && filter.SortColumnDir != "Role") {
                     query = query.OrderBy(filter.SortColumn + " " + filter.SortColumnDir);
@@ -56,9 +57,6 @@ namespace AutoPartsStore.BLL.Services {
                     query = result.AsQueryable();
                 }
             }
-
-            //Paging     
-            query = query.Skip(filter.Skip).Take(filter.PageSize);
 
             return query;
         }
@@ -145,7 +143,9 @@ namespace AutoPartsStore.BLL.Services {
             }
         }
 
-        public override UserFilter GetFilter(IFormCollection form, UserFilter filter) {
+        public override UserFilter GetFilter(IFormCollection form) {
+            UserFilter filter = new();
+            filter = InitFilter(form, filter);
             filter.UserName = form["UserName"].FirstOrDefault();
             filter.Email = form["Email"].FirstOrDefault();
             return filter;

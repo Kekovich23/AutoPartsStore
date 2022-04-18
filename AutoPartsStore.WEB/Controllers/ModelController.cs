@@ -23,61 +23,18 @@ namespace AutoPartsStore.WEB.Controllers {
             _brandService = brandService;
         }
 
-        [HttpGet]
-        public override async Task<IActionResult> Edit(Guid id) {
+        protected override async Task<bool> InitDataAsync() {
             var brandsResult = await _brandService.GetAllAsync(null);
-
             if (!brandsResult.IsSuccessful) {
-                return View("ErrorGet", brandsResult.Message);
+                return false;
             }
-
             var typeTransportResult = await _typeTransportService.GetAllAsync(null);
-
             if (!typeTransportResult.IsSuccessful) {
-                return View("ErrorGet", typeTransportResult.Message);
+                return false;
             }
-
             ViewBag.Brands = brandsResult.Data;
             ViewBag.TypesTransport = typeTransportResult.Data;
-            return await base.Edit(id);
-        }
-
-        [HttpGet]
-        public override async Task<IActionResult> Add() {
-            var brandsResult = await _brandService.GetAllAsync(null);
-
-            if (!brandsResult.IsSuccessful) {
-                return View("ErrorGet", brandsResult.Message);
-            }
-
-            var typeTransportResult = await _typeTransportService.GetAllAsync(null);
-
-            if (!typeTransportResult.IsSuccessful) {
-                return View("ErrorGet", typeTransportResult.Message);
-            }
-
-            ViewBag.Brands = brandsResult.Data;
-            ViewBag.TypesTransport = typeTransportResult.Data;
-            return await base.Add();
-        }
-
-        [HttpGet]
-        public override async Task<IActionResult> Index() {
-            var brandsResult = await _brandService.GetAllAsync(null);
-
-            if (!brandsResult.IsSuccessful) {
-                return View("ErrorGet", brandsResult.Message);
-            }
-
-            var typeTransportResult = await _typeTransportService.GetAllAsync(null);
-
-            if (!typeTransportResult.IsSuccessful) {
-                return View("ErrorGet", typeTransportResult.Message);
-            }
-
-            ViewBag.Brands = brandsResult.Data;
-            ViewBag.TypesTransport = typeTransportResult.Data;
-            return await base.Index();
+            return true;
         }
     }
 }

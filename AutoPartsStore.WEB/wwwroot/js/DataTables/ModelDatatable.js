@@ -8,8 +8,8 @@
                 return "<a class='btn' href='Model/Get/" + row.id + "'>" + data + "</a>";
             }
         },
-        { 'data': 'brand.Name', 'name': 'Brand', 'autowidth': true },
-        { 'data': 'typeTransport.Name', 'name': 'TypeTransport', 'autowidth': true },
+        { 'data': 'brand.name', 'name': 'Brand', 'autowidth': true },
+        { 'data': 'typeTransport.name', 'name': 'TypeTransport', 'autowidth': true },
         {
             'orderable': false,
             'searchable': false,

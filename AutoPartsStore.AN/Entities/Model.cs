@@ -6,6 +6,7 @@ namespace AutoPartsStore.AN.Entities {
         public string Name { get; set; }
         public Guid BrandId { get; set; }
         public int TypeTransportId { get; set; }
+
         public virtual Brand Brand { get; set; }
         public virtual TypeTransport TypeTransport { get; set; }
     }

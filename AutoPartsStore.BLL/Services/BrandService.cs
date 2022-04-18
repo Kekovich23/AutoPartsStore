@@ -14,24 +14,22 @@ namespace AutoPartsStore.BLL.Services {
         }
 
         protected override IQueryable<Brand> FilterOut(IQueryable<Brand> query, BrandFilter filter) {
-            if (filter != null) {
-                //Search    
-                if (!string.IsNullOrEmpty(filter.Name)) {
-                    query = query.Where(m => m.Name.ToLower() == filter.Name.ToLower());
-                }
-                //Sorting
-                if (!(string.IsNullOrEmpty(filter.SortColumn) && string.IsNullOrEmpty(filter.SortColumnDir))) {
-                    query = query.OrderBy(filter.SortColumn + " " + filter.SortColumnDir);
-                }
-
-                //Paging     
-                query = query.Skip(filter.Skip).Take(filter.PageSize);
+            if (!string.IsNullOrEmpty(filter.Name)) {
+                query = query.Where(m => m.Name.ToLower() == filter.Name.ToLower());
             }
-
             return query;
         }
 
-        public override BrandFilter GetFilter(IFormCollection form, BrandFilter filter) {
+        protected override IQueryable<Brand> OrderBy(IQueryable<Brand> query, BrandFilter filter) {
+            if (!(string.IsNullOrEmpty(filter.SortColumn) && string.IsNullOrEmpty(filter.SortColumnDir))) {
+                query = query.OrderBy(filter.SortColumn + " " + filter.SortColumnDir);
+            }
+            return query;
+        }
+
+        public override BrandFilter GetFilter(IFormCollection form) {
+            BrandFilter filter = new();
+            filter = InitFilter(form, filter);
             filter.Name = form["Name"].FirstOrDefault();
             return filter;
         }

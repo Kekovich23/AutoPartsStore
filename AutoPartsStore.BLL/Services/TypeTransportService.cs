@@ -15,23 +15,23 @@ namespace AutoPartsStore.BLL.Services {
 
         protected override IQueryable<TypeTransport> FilterOut(IQueryable<TypeTransport> query, TypeTransportFilter filter) {
             if (filter != null) {
-                //Search    
                 if (!string.IsNullOrEmpty(filter.Name)) {
                     query = query.Where(m => m.Name.ToLower() == filter.Name.ToLower());
-                }
-                //Sorting
-                if (!(string.IsNullOrEmpty(filter.SortColumn) && string.IsNullOrEmpty(filter.SortColumnDir))) {
-                    query = query.OrderBy(filter.SortColumn + " " + filter.SortColumnDir);
-                }
-
-                //Paging     
-                query = query.Skip(filter.Skip).Take(filter.PageSize);
+                }                
             }
-
             return query;
         }
 
-        public override TypeTransportFilter GetFilter(IFormCollection form, TypeTransportFilter filter) {
+        protected override IQueryable<TypeTransport> OrderBy(IQueryable<TypeTransport> query, TypeTransportFilter filter) {
+            if (!(string.IsNullOrEmpty(filter.SortColumn) && string.IsNullOrEmpty(filter.SortColumnDir))) {
+                query = query.OrderBy(filter.SortColumn + " " + filter.SortColumnDir);
+            }
+            return query;
+        }
+
+        public override TypeTransportFilter GetFilter(IFormCollection form) {
+            TypeTransportFilter filter = new();
+            filter = InitFilter(form, filter);
             filter.Name = form["Name"].FirstOrDefault();
             return filter;
         }

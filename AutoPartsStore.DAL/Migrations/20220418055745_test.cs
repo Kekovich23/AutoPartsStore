@@ -276,15 +276,14 @@ namespace AutoPartsStore.DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SectionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SectionId1 = table.Column<int>(type: "int", nullable: false)
+                    SectionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TypeDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TypeDetails_Sections_SectionId1",
-                        column: x => x.SectionId1,
+                        name: "FK_TypeDetails_Sections_SectionId",
+                        column: x => x.SectionId,
                         principalTable: "Sections",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -297,8 +296,7 @@ namespace AutoPartsStore.DAL.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BrandId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TypeTransportId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TypeTransportId1 = table.Column<int>(type: "int", nullable: false)
+                    TypeTransportId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -310,8 +308,8 @@ namespace AutoPartsStore.DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Models_TypeTransports_TypeTransportId1",
-                        column: x => x.TypeTransportId1,
+                        name: "FK_Models_TypeTransports_TypeTransportId",
+                        column: x => x.TypeTransportId,
                         principalTable: "TypeTransports",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -380,15 +378,14 @@ namespace AutoPartsStore.DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TypeDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TypeDetailId1 = table.Column<int>(type: "int", nullable: false)
+                    TypeDetailId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Features", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Features_TypeDetails_TypeDetailId1",
-                        column: x => x.TypeDetailId1,
+                        name: "FK_Features_TypeDetails_TypeDetailId",
+                        column: x => x.TypeDetailId,
                         principalTable: "TypeDetails",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -545,9 +542,9 @@ namespace AutoPartsStore.DAL.Migrations
                 column: "ManufacturerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Features_TypeDetailId1",
+                name: "IX_Features_TypeDetailId",
                 table: "Features",
-                column: "TypeDetailId1");
+                column: "TypeDetailId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Models_BrandId",
@@ -555,9 +552,9 @@ namespace AutoPartsStore.DAL.Migrations
                 column: "BrandId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Models_TypeTransportId1",
+                name: "IX_Models_TypeTransportId",
                 table: "Models",
-                column: "TypeTransportId1");
+                column: "TypeTransportId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Modifications_ModelId",
@@ -590,9 +587,9 @@ namespace AutoPartsStore.DAL.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TypeDetails_SectionId1",
+                name: "IX_TypeDetails_SectionId",
                 table: "TypeDetails",
-                column: "SectionId1");
+                column: "SectionId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

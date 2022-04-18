@@ -3,16 +3,18 @@ using AutoPartsStore.AN.DTO;
 using AutoPartsStore.AN.Entities;
 using AutoPartsStore.BLL.Filters;
 using AutoPartsStore.BLL.Services;
+using AutoPartsStore.DAL.Configure;
 using AutoPartsStore.WEB.Controllers.Base;
 using AutoPartsStore.WEB.Models;
 using AutoPartsStore.WEB.Models.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AutoPartsStore.WEB.Controllers {
 
-    // [Authorize(Roles = RoleInitializer.AdminRoleName)]
+    [Authorize(Roles = RoleInitializer.AdminRoleName)]
     public class UserController : CrudController<User, UserDTO, UserViewModel, Guid, UserFilter> {
         private readonly UserService _userService;
         private readonly RoleManager<Role> _roleManager;
