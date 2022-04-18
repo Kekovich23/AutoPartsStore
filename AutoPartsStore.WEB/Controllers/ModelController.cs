@@ -5,8 +5,6 @@ using AutoPartsStore.BLL.Filters;
 using AutoPartsStore.BLL.Services;
 using AutoPartsStore.WEB.Controllers.Base;
 using AutoPartsStore.WEB.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AutoPartsStore.WEB.Controllers {
     public class ModelController : CrudController<Model, ModelDTO, ModelViewModel, Guid, ModelFilter> {
