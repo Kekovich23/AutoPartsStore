@@ -1,0 +1,28 @@
+﻿@model TypeDetailViewModel
+@{
+    ViewBag.Title = Model.IsNew ? "New type" : "Edit type";
+}
+<form method="post">
+    <div class="mb-3 row">
+        <div class="col">
+            <label for="BrandId" class="form-label">Section</label>
+        </div>
+        <div class="col">
+            <select id="SectionId" name="SectionId" class="form-select">
+                @foreach (var sectionDetail in ViewBag.Sections) {
+                    <!option value="@sectionDetail.Id" @((sectionDetail.Id == Model.SectionId) ? "selected" : "")>@sectionDetail.Name</!option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <div class="col">
+            <label for="Name" class="form-label">Name</label>
+        </div>
+        <div class="col">
+            <input type="text" name="Name" value=@Model.Name class="form-control" />
+        </div>
+    </div>
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <button type="submit" class="btn btn-primary">@(Model.IsNew ? "Add" : "Edit")</button>
+</form>
