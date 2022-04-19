@@ -31,12 +31,14 @@ try {
     builder.Services.AddScoped<BrandService>();
     builder.Services.AddScoped<ModelService>();
     builder.Services.AddScoped<UserService>();
+    builder.Services.AddScoped<SectionService>();
     builder.Services.AddScoped<TypeTransportService>();
     builder.Services.AddScoped(provider => new MapperConfiguration(cfg => {
         cfg.AddProfile(new UserProfile(provider.GetService<UserManager<User>>()));
         cfg.AddProfile(new BrandProfile());
         cfg.AddProfile(new TypeTransportProfile());
         cfg.AddProfile(new ModelProfile());
+        cfg.AddProfile(new SectionProfile());
     }).CreateMapper());    
 
     // NLog: Setup NLog for Dependency injection

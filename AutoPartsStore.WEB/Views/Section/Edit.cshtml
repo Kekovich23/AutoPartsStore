@@ -1,0 +1,12 @@
+﻿@model SectionViewModel
+@{
+    ViewBag.Title = Model.IsNew ? "New section" : "Edit section";
+}
+<form method="post">
+    <div class="mb-3">
+        <label for="Name" class="form-label">Name</label>
+        <input id="Name" type="text" name="Name" value=@Model.Name class="form-control" />
+    </div>
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <button type="submit" class="btn btn-primary">@(Model.IsNew ? "Add" : "Edit")</button>
+</form>
