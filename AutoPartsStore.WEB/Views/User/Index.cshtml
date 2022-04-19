@@ -2,12 +2,22 @@
     ViewData["Title"] = "Users page";
 }
 <div class="container">
-    <label>User's name</label>
-    <input type="text" id="UserName" />
-    <label>Email</label>
-    <input type="text" id="Email" />
-    <button onclick="FilterOut('#userTable')">Filter</button>
+    <div class="row">
+        <div class="col">
+            <label for="UserName" class="form-label">User's name</label>
+            <input type="text" id="UserName" class="form-control"/>
+        </div>
+        <div class="col">
+            <label for="Email" class="form-label">Email</label>
+            <input type="text" id="Email" class="form-control"/>
+        </div>
+        <div class="col">
+            <button onclick="FilterOut('#userTable')" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+
     <br />
+
     <div style="width:90%; margin:0 auto;">
         <table id="userTable" class="table table-striped" width="100%" cellspacing="0">
             <thead>

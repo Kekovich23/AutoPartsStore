@@ -3,22 +3,22 @@
     ViewBag.Title = Model.IsNew ? "Add new user" : "Edit user";
 }
 <form method="post">
-    <div>
-        <label>User's name</label>
-        <input type="text" name="UserName" value=@Model.UserName />
+    <div class="mb-3">
+        <label for="Name" class="form-label">User's name</label>
+        <input id="Name" type="text" name="UserName" value=@Model.UserName class="form-control" />
     </div>
-    <div>
-        <label>E-mail</label>
-        <input type="text" name="Email" value=@Model.Email />
-    </div>
-    <div>
-        <label>Role</label>
-        <select asp-for="Role" asp-items="ViewBag.AllRoles"></select>
-    </div>
+    <div class="mb-3">
+        <label for="Email" class="form-label">E-mail</label>
+        <input id="Email" type="text" name="Email" value=@Model.Email class="form-control" />
+    </div> class="mb-3"
+    <div class="mb-3">
+        <label for="Role" class="form-label">Role</label>
+        <select id="Role" asp-for="Role" asp-items="ViewBag.AllRoles" class="form-select"></select>
+    </div class="mb-3">
     <input type="hidden" name="Id" value="@Model.Id" />
-    <div>
-        <label>Password</label>
-        <input type="text" name="Password" value=@Model.Password />
+    <div class="mb-3">
+        <label for="Password" class="form-label">Password</label>
+        <input id="Password" type="text" name="Password" value=@Model.Password class="form-control" />
     </div>
     <input type="submit" value="Add" />
 </form>

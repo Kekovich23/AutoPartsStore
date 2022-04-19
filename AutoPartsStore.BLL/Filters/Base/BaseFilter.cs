@@ -5,7 +5,5 @@
         public string? Draw { get; set; }
         public int Skip { get; set; }
         public int PageSize { get; set; }
-        
-        public BaseFilter() { }
     }
 }

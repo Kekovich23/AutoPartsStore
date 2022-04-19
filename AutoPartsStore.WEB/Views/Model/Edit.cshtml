@@ -3,28 +3,38 @@
     ViewBag.Title = Model.IsNew ? "New model" : "Edit model";
 }
 <form method="post">
-    <div>
-        <label>Марка</label>
-        <select name="BrandId">
-            <option value="@null">--------</option>
-            @foreach (var brand in ViewBag.Brands) {
-                <option value="@brand.Id">@brand.Name</option>
-            }
-        </select>       
+    <div class="mb-3 row">
+        <div class="col">
+            <label for="BrandId" class="form-label">Марка</label>
+        </div>
+        <div class="col">
+            <select id="BrandId" name="BrandId" class="form-select">
+                @foreach (var brand in ViewBag.Brands) {
+                    <!option value="@brand.Id" @((brand.Id == Model.BrandId) ? "selected" : "")>@brand.Name</!option>
+                }
+            </select>
+        </div>
     </div>
-    <div>
-        <label>Тип</label>
-         <select name="TypeTransportId">
-            <option value="@null">--------</option>
-            @foreach (var typeTransport in ViewBag.TypesTransport) {
-                <option value="@typeTransport.Id">@typeTransport.Name</option>
-            }
-        </select>
+    <div class="mb-3 row">
+        <div class="col">
+            <label for="Type" class="form-label">Тип</label>
+        </div>
+        <div class="col">
+            <select id="Type" name="TypeTransportId" class="form-select">
+                @foreach (var typeTransport in ViewBag.TypesTransport) {
+                    <!option value="@typeTransport.Id" @((typeTransport.Id == Model.TypeTransportId) ? "selected" : "")>@typeTransport.Name</!option>
+                }
+            </select>
+        </div>
     </div>
-    <div>
-        <label>Name</label>
-        <input type="text" name="Name" value=@Model.Name />
+    <div class="mb-3 row">
+        <div class="col">
+            <label for="Name" class="form-label">Name</label>
+        </div>
+        <div class="col">
+            <input type="text" name="Name" value=@Model.Name class="form-control" />
+        </div>
     </div>
     <input type="hidden" name="Id" value="@Model.Id" />
-    <input type="submit" value=@(Model.IsNew ? "Add" : "Edit") />
+    <button type="submit" class="btn btn-primary">@(Model.IsNew ? "Add" : "Edit")</button>
 </form>

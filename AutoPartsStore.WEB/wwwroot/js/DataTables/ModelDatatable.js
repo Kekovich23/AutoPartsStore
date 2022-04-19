@@ -21,7 +21,7 @@
             'orderable': false,
             'searchable': false,
             "render": function (data, type, row) {
-                return "<a class='btn btn-info' href='/Brand/Edit/" + row.id + "'>Edit</a>";
+                return "<a class='btn btn-info' href='/Model/Edit/" + row.id + "'>Edit</a>";
             }
         }],    
      'data': {

@@ -3,10 +3,10 @@
     ViewBag.Title = Model.IsNew ? "New type" : "Edit type";
 }
 <form method="post">
-    <div>
+    <div class="mb-3">
         <label>Name</label>
         <input type="text" name="Name" value=@Model.Name />
     </div>
     <input type="hidden" name="Id" value="@Model.Id" />
-    <input type="submit" value=@(Model.IsNew ? "Add" : "Edit") />
+    <button type="submit" class="btn btn-primary">@(Model.IsNew ? "Add" : "Edit")</button>
 </form>

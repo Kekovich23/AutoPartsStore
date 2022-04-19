@@ -2,24 +2,36 @@
     ViewData["Title"] = "Model page";
 }
 <div class="container">
-    <label>Name</label>
-    <input type="text" id="Name" />
-    <select id="BrandId">
-        <option value="@null">--------</option>
-        @foreach (var brand in ViewBag.Brands)
-        {
-            <option value="@brand.Id">@brand.Name</option>
-        }
-    </select>
-    <select id="TypeTransportId">
-        <option value="@null">--------</option>
-        @foreach (var typeTransport in ViewBag.TypesTransport)
-        {
-            <option value="@typeTransport.Id">@typeTransport.Name</option>
-        }
-    </select>
-    <button onclick="FilterOut('#modelTable')">Filter</button>
+    <div class="row">
+        <div class="col">
+            <label for="Name" class="form-label">Name</label>
+            <input type="text" id="Name" class="form-control" />
+        </div>
+        <div class="col">
+             <label for="BrandId" class="form-label">Brand</label>
+            <select id="BrandId" class="form-select">
+                <option selected>-----</option>
+                @foreach (var brand in ViewBag.Brands) {
+                    <option value="@brand.Id">@brand.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col">
+             <label for="TypeTransportId" class="form-label">Type of transport</label>
+            <select id="TypeTransportId" class="form-select">
+                <option selected>-----</option>
+                @foreach (var typeTransport in ViewBag.TypesTransport) {
+                    <option value="@typeTransport.Id">@typeTransport.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col">
+            <button onclick="FilterOut('#modelTable')" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+
     <br />
+
     <div style="width:90%; margin:0 auto;">
         <table id="modelTable" class="table table-striped" width="100%" cellspacing="0">
             <thead>
@@ -36,6 +48,6 @@
     </div>
 </div>
 
-<a class='btn btn-primary' href='Model/Add/'>Add new</a>
+<a class="btn btn-primary" href="Model/Add/">Add new</a>
 
 @await Html.PartialAsync("DataTable", "ModelDatatable")
