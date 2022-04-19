@@ -14,10 +14,8 @@ namespace AutoPartsStore.BLL.Services {
         }
 
         protected override IQueryable<TypeTransport> FilterOut(IQueryable<TypeTransport> query, TypeTransportFilter filter) {
-            if (filter != null) {
-                if (!string.IsNullOrEmpty(filter.Name)) {
-                    query = query.Where(m => m.Name.ToLower() == filter.Name.ToLower());
-                }                
+            if (!string.IsNullOrEmpty(filter.Name)) {
+                query = query.Where(m => m.Name.ToLower() == filter.Name.ToLower());
             }
             return query;
         }

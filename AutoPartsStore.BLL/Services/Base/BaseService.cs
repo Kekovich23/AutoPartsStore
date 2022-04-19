@@ -60,13 +60,15 @@ namespace AutoPartsStore.BLL.Services.Base {
             try {
                 var query = Database.GetRepository<TEntity>().GetAll();
 
-                query = FilterOut(query, filter);
+                if (filter != null) {
+                    query = FilterOut(query, filter);
 
-                query = OrderBy(query, filter);
+                    query = OrderBy(query, filter);
 
-                query = Include(query);
+                    query = query.Skip(filter.Skip).Take(filter.PageSize);
+                }
 
-                query = query.Skip(filter.Skip).Take(filter.PageSize);
+                query = Include(query);                
 
                 return ServiceResult<IEnumerable<TEntityDTO>>.Success(_mapper.Map<IEnumerable<TEntityDTO>>(query));
             }

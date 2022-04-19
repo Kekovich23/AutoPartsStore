@@ -44,11 +44,12 @@ namespace AutoPartsStore.BLL.Services {
             ModelFilter filter = new();
             filter = InitFilter(form, filter);
             filter.Name = form["Name"].FirstOrDefault();
-            if (!string.IsNullOrWhiteSpace(form["BrandId"])) {
-                filter.BrandId = Guid.Parse(form["BrandId"].FirstOrDefault());
+
+            if (!string.IsNullOrWhiteSpace(form["BrandId"]) && Guid.TryParse(form["BrandId"], out Guid result)) {
+                filter.BrandId = result;
             }
-            if (!string.IsNullOrWhiteSpace(form["TypeTransportId"])) {
-                filter.TypeTransportId = Convert.ToInt32(form["TypeTransportId"].FirstOrDefault());
+            if (!string.IsNullOrWhiteSpace(form["TypeTransportId"]) && int.TryParse(form["TypeTransportId"], out int result1)) {
+                filter.TypeTransportId = result1;
             }
             return filter;
         }
