@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Feature page";
+}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <label for="Name" class="form-label">Name</label>
+            <input type="text" id="Name" class="form-control" />
+        </div>
+        <div class="col">
+            <button onclick="FilterOut('#featureTable')" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+
+    <br />
+
+    <div style="width:90%; margin:0 auto;">
+        <table id="featureTable" class="table table-striped" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Delete</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<a class="btn btn-primary" href="Feature/Add/">Add new</a>
+
+@await Html.PartialAsync("DataTable", "FeatureDatatable")
