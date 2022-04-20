@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace AutoPartsStore.DAL.Configure {
     public class BrandConfiguration : IEntityTypeConfiguration<Brand> {
         public void Configure(EntityTypeBuilder<Brand> builder) {
-            builder.Property(e => e.Name).IsRequired();
+            builder.Property(b => b.Name).IsRequired();
         }
     }
 }
