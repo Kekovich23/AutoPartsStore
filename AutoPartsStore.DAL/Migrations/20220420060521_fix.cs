@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AutoPartsStore.DAL.Migrations
 {
-    public partial class test : Migration
+    public partial class fix : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -73,6 +73,19 @@ namespace AutoPartsStore.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Features",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Features", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -252,24 +265,6 @@ namespace AutoPartsStore.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Details",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ManufacturerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Details", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Details_Manufacturers_ManufacturerId",
-                        column: x => x.ManufacturerId,
-                        principalTable: "Manufacturers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TypeDetails",
                 columns: table => new
                 {
@@ -340,51 +335,24 @@ namespace AutoPartsStore.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PriceLists",
+                name: "Details",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Price = table.Column<long>(type: "bigint", nullable: false),
-                    Count = table.Column<long>(type: "bigint", nullable: false),
-                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PriceLists", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PriceLists_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_PriceLists_Details_DetailId",
-                        column: x => x.DetailId,
-                        principalTable: "Details",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PriceLists_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Features",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ManufacturerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TypeDetailId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Features", x => x.Id);
+                    table.PrimaryKey("PK_Details", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Features_TypeDetails_TypeDetailId",
+                        name: "FK_Details_Manufacturers_ManufacturerId",
+                        column: x => x.ManufacturerId,
+                        principalTable: "Manufacturers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Details_TypeDetails_TypeDetailId",
                         column: x => x.TypeDetailId,
                         principalTable: "TypeDetails",
                         principalColumn: "Id",
@@ -414,24 +382,58 @@ namespace AutoPartsStore.DAL.Migrations
                 name: "DetailFeature",
                 columns: table => new
                 {
-                    DetailsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FeaturesId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FeatureId = table.Column<int>(type: "int", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DetailFeature", x => new { x.DetailsId, x.FeaturesId });
+                    table.PrimaryKey("PK_DetailFeature", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DetailFeature_Details_DetailsId",
-                        column: x => x.DetailsId,
+                        name: "FK_DetailFeature_Details_DetailId",
+                        column: x => x.DetailId,
                         principalTable: "Details",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DetailFeature_Features_FeaturesId",
-                        column: x => x.FeaturesId,
+                        name: "FK_DetailFeature_Features_FeatureId",
+                        column: x => x.FeatureId,
                         principalTable: "Features",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PriceLists",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Price = table.Column<long>(type: "bigint", nullable: false),
+                    Count = table.Column<long>(type: "bigint", nullable: false),
+                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PriceLists", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PriceLists_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PriceLists_Details_DetailId",
+                        column: x => x.DetailId,
+                        principalTable: "Details",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PriceLists_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -527,9 +529,14 @@ namespace AutoPartsStore.DAL.Migrations
                 column: "ModificationsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DetailFeature_FeaturesId",
+                name: "IX_DetailFeature_DetailId",
                 table: "DetailFeature",
-                column: "FeaturesId");
+                column: "DetailId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DetailFeature_FeatureId",
+                table: "DetailFeature",
+                column: "FeatureId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DetailModification_ModificationsId",
@@ -542,8 +549,8 @@ namespace AutoPartsStore.DAL.Migrations
                 column: "ManufacturerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Features_TypeDetailId",
-                table: "Features",
+                name: "IX_Details_TypeDetailId",
+                table: "Details",
                 column: "TypeDetailId");
 
             migrationBuilder.CreateIndex(
@@ -646,25 +653,25 @@ namespace AutoPartsStore.DAL.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "TypeDetails");
-
-            migrationBuilder.DropTable(
                 name: "Models");
 
             migrationBuilder.DropTable(
                 name: "Manufacturers");
 
             migrationBuilder.DropTable(
-                name: "Customers");
+                name: "TypeDetails");
 
             migrationBuilder.DropTable(
-                name: "Sections");
+                name: "Customers");
 
             migrationBuilder.DropTable(
                 name: "Brands");
 
             migrationBuilder.DropTable(
                 name: "TypeTransports");
+
+            migrationBuilder.DropTable(
+                name: "Sections");
         }
     }
 }

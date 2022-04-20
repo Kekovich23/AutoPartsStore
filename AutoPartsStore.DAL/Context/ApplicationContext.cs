@@ -1,6 +1,5 @@
 ﻿using AutoPartsStore.AN.Entities;
 using AutoPartsStore.DAL.Configure;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +18,7 @@ namespace AutoPartsStore.DAL.Context {
         public DbSet<TypeDetail> TypeDetails { get; set; }
         public DbSet<TypeTransport> TypeTransports { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<DetailFeature> DetailFeature { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) {
 
@@ -29,6 +29,12 @@ namespace AutoPartsStore.DAL.Context {
 
             modelBuilder.ApplyConfiguration(new BrandConfiguration());
             modelBuilder.ApplyConfiguration(new TypeTransportConfiguration());
+            modelBuilder.ApplyConfiguration(new ModelConfiguraton());
+            modelBuilder.ApplyConfiguration(new SectionConfiguration());
+            modelBuilder.ApplyConfiguration(new TypeDetailConfiguration());
+            modelBuilder.ApplyConfiguration(new FeatureConfiguration());
+            modelBuilder.ApplyConfiguration(new DetailConfiguration());
+            modelBuilder.ApplyConfiguration(new DetailFeatureConfiguration());
         }
     }
 }

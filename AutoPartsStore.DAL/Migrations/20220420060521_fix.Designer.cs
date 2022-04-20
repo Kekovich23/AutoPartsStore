@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoPartsStore.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220418055745_test")]
-    partial class test
+    [Migration("20220420060521_fix")]
+    partial class fix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -75,11 +75,41 @@ namespace AutoPartsStore.DAL.Migrations
                     b.Property<Guid>("ManufacturerId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("TypeDetailId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ManufacturerId");
 
+                    b.HasIndex("TypeDetailId");
+
                     b.ToTable("Details");
+                });
+
+            modelBuilder.Entity("AutoPartsStore.AN.Entities.DetailFeature", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DetailId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("FeatureId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailId");
+
+                    b.HasIndex("FeatureId");
+
+                    b.ToTable("DetailFeature");
                 });
 
             modelBuilder.Entity("AutoPartsStore.AN.Entities.Feature", b =>
@@ -94,12 +124,7 @@ namespace AutoPartsStore.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TypeDetailId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TypeDetailId");
 
                     b.ToTable("Features");
                 });
@@ -397,21 +422,6 @@ namespace AutoPartsStore.DAL.Migrations
                     b.ToTable("CustomerModification");
                 });
 
-            modelBuilder.Entity("DetailFeature", b =>
-                {
-                    b.Property<Guid>("DetailsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("FeaturesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DetailsId", "FeaturesId");
-
-                    b.HasIndex("FeaturesId");
-
-                    b.ToTable("DetailFeature");
-                });
-
             modelBuilder.Entity("DetailModification", b =>
                 {
                     b.Property<Guid>("DetailsId")
@@ -557,18 +567,34 @@ namespace AutoPartsStore.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Manufacturer");
-                });
-
-            modelBuilder.Entity("AutoPartsStore.AN.Entities.Feature", b =>
-                {
                     b.HasOne("AutoPartsStore.AN.Entities.TypeDetail", "TypeDetail")
                         .WithMany()
                         .HasForeignKey("TypeDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Manufacturer");
+
                     b.Navigation("TypeDetail");
+                });
+
+            modelBuilder.Entity("AutoPartsStore.AN.Entities.DetailFeature", b =>
+                {
+                    b.HasOne("AutoPartsStore.AN.Entities.Detail", "Detail")
+                        .WithMany()
+                        .HasForeignKey("DetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AutoPartsStore.AN.Entities.Feature", "Feature")
+                        .WithMany()
+                        .HasForeignKey("FeatureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Detail");
+
+                    b.Navigation("Feature");
                 });
 
             modelBuilder.Entity("AutoPartsStore.AN.Entities.Model", b =>
@@ -653,21 +679,6 @@ namespace AutoPartsStore.DAL.Migrations
                     b.HasOne("AutoPartsStore.AN.Entities.Modification", null)
                         .WithMany()
                         .HasForeignKey("ModificationsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DetailFeature", b =>
-                {
-                    b.HasOne("AutoPartsStore.AN.Entities.Detail", null)
-                        .WithMany()
-                        .HasForeignKey("DetailsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AutoPartsStore.AN.Entities.Feature", null)
-                        .WithMany()
-                        .HasForeignKey("FeaturesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
