@@ -35,6 +35,7 @@ namespace AutoPartsStore.DAL.Context {
             modelBuilder.ApplyConfiguration(new FeatureConfiguration());
             modelBuilder.ApplyConfiguration(new DetailConfiguration());
             modelBuilder.ApplyConfiguration(new DetailFeatureConfiguration());
+            modelBuilder.ApplyConfiguration(new ManufacturerConfiguration());
         }
     }
 }

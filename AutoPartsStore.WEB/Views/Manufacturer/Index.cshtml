@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Manufacturer page";
+}
+<div class="container">
+    <div class="mb-3">
+        <label for="Name" class="form-label">Name</label>
+        <input type="text" id="Name" class="form-control" />
+    </div>
+    <button onclick="FilterOut('#manufacturerTable')" class="btn btn-primary">Filter</button>
+    <br />
+    <div style="width:90%; margin:0 auto;">
+        <table id="manufacturerTable" class="table table-striped" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Delete</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<a class='btn btn-primary' href="Manufacturer/Add">Add new</a>
+
+@await Html.PartialAsync("DataTable", "ManufacturerDatatable")
