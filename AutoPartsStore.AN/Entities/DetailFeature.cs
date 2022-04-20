@@ -3,7 +3,7 @@
 namespace AutoPartsStore.AN.Entities {
     public class DetailFeature : IBaseEntity<Guid> {
         public Guid Id { get; set; }
-        public Guid DeatailId { get; set; }
+        public Guid DetailId { get; set; }
         public int FeatureId { get; set; }
         public string Value { get; set; }
 
