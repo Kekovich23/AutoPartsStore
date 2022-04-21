@@ -8,18 +8,27 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace AutoPartsStore.BLL.Services.Base {
-    public abstract class BaseService<TEntity, TEntityDTO, TKey, TFilter> : IService<TEntity, TEntityDTO, TKey, TFilter>
-        where TEntityDTO : class, IBaseEntityDTO<TKey>
-        where TEntity : class, IBaseEntity<TKey>
-        where TFilter : BaseFilter {
+    public abstract class BaseService {
         protected readonly IUnitOfWork Database;
         protected readonly IMapper _mapper;
-        protected readonly ILogger<BaseService<TEntity, TEntityDTO, TKey, TFilter>> _logger;
-
-        public BaseService(IUnitOfWork uow, IMapper mapper, ILogger<BaseService<TEntity, TEntityDTO, TKey, TFilter>> logger) {
+        protected readonly ILogger<BaseService> _logger;
+        public BaseService(IUnitOfWork uow, IMapper mapper, ILogger<BaseService> logger) {
             Database = uow;
             _mapper = mapper;
             _logger = logger;
+        }
+    }
+
+    public abstract class BaseService<TEntity> : BaseService {
+        protected BaseService(IUnitOfWork uow, IMapper mapper, ILogger<BaseService> logger) : base(uow, mapper, logger) {
+        }
+    }
+
+    public abstract class BaseService<TEntity, TEntityDTO, TKey, TFilter> : BaseService<TEntity>, IService<TEntity, TEntityDTO, TKey, TFilter>
+        where TEntityDTO : class, IBaseEntityDTO<TKey>
+        where TEntity : class, IBaseEntity<TKey>
+        where TFilter : BaseFilter {
+        protected BaseService(IUnitOfWork uow, IMapper mapper, ILogger<BaseService> logger) : base(uow, mapper, logger) {
         }
 
         public virtual async Task<ServiceResult<TEntityDTO>> CreateAsync(TEntityDTO entityDTO) {

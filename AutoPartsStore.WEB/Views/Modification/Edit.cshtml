@@ -1,0 +1,28 @@
+﻿@model ModificationViewModel
+@{
+    ViewBag.Title = Model.IsNew ? "New modification" : "Edit modification";
+}
+<form method="post">
+    <div class="mb-3 row">
+        <div class="col">
+            <label for="ModelId" class="form-label">Modification</label>
+        </div>
+        <div class="col">
+            <select id="ModelId" name="ModelId" class="form-select">
+                @foreach (var modelModification in ViewBag.Models) {
+                    <!option value="@modelModification.Id" @((modelModification.Id == Model.ModelId) ? "selected" : "")>@modelModification.Name</!option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <div class="col">
+            <label for="Name" class="form-label">Name</label>
+        </div>
+        <div class="col">
+            <input type="text" name="Name" value=@Model.Name class="form-control" />
+        </div>
+    </div>
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <button type="submit" class="btn btn-primary">@(Model.IsNew ? "Add" : "Edit")</button>
+</form>

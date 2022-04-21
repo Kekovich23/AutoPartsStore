@@ -36,6 +36,8 @@ try {
     builder.Services.AddScoped<TypeDetailService>();
     builder.Services.AddScoped<FeatureService>();
     builder.Services.AddScoped<ManufacturerService>();
+    builder.Services.AddScoped<DetailService>();
+    builder.Services.AddScoped<ModificationService>();
 
     builder.Services.AddScoped(provider => new MapperConfiguration(cfg => {
         cfg.AddProfile(new UserProfile(provider.GetService<UserManager<User>>()));
@@ -46,6 +48,8 @@ try {
         cfg.AddProfile(new TypeDetailProfile());
         cfg.AddProfile(new FeatureProfile());
         cfg.AddProfile(new ManufacturerProfile());
+        cfg.AddProfile(new DetailProfile());
+        cfg.AddProfile(new ModificationProfile());
     }).CreateMapper());    
 
     // NLog: Setup NLog for Dependency injection
