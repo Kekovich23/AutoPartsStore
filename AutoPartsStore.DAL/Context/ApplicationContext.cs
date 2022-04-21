@@ -36,6 +36,7 @@ namespace AutoPartsStore.DAL.Context {
             modelBuilder.ApplyConfiguration(new DetailConfiguration());
             modelBuilder.ApplyConfiguration(new DetailFeatureConfiguration());
             modelBuilder.ApplyConfiguration(new ManufacturerConfiguration());
+            modelBuilder.Entity<DetailFeature>().HasKey(e => new { e.FeatureId, e.DetailId });           
         }
     }
 }
