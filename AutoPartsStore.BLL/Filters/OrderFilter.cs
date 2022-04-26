@@ -2,6 +2,5 @@
 
 namespace AutoPartsStore.BLL.Filters {
     public class OrderFilter : BaseFilter {
-
     }
 }
