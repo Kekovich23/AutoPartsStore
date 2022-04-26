@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using AutoPartsStore.AN.DTO;
 using AutoPartsStore.AN.Entities;
+using AutoPartsStore.AN.Entities.Complex;
 using AutoPartsStore.BLL.Filters;
 using AutoPartsStore.BLL.Services.Base;
 using AutoPartsStore.DAL.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Dynamic.Core;
 
@@ -149,6 +151,68 @@ namespace AutoPartsStore.BLL.Services {
             filter.UserName = form["UserName"].FirstOrDefault();
             filter.Email = form["Email"].FirstOrDefault();
             return filter;
+        }
+
+        public async Task<ServiceResult> AddDetailAsync(Guid userId, Guid detailId, int amount) {
+            try {
+                if (amount == 0) {
+                    var cart = Database.GetRepository<Cart>().GetAll().Where(e => e.DetailId == detailId).Where(e => e.UserId == userId);
+                    if (cart.Any()) {
+                        Database.GetRepository<Cart>().Remove(cart.FirstOrDefault());
+                    }
+                }
+                else {
+                    Cart cart = new Cart { Amount = amount, DetailId = detailId, UserId = userId };
+                    Database.GetRepository<Cart>().Create(cart);
+                }
+
+                return ServiceResult.Success();
+            }
+            catch (Exception ex) {
+                _logger.LogError(ex, "Failed to add detail to cart");
+                return ServiceResult.Failed(ex.Message);
+            }
+        }
+
+        public ServiceResult ClearCart(Guid userId) {
+            try {
+                var carts = Database.GetRepository<Cart>().GetAll().Where(e => e.UserId == userId).ToList();
+
+                foreach (var cart in carts) {
+                    Database.GetRepository<Cart>().Remove(cart);
+                }
+
+                return ServiceResult.Success();
+            }
+            catch (Exception ex) {
+                return ServiceResult.Failed(ex.Message);
+            }
+        }
+
+        public ServiceResult<UserCartDTO> GetCart(Guid userId) {
+            try {
+                var carts = Database.GetRepository<Cart>().GetAll().Where(e => e.UserId == userId).ToList();
+
+                UserCartDTO userCartDTO = new() { UserId = userId, Details = new() };
+
+                foreach (var cart in carts) {
+                    DetailInCartDTO detailInCartDTO = new() {
+                        Detail = _mapper.Map<DetailDTO>(Database.GetRepository<Detail>()
+                        .GetAll()
+                        .Where(e => e.Id == cart.DetailId)
+                        .Include(e => e.Manufacturer)
+                        .Include(e => e.TypeDetail)
+                        .FirstOrDefault()),
+                        Amount = cart.Amount
+                    };
+                    userCartDTO.Details.Add(detailInCartDTO);
+                }
+
+                return ServiceResult<UserCartDTO>.Success(userCartDTO);
+            }
+            catch (Exception ex) {
+                return ServiceResult<UserCartDTO>.Failed(ex.Message);
+            }
         }
     }
 }

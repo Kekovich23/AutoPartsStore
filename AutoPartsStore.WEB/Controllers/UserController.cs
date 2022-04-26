@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AutoPartsStore.WEB.Controllers {
 
-    [Authorize(Roles = RoleInitializer.AdminRoleName)]
+    //[Authorize(Roles = RoleInitializer.AdminRoleName)]
     public class UserController : CrudController<User, UserDTO, UserViewModel, Guid, UserFilter> {
         private readonly UserService _userService;
         private readonly RoleManager<Role> _roleManager;
@@ -26,6 +26,11 @@ namespace AutoPartsStore.WEB.Controllers {
             _userService = service;
             _roleManager = roleManager;
         }
+        protected override async Task<bool> InitDataAsync() {
+            ViewBag.AllRoles = new SelectList(_roleManager.Roles.ToList());
+            return true;
+        }
+
 
         [HttpGet]
         public IActionResult AddUser() {
@@ -39,14 +44,14 @@ namespace AutoPartsStore.WEB.Controllers {
             var result = await _service.CreateAsync(_mapper.Map<UserDTO>(createUserViewModel));
             if (!result.IsSuccessful) {
                 ErrorOccured(result.Message);
-                return View("Create" ,createUserViewModel);
+                return View("Create", createUserViewModel);
             }
             return RedirectToAction("Index");
         }
 
         [HttpGet]
         public IActionResult ChangePassword(Guid id) {
-            return View(new ChangePasswordUserViewModel { UserId = id});
+            return View(new ChangePasswordUserViewModel { UserId = id });
         }
 
         [HttpPost]
@@ -59,10 +64,8 @@ namespace AutoPartsStore.WEB.Controllers {
             return View("Index");
         }
 
-        [HttpGet]
-        public override Task<IActionResult> Edit(Guid id) {          
-            ViewBag.AllRoles = new SelectList(_roleManager.Roles.ToList());
-            return base.Edit(id);
+        public IActionResult AddDetailToCart(Guid userId, Guid detailId, int amount) {
+            return View();
         }
     }
 }

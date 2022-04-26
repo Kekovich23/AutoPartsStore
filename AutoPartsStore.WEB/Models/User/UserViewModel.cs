@@ -1,5 +1,4 @@
 ﻿using AutoPartsStore.WEB.Models.Base;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AutoPartsStore.WEB.Models.User {
     public class UserViewModel : BaseEntityViewModel<Guid>{
