@@ -1,15 +1,15 @@
 ﻿@{
-    ViewData["Title"] = "Type transport page";
+    ViewData["Title"] = "Statuses page";
 }
 <div class="container">
      <div class="mb-3">
         <label for="Name" class="form-label">Name</label>
         <input type="text" id="Name" class="form-control" />
     </div>
-    <button class="btn btn-primary" onclick="FilterOut('#typeTransportTable')">Filter</button>
+    <button class="btn btn-primary" onclick="FilterOut('#statusTable')">Filter</button>
     <br />
     <div style="width:90%; margin:0 auto;">
-        <table id="typeTransportTable" class="table table-striped" width="100%" cellspacing="0">
+        <table id="statusTable" class="table table-striped" width="100%" cellspacing="0">
             <thead>
                 <tr>
                     <th>Id</th>
@@ -22,6 +22,6 @@
     </div>
 </div>
 
-<a class='btn btn-primary' href='TypeTransport/Add/'>Add new</a>
+<a class='btn btn-primary' href='Status/Add/'>Add new</a>
 
-@await Html.PartialAsync("DataTable", "typeTransportDatatable")
+@await Html.PartialAsync("DataTable", "StatusDataTable")

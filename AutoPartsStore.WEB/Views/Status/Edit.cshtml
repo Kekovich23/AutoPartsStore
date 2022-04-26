@@ -1,0 +1,12 @@
+﻿@model StatusViewModel
+@{
+    ViewBag.Title = Model.IsNew ? "New status" : "Edit status";
+}
+<form method="post">
+    <div class="mb-3">
+        <label>Name</label>
+        <input type="text" name="Name" value=@Model.Name />
+    </div>
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <button type="submit" class="btn btn-primary">@(Model.IsNew ? "Add" : "Edit")</button>
+</form>
