@@ -3,6 +3,7 @@ using AutoPartsStore.AN.DTO;
 using AutoPartsStore.AN.Entities;
 using AutoPartsStore.BLL.Filters;
 using AutoPartsStore.BLL.Services;
+using AutoPartsStore.BLL.Services.Base;
 using AutoPartsStore.DAL.Configure;
 using AutoPartsStore.WEB.Controllers.Base;
 using AutoPartsStore.WEB.Models;
@@ -64,8 +65,36 @@ namespace AutoPartsStore.WEB.Controllers {
             return View("Index");
         }
 
-        public IActionResult AddDetailToCart(Guid userId, Guid detailId, int amount) {
-            return View();
+        private ServiceResult<UserCartDTO> GetCart(Guid userId) {
+            return _userService.GetCart(userId);
+        }
+
+        public IActionResult Cart(Guid userId) {
+            var result = GetCart(userId);
+            if (!result.IsSuccessful) {
+                return View("ErrorGet", result.Message);
+            }
+            return View(_mapper.Map<UserCartViewModel>(result.Data));
+        }
+
+        public IActionResult ClearCart(Guid userId) {
+            var result = _userService.ClearCart(userId);
+            if (!result.IsSuccessful) {
+                return View("ErrorGet", result.Message);
+            }
+            var cartResult = GetCart(userId);
+            if (!cartResult.IsSuccessful) {
+                return View("ErrorGet", cartResult.Message);
+            }
+            return View("Cart", _mapper.Map<UserCartViewModel>(cartResult.Data));
+        }
+
+        public async Task<IActionResult> AddDetailToCart(Guid userId, Guid detailId, int amount) {
+            var result = await _userService.AddDetailAsync(userId, detailId, amount);
+            if (!result.IsSuccessful) {
+                return View("ErrorGet", result.Message);
+            }
+            return Ok();
         }
     }
 }

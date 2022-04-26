@@ -162,7 +162,7 @@ namespace AutoPartsStore.BLL.Services {
                     }
                 }
                 else {
-                    Cart cart = new Cart { Amount = amount, DetailId = detailId, UserId = userId };
+                    Cart cart = new() { Amount = amount, DetailId = detailId, UserId = userId };
                     Database.GetRepository<Cart>().Create(cart);
                 }
 
