@@ -1,4 +1,5 @@
 ﻿using AutoPartsStore.AN.Entities;
+using AutoPartsStore.AN.Entities.Complex;
 using AutoPartsStore.DAL.Configure;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +37,9 @@ namespace AutoPartsStore.DAL.Context {
             modelBuilder.ApplyConfiguration(new DetailConfiguration());
             modelBuilder.ApplyConfiguration(new DetailFeatureConfiguration());
             modelBuilder.ApplyConfiguration(new ManufacturerConfiguration());
-            modelBuilder.Entity<DetailFeature>().HasKey(e => new { e.FeatureId, e.DetailId });           
+            modelBuilder.Entity<DetailFeature>().HasKey(e => new { e.FeatureId, e.DetailId });
+            modelBuilder.Entity<Cart>().HasKey(e => new { e.UserId, e.DetailId });
+            modelBuilder.Entity<OrderDetail>().HasKey(e => new { e.OrderId, e.DetailId });
         }
     }
 }
