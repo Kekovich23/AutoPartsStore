@@ -1,0 +1,46 @@
+﻿@model UserCartViewModel
+@{
+    ViewBag.Title = "Cart";
+}
+@if (Model.Details.Count == 0) {
+    <h3>Your cart is currently empty!</h3>
+}
+else {
+    <button class="btn btn-danger" onclick=ClearCart("@Model.Id")>Clear cart</button>
+    <ul>
+        @foreach (var element in Model.Details) {
+            <li>
+                @element.Detail.TypeDetail.Name &nbsp @element.Detail.Manufacturer.Name &nbsp
+                <input type="number" id="inputAmount" onchange="SetDetailCount(@Model.Id,@element.Detail.Id)" value="@element.Amount">
+            </li>
+        }
+    </ul>
+}
+<script>
+    function SetDetailCount(UserId, DetailId){
+        $.ajax({
+        'url': 'User/SetDetailCount',
+        'type': 'GET',
+        'data': {
+            'detailId': DetailId,
+            'amount': inputAmount.value
+        },
+        'error': function (err) {
+            Notify(err.responseText, 'danger');
+        }
+    });
+    }
+
+    function ClearCart(UserId){
+        $.ajax({
+        'url': 'User/ClearCart',
+        'type': 'GET',
+        'data': {
+            'userId': UserId
+        },
+        'error': function (err) {
+            Notify(err.responseText, 'danger');
+        }
+    });
+    }
+</script>

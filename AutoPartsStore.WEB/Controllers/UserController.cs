@@ -69,7 +69,8 @@ namespace AutoPartsStore.WEB.Controllers {
             return _userService.GetCart(userId);
         }
 
-        public IActionResult Cart(Guid userId) {
+        public IActionResult Cart(/*Guid userId*/) {
+            Guid userId = Guid.Parse("76ebf755-3bbb-48b0-076e-08da22949cc1");
             var result = GetCart(userId);
             if (!result.IsSuccessful) {
                 return View("ErrorGet", result.Message);
@@ -89,7 +90,9 @@ namespace AutoPartsStore.WEB.Controllers {
             return View("Cart", _mapper.Map<UserCartViewModel>(cartResult.Data));
         }
 
-        public async Task<IActionResult> AddDetailToCart(Guid userId, Guid detailId, int amount) {
+        [HttpGet]
+        public async Task<IActionResult> SetDetailCount(/*Guid userId, */Guid detailId, int amount) {
+            Guid userId = Guid.Parse("76ebf755-3bbb-48b0-076e-08da22949cc1");
             var result = await _userService.AddDetailAsync(userId, detailId, amount);
             if (!result.IsSuccessful) {
                 return View("ErrorGet", result.Message);

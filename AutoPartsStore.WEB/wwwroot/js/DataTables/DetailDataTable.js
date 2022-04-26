@@ -8,6 +8,13 @@
             'orderable': false,
             'searchable': false,
             "render": function (data, type, row) {
+                return "<input type='number' value='0' id='inputAmount' onchange=SetDetailCount('" + row.id + "') >";
+            }
+        },
+        {
+            'orderable': false,
+            'searchable': false,
+            "render": function (data, type, row) {
                 return "<a class='btn btn-danger' onclick=DeleteData('" + row.id + "'); >Delete</a>";
             }
         },
@@ -42,4 +49,17 @@ function DeleteData(Id) {
         'tableId': '#detailTable'
     }
     Delete(option);
+}
+function SetDetailCount(Id) {
+    $.ajax({
+        'url': 'User/SetDetailCount',
+        'type': 'GET',
+        'data': {
+            'detailId': Id,
+            'amount': inputAmount.value
+        },
+        'error': function (err) {
+            Notify(err.responseText, 'danger');
+        }
+    });
 }

@@ -15,6 +15,8 @@ namespace AutoPartsStore.WEB.AutoMapperProfiles {
             CreateMap<UserDTO, UserViewModel>();
             CreateMap<CreateUserViewModel, UserDTO>().ForMember(s => s.NewPassword, opt => opt.MapFrom(src => src.Password));
             CreateMap<UserViewModel, UserDTO>();
+            CreateMap<UserCartDTO, UserCartViewModel>().ReverseMap();
+            CreateMap<DetailInCartDTO, DetailInCartViewModel>().ReverseMap();
         }
     }
 }
