@@ -1,5 +1,48 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Detail page";
 }
+<div class="container">
+    <div class="row">        
+        <div class="col">
+             <label for="ManufacturerId" class="form-label">Manufacturer</label>
+            <select id="ManufacturerId" class="form-select">
+                <option selected>-----</option>
+                @foreach (var manufacturer in ViewBag.Manufacturers) {
+                    <option value="@manufacturer.Id">@manufacturer.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col">
+             <label for="TypeDetailId" class="form-label">Type of detail</label>
+            <select id="TypeDetailId" class="form-select">
+                <option selected>-----</option>
+                @foreach (var typeDetail in ViewBag.TypesDetail) {
+                    <option value="@typeDetail.Id">@typeDetail.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col">
+            <button onclick="FilterOut('#detailTable')" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+
+    <br />
+
+    <div style="width:90%; margin:0 auto;">
+        <table id="detailTable" class="table table-striped" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Manufacturer</th>
+                    <th>Type detail</th>
+                    <th>Delete</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<a class="btn btn-primary" href="Detail/Add/">Add new</a>
+
+@await Html.PartialAsync("DataTable", "DetailDatatable")

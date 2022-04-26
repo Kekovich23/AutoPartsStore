@@ -7,6 +7,7 @@ namespace AutoPartsStore.AN.DTO {
         public int TypeDetailId { get; set; }
         public ManufacturerDTO Manufacturer { get; set; }
         public TypeDetailDTO TypeDetail { get; set; }
-        public ICollection<ModificationDTO> Modifications { get; set; }
+        public IEnumerable<ModificationDTO> AllModifications { get; set; }
+        public IEnumerable<ModificationDTO> SelectedModifications { get; set; }
     }
 }

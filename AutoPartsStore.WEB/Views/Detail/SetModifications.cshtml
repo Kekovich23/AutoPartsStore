@@ -8,14 +8,22 @@
             <samp>@Model.Manufacturer.Name</samp>
         </div>
         <div class="col">
-           <samp>@Model.TypeDetail.Name</samp>
+            <samp>@Model.TypeDetail.Name</samp>
         </div>
     </div>
-    <select class="form-select" multiple name="modificationIds">
-        @foreach (var modification in ViewBag.AllModifications) {
-            <!option value="@modification.Id" @(ViewBag.ModificationsDetail.Contains(modification.Id) ? "checked" : "")>@modification.Name</!option>
+    <div class="form-group">
+        @foreach (var m in Model.AllModifications) {
+            <input type="checkbox" name="modificationIds" value="@m.Id"
+               @foreach(var s in Model.SelectedModifications) {
+                    if(m.Id == s.Id){
+                         @Html.Raw("checked=\"checked\"");
+                         break;
+                    }
+               } />
+            @m.Name <br />
+
         }
-    </select>
+    </div>
     <input type="hidden" name="Id" value="@Model.Id" />
     <button type="submit" class="btn btn-primary">Save</button>
 </form>

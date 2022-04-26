@@ -6,5 +6,6 @@ namespace AutoPartsStore.AN.DTO {
         public string Name { get; set; }
         public Guid ModelId { get; set; }
         public ModelDTO Model { get; set; }
+        public ICollection<DetailDTO> Details { get; set; }
     }
 }

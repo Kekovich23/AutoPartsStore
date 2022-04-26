@@ -46,22 +46,16 @@ namespace AutoPartsStore.WEB.Controllers {
             if (!modificationResult.IsSuccessful) {
                 return View("Error", modificationResult.Message);
             }
-            var detail = await _detailService.GetAsync(id);
-            if (!detail.IsSuccessful) {
-                return View("Error", detail.Message);
+            var detailDTOResult = _detailService.GetModifications(id, modificationResult.Data);
+            if (!detailDTOResult.IsSuccessful) {
+                return View("Error", detailDTOResult.Message);
             }
-            var modificationsDetails = _detailService.GetModifications(detail.Data);
-            if (!modificationsDetails.IsSuccessful) {
-                return View("Error", modificationsDetails.Message);
-            }
-            ViewBag.AllModifications = modificationResult.Data;
-            ViewBag.ModificationsDetail = modificationsDetails.Data;
-            return View("SetModifications", id);
+            InitDataAsync();
+            return View("SetModifications", _mapper.Map<DetailViewModel>(detailDTOResult.Data));
         }
 
         [HttpPost]
         public async Task<IActionResult> SetModifications(Guid id, List<Guid> modificationIds) {
-            
 
             List<ModificationDTO> modifications = new ();
 

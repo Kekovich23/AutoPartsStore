@@ -42,28 +42,40 @@ namespace AutoPartsStore.BLL.Services {
             DetailFilter filter = new();
             filter = InitFilter(form, filter);
 
-            if (!string.IsNullOrWhiteSpace(form["TypeDetailId"]) && int.TryParse(form["TypeDetailId"], out int result)) {
-                filter.TypeDetailId = result;
-            }
-            if (!string.IsNullOrWhiteSpace(form["ManufacturerId"]) && Guid.TryParse(form["ManufacturerId"], out Guid result2)) {
-                filter.ManufacturerId = result2;
-            }
+            GetFromRequest(form["TypeDetailId"], filter);
+            GetFromRequest(form["ManufacturerId"], filter);
+
             return filter;
         }
 
-        public ServiceResult<IEnumerable<ModificationDTO>> GetModifications(DetailDTO detail) {
-            try {
-                var query = Database.GetRepository<Modification>()
-                    .GetAll()
-                    .Where(m => m.Details.Contains(_mapper.Map<Detail>(detail)))
-                    .Include(m => m.Model.Brand)
-                    .Include(m => m.Model.TypeTransport);
+        private static void GetFromRequest(string data, DetailFilter filter) {
+            if (!string.IsNullOrWhiteSpace(data) && int.TryParse(data, out int result)) {
+                filter.TypeDetailId = result;
+            }
+        }
 
-                return ServiceResult<IEnumerable<ModificationDTO>>.Success(_mapper.Map<IEnumerable<ModificationDTO>>(query));
+        public ServiceResult<DetailDTO> GetModifications(Guid id, IEnumerable<ModificationDTO> modificationDTOs) {
+            try {
+                var detailQ = Database.GetRepository<Detail>().GetAll().Where(d => d.Id == id);
+
+                detailQ = Include(detailQ);
+
+                var detail = detailQ.FirstOrDefault();
+                
+                var modifications = _mapper.Map<IEnumerable<Modification>>(modificationDTOs);
+                DetailDTO detailDTO = _mapper.Map<DetailDTO>(detail);
+                detailDTO.AllModifications = _mapper.Map<IEnumerable<ModificationDTO>>(modifications);
+
+                var query = modifications.Where(m => m.Details.FirstOrDefault()?.Id == detail.Id).ToList();
+
+               
+                detailDTO.SelectedModifications = _mapper.Map<IEnumerable<ModificationDTO>>(query);
+
+                return ServiceResult<DetailDTO>.Success(detailDTO);
             }
             catch (Exception ex) {
                 _logger.LogError(ex, "Failed to get modifications");
-                return ServiceResult<IEnumerable<ModificationDTO>>.Failed("Failed to get modifications");
+                return ServiceResult<DetailDTO>.Failed("Failed to get modifications");
             }
         }
 
