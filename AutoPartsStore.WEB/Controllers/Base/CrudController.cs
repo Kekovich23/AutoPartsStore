@@ -3,6 +3,8 @@ using AutoPartsStore.AN.DTO.Base;
 using AutoPartsStore.AN.Entities.Base;
 using AutoPartsStore.BLL.Filters.Base;
 using AutoPartsStore.BLL.Services.Base;
+using AutoPartsStore.DAL.Configure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -59,6 +61,7 @@ namespace AutoPartsStore.WEB.Controllers.Base {
             return View(_mapper.Map<TEntityViewModel>(result.Data));
         }
 
+        [Authorize(Roles = RoleInitializer.AdminRoleName)]
         [HttpDelete]
         public virtual async Task<IActionResult> Delete(TKey id) {
             var result = await _service.RemoveAsync(id);
@@ -73,6 +76,7 @@ namespace AutoPartsStore.WEB.Controllers.Base {
             ViewBag.ErrorMessage = errorMessage;
         }
 
+        [Authorize(Roles = RoleInitializer.AdminRoleName)]
         [HttpGet]
         public virtual async Task<IActionResult> Add() {
             if (!await InitDataAsync()) {
@@ -95,6 +99,7 @@ namespace AutoPartsStore.WEB.Controllers.Base {
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = RoleInitializer.AdminRoleName)]
         [HttpGet]
         public virtual async Task<IActionResult> Edit(TKey id) {
             if (!await InitDataAsync()) {

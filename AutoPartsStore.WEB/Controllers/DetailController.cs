@@ -42,36 +42,20 @@ namespace AutoPartsStore.WEB.Controllers {
 
         [HttpGet]
         public async Task<IActionResult> SetModifications(Guid id) {
-            var modificationResult = await _modificationService.GetAllAsync(null);
-            if (!modificationResult.IsSuccessful) {
-                return View("Error", modificationResult.Message);
+            var result = _detailService.GetModifications(id);
+            if (!result.IsSuccessful) {
+                return View("ErrorGet", result.Message);
             }
-            var detailDTOResult = _detailService.GetModifications(id, modificationResult.Data);
-            if (!detailDTOResult.IsSuccessful) {
-                return View("Error", detailDTOResult.Message);
-            }
-            InitDataAsync();
-            return View("SetModifications", _mapper.Map<DetailViewModel>(detailDTOResult.Data));
+            return View("SetModifications", _mapper.Map<DetailViewModel>(result.Data));
         }
 
         [HttpPost]
-        public async Task<IActionResult> SetModifications(Guid id, List<Guid> modificationIds) {
-
-            List<ModificationDTO> modifications = new ();
-
-            foreach (var modificationId in modificationIds) {
-                var resultModification = await _modificationService.GetAsync(modificationId);
-                modifications.Add(resultModification.Data);
-            }
-
-            var result = _detailService.SetModifications(
-                id,
-                _mapper.Map<IEnumerable<ModificationDTO>>(modifications));
-
+        public async Task<IActionResult> SetModifications(DetailViewModel detailViewModel) { 
+            var result = _detailService.SetModifications(_mapper.Map<DetailDTO>(detailViewModel));
             if (!result.IsSuccessful) {
-                return View("Error", result.Message);
+                return View("ErrorGet", result.Message);
             }
-            return View("Index");
+            return RedirectToAction("Index");
         }
     }    
 }

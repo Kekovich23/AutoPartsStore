@@ -17,7 +17,7 @@ namespace AutoPartsStore.BLL.Services {
         protected override IQueryable<Detail> Include(IQueryable<Detail> query) {
             return query
                 .Include(d => d.Manufacturer)
-                .Include(d => d.Modifications)
+                //.Include(d => d.Modifications)
                 .Include(d => d.TypeDetail);
         }
 
@@ -54,24 +54,12 @@ namespace AutoPartsStore.BLL.Services {
             }
         }
 
-        public ServiceResult<DetailDTO> GetModifications(Guid id, IEnumerable<ModificationDTO> modificationDTOs) {
+        public ServiceResult<DetailDTO> GetModifications(Guid detailId) {
             try {
-                var detailQ = Database.GetRepository<Detail>().GetAll().Where(d => d.Id == id);
-
-                detailQ = Include(detailQ);
-
-                var detail = detailQ.FirstOrDefault();
+                var detail = Database.GetRepository<Detail>().GetAll().Where(d => d.Id == detailId).Include(d => d.Modifications).AsQueryable();
+                detail = Include(detail);
                 
-                var modifications = _mapper.Map<IEnumerable<Modification>>(modificationDTOs);
-                DetailDTO detailDTO = _mapper.Map<DetailDTO>(detail);
-                detailDTO.AllModifications = _mapper.Map<IEnumerable<ModificationDTO>>(modifications);
-
-                var query = modifications.Where(m => m.Details.FirstOrDefault()?.Id == detail.Id).ToList();
-
-               
-                detailDTO.SelectedModifications = _mapper.Map<IEnumerable<ModificationDTO>>(query);
-
-                return ServiceResult<DetailDTO>.Success(detailDTO);
+                return ServiceResult<DetailDTO>.Success(_mapper.Map<DetailDTO>(detail.FirstOrDefault()));
             }
             catch (Exception ex) {
                 _logger.LogError(ex, "Failed to get modifications");
@@ -79,17 +67,14 @@ namespace AutoPartsStore.BLL.Services {
             }
         }
 
-        public ServiceResult SetModifications(Guid id, IEnumerable<ModificationDTO> modificationDTOs) {
+        public ServiceResult SetModifications(DetailDTO detailDTO) {
             try {
-                var detail = Database.GetRepository<Detail>()
-                    .GetAll()
-                    .Where(e => e.Id == id)
-                    .Include(e => e.Modifications)
-                    .FirstOrDefault();
+                var detail = Database.GetRepository<Detail>().GetAll(true).Where(d => d.Id == detailDTO.Id).Include(d => d.Modifications).FirstOrDefault();
 
                 detail.Modifications.Clear();
-                foreach (var modificationDTO in modificationDTOs) {
-                    var modification = Database.GetRepository<Modification>().Get(e => e.Id == modificationDTO.Id);
+
+                foreach (var modificationE in detailDTO.Modifications) {
+                    Modification? modification = Database.GetRepository<Modification>().GetAll().Where(m => m.Id == modificationE.Id).FirstOrDefault();
                     detail.Modifications.Add(modification);
                 }
 
@@ -98,8 +83,8 @@ namespace AutoPartsStore.BLL.Services {
                 return ServiceResult.Success();
             }
             catch (Exception ex) {
-                _logger.LogError(ex, "Failed to set modifications");
-                return ServiceResult.Failed("Failed to set modifications");
+                _logger.LogError(ex, "Failed to set features");
+                return ServiceResult.Failed("Failed to set features");
             }
         }
 

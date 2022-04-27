@@ -12,18 +12,16 @@
         </div>
     </div>
     <div class="form-group">
-        @foreach (var m in Model.AllModifications) {
-            <input type="checkbox" name="modificationIds" value="@m.Id"
-               @foreach(var s in Model.SelectedModifications) {
-                    if(m.Id == s.Id){
-                         @Html.Raw("checked=\"checked\"");
-                         break;
-                    }
-               } />
-            @m.Name <br />
-
+        @for(int i = 0; i < Model.Modifications.Count; i++) {
+             @Html.CheckBoxFor(m => m.Modifications[i].Selected);
+             <input type="hidden" name="Modifications[@i].Id" value="@Model.Modifications[i].Id" />
+             <input type="hidden" name="Modifications[@i].ModelId" value="@Model.Modifications[i].ModelId" />
+            <label for="@Model.Modifications[i].Id">@Model.Modifications[i].Name</label>
+            <br />
         }
     </div>
     <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="hidden" name="ManufacturerId" value="@Model.Manufacturer.Id" />
+    <input type="hidden" name="TypeDetailId" value="@Model.TypeDetail.Id" />
     <button type="submit" class="btn btn-primary">Save</button>
 </form>

@@ -8,6 +8,7 @@ namespace AutoPartsStore.WEB.AutoMapperProfiles {
         public ModificationProfile() {
             CreateMap<Modification, ModificationDTO>().ReverseMap();
             CreateMap<ModificationDTO, ModificationViewModel>().ReverseMap();
+            CreateMap<SelectableModificationViewModel, ModificationDTO>();
         }
     }
 }

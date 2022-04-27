@@ -49,7 +49,7 @@ try {
         cfg.AddProfile(new TypeDetailProfile());
         cfg.AddProfile(new FeatureProfile());
         cfg.AddProfile(new ManufacturerProfile());
-        cfg.AddProfile(new DetailProfile());
+        cfg.AddProfile(new DetailProfile(provider.GetService<IUnitOfWork>()));
         cfg.AddProfile(new ModificationProfile());
         cfg.AddProfile(new StatusProfile());
     }).CreateMapper());    

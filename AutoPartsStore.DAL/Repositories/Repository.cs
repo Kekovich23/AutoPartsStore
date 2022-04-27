@@ -18,7 +18,11 @@ namespace AutoPartsStore.DAL.Repositories {
             _db.SaveChanges();
         }
 
-        public IQueryable<TEntity> GetAll() {
+        public IQueryable<TEntity> GetAll(bool tracking = false) {
+            if (tracking) {
+                return _dbSet.AsTracking();
+            }
+
             return _dbSet.AsNoTracking();
         }
 

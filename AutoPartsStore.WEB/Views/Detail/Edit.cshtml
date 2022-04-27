@@ -9,24 +9,42 @@
         </div>
         <div class="col">
             <select id="ManufacturerId" name="ManufacturerId" class="form-select">
-                @foreach (var manufacturer in ViewBag.Manufacturers) {
-                    <!option value="@manufacturer.Id" @((manufacturer.Id == Model.Manufacturer.Id) ? "selected" : "")>@manufacturer.Name</!option>
+                @if (Model.IsNew) {
+                    @foreach (var manufacturer in ViewBag.Manufacturers) {
+                        <!option value="@manufacturer.Id">@manufacturer.Name</!option>
+                    }
+                }
+                else {
+                    @foreach (var manufacturer in ViewBag.Manufacturers) {
+                        <!option value="@manufacturer.Id" @((manufacturer.Id == Model.Manufacturer.Id) ? "selected" : "")>@manufacturer.Name</!option>
+                    }
                 }
             </select>
         </div>
     </div>
+
     <div class="mb-3 row">
         <div class="col">
             <label for="TypeDetailId" class="form-label">Type detail</label>
         </div>
         <div class="col">
             <select id="TypeDetailId" name="TypeDetailId" class="form-select">
-                @foreach (var typeDetail in ViewBag.TypesDetail) {
-                    <!option value="@typeDetail.Id" @((typeDetail.Id == Model.TypeDetail.Id) ? "selected" : "")>@typeDetail.Name</!option>
+                @if (Model.IsNew) {
+                    @foreach (var typeDetail in ViewBag.TypesDetail) {
+                        <!option value="@typeDetail.Id">@typeDetail.Name</!option>
+                    }
+                }
+                else {
+                    @foreach (var typeDetail in ViewBag.TypesDetail) {
+                        <!option value="@typeDetail.Id" @((typeDetail.Id == Model.TypeDetail.Id) ? "selected" : "")>@typeDetail.Name</!option>
+                    }
                 }
             </select>
         </div>
     </div>
+    @if (!Model.IsNew) {
+        <a class="btn btn-primary" href="/Detail/SetModifications/@Model.Id">Set modifications</a>
+    }
     <input type="hidden" name="Id" value="@Model.Id" />
     <button type="submit" class="btn btn-primary">@(Model.IsNew ? "Add" : "Edit")</button>
 </form>
