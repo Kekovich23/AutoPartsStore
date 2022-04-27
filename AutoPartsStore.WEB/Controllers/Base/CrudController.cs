@@ -4,6 +4,7 @@ using AutoPartsStore.AN.Entities.Base;
 using AutoPartsStore.BLL.Filters.Base;
 using AutoPartsStore.BLL.Services.Base;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AutoPartsStore.WEB.Controllers.Base {
     public class CrudController<TEntity, TEntityDTO, TEntityViewModel, TKey, TFilter> : Controller
@@ -117,6 +118,10 @@ namespace AutoPartsStore.WEB.Controllers.Base {
                 return View(_mapper.Map<TEntityViewModel>(result.Data));
             }
             return RedirectToAction("Index");
+        }
+
+        public Guid GetUserId() {
+            return Guid.Parse(User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
         }
     }
 }

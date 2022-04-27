@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AutoPartsStore.WEB.Controllers {
 
-    //[Authorize(Roles = RoleInitializer.AdminRoleName)]
+    [Authorize(Roles = RoleInitializer.AdminRoleName)]
     public class UserController : CrudController<User, UserDTO, UserViewModel, Guid, UserFilter> {
         private readonly UserService _userService;
         private readonly RoleManager<Role> _roleManager;
@@ -69,8 +69,8 @@ namespace AutoPartsStore.WEB.Controllers {
             return _userService.GetCart(userId);
         }
 
-        public IActionResult Cart(/*Guid userId*/) {
-            Guid userId = Guid.Parse("76ebf755-3bbb-48b0-076e-08da22949cc1");
+        public IActionResult Cart() {
+            Guid userId = GetUserId();
             var result = GetCart(userId);
             if (!result.IsSuccessful) {
                 return View("ErrorGet", result.Message);
@@ -83,17 +83,13 @@ namespace AutoPartsStore.WEB.Controllers {
             if (!result.IsSuccessful) {
                 return View("ErrorGet", result.Message);
             }
-            var cartResult = GetCart(userId);
-            if (!cartResult.IsSuccessful) {
-                return View("ErrorGet", cartResult.Message);
-            }
-            return View("Cart", _mapper.Map<UserCartViewModel>(cartResult.Data));
+            return RedirectToAction("Cart");
         }
 
         [HttpGet]
-        public async Task<IActionResult> SetDetailCount(/*Guid userId, */Guid detailId, int amount) {
-            Guid userId = Guid.Parse("76ebf755-3bbb-48b0-076e-08da22949cc1");
-            var result = await _userService.AddDetailAsync(userId, detailId, amount);
+        public async Task<IActionResult> SetDetailCount(Guid detailId, int amount) {
+            Guid userId = GetUserId();
+            var result = _userService.AddDetail(userId, detailId, amount);
             if (!result.IsSuccessful) {
                 return View("ErrorGet", result.Message);
             }

@@ -153,7 +153,7 @@ namespace AutoPartsStore.BLL.Services {
             return filter;
         }
 
-        public async Task<ServiceResult> AddDetailAsync(Guid userId, Guid detailId, int amount) {
+        public ServiceResult AddDetail(Guid userId, Guid detailId, int amount) {
             try {
                 if (amount == 0) {
                     var cart = Database.GetRepository<Cart>().GetAll().Where(e => e.DetailId == detailId).Where(e => e.UserId == userId);
@@ -198,11 +198,11 @@ namespace AutoPartsStore.BLL.Services {
                 foreach (var cart in carts) {
                     DetailInCartDTO detailInCartDTO = new() {
                         Detail = _mapper.Map<DetailDTO>(Database.GetRepository<Detail>()
-                        .GetAll()
-                        .Where(e => e.Id == cart.DetailId)
-                        .Include(e => e.Manufacturer)
-                        .Include(e => e.TypeDetail)
-                        .FirstOrDefault()),
+                            .GetAll()
+                            .Where(e => e.Id == cart.DetailId)
+                            .Include(e => e.Manufacturer)
+                            .Include(e => e.TypeDetail)
+                            .FirstOrDefault()),
                         Amount = cart.Amount
                     };
                     userCartDTO.Details.Add(detailInCartDTO);
